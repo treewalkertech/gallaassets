@@ -157,6 +157,7 @@
           </div>
         </div>
 
+      
         <div class="col-md-4 col-lg-3 col-sm-6 col-xl-1">
           <div class="admin box box-default">
             <div class="box-body text-center">
@@ -203,7 +204,7 @@
           </div>
         </div>
 
-
+       {{--
         <div class="col-md-4 col-lg-3 col-sm-6 col-xl-1">
           <div class="admin box box-default">
             <div class="box-body text-center">
@@ -218,6 +219,7 @@
             </div>
           </div>
         </div>
+      
 
       <div class="col-md-4 col-lg-3 col-sm-6 col-xl-1">
         <div class="admin box box-default">
@@ -243,11 +245,12 @@
                 <br><br>
                 <span class="name">{{ trans('admin/settings/general.saml') }}</span>
               </a>
-            </h5>
+             </h5>
             <p class="help-block">{{ trans('admin/settings/general.saml_help') }}</p>
           </div>
         </div>
       </div>
+       --}}
 
         <div class="col-md-4 col-lg-3 col-sm-6 col-xl-1">
           <div class="admin box box-default">
@@ -333,7 +336,7 @@
 </div>
 
 
-
+{{--
 
 <div class="row">
   <div class="col-md-12">
@@ -437,7 +440,7 @@
       </div> <!-- /box-body-->
     </div> <!--/box-default-->
 
-
+ --}}
 
 
 
