@@ -1068,7 +1068,7 @@ class AssetsController extends Controller
 
         $asset = Asset::where('asset_tag', '=', $request->input('asset_tag'))->first();
 
-
+         Log::error('Assets Tag No  ' . $request->input('asset_tag') . '');
           if ($asset) {
 
             /**
@@ -1140,10 +1140,13 @@ class AssetsController extends Controller
  
 
                    // Extract barcode values into an array
-    		  $barcodes = collect($request['barcodes'])->pluck('code')->toArray();
-
+	          $barcodes = collect($request['barcodes'])->pluck('code')->toArray();
+                  $updatedBarcodes = array_map(function ($item) {
+    			return str_replace('&amp;', '&', $item);
+		  }, $barcodes);
+                  Log::info('Assets Tag Nos  ' . print_r($updatedBarcodes,true) . '');
     		  // Fetch records where 'barcode' column matches the codes
-    		  $assets = Asset::whereIn('asset_tag', $barcodes)->get();
+    		  $assets = Asset::whereIn('asset_tag', $updatedBarcodes)->get();
 
       		  #$asset = Asset::where('asset_tag', '=', $request->input('asset_tag'))->first();
 
@@ -1180,7 +1183,7 @@ class AssetsController extends Controller
                          return response()->json(Helper::formatStandardApiResponse('success', [
                     		'asset_tag' => implode(', ', $updated_tags),
                     		'note' => e($request->input('note')),
-                    		'next_audit_date' => Helper::getFormattedDateObject($asset->next_audit_date),
+                    		//'next_audit_date' => Helper::getFormattedDateObject($asset->next_audit_date),
             			 ], trans('admin/hardware/message.audit.success')));
 
 		       	  
