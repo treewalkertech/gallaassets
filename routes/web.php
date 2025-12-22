@@ -1,557 +1,131 @@
 <?php
 
-use App\Http\Controllers\Account;
-use App\Http\Controllers\ActionlogController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\CompaniesController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DepartmentsController;
-use App\Http\Controllers\DepreciationsController;
-use App\Http\Controllers\GroupsController;
-use App\Http\Controllers\HealthController;
-use App\Http\Controllers\ImportsController;
-use App\Http\Controllers\LabelsController;
-use App\Http\Controllers\LocationsController;
-use App\Http\Controllers\ManufacturersController;
-use App\Http\Controllers\ModalController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReportsController;
-use App\Http\Controllers\ReportTemplatesController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\StatuslabelsController;
-use App\Http\Controllers\SuppliersController;
-use App\Http\Controllers\ViewAssetsController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Livewire\Importer;
+use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\authentications\ForgotPasswordBasic;
+use App\Http\Controllers\dashboard\DashboardController;
+use App\Http\Controllers\device_registration\DeviceRegistrationController;
+use App\Http\Controllers\user_management\Users;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
-Route::group(['middleware' => 'auth'], function () {
-    /*
-    * Companies
-    */
-    Route::resource('companies', CompaniesController::class, [
-        'parameters' => ['company' => 'company_id'],
-    ]);
+$controller_path = 'App\Http\Controllers';
 
-    /*
-    * Categories
-    */
-    Route::resource('categories', CategoriesController::class, [
-        'parameters' => ['category' => 'category_id'],
-    ]);
-  
-    /*
-    * Labels
-    */
-    Route::get(
-        'labels/{labelName}',
-        [LabelsController::class, 'show']
-    )->where('labelName', '.*')->name('labels.show');
+Route::get('/auth/login', [AuthController::class, 'index'])->name('auth-login');
+Route::post('/user-login', [AuthController::class, 'userLogin'])->name('user-login');
+Route::get('/user-logout', [AuthController::class, 'userLogout'])->name('user-logout');
+Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 
-    /*
-     * Locations
+// Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
+
+    $controller_path = 'App\Http\Controllers';
+
+    /**
+     * * This Routes are for Employess
      */
-    Route::group(['prefix' => 'locations', 'middleware' => ['auth']], function () {
 
-        Route::post(
-            'bulkdelete',
-            [LocationsController::class, 'postBulkDelete']
-        )->name('locations.bulkdelete.show');
+    // Main Page Route
+    // Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('permission:dashboard_admin,view.dashboard_admin');
+    Route::get('/', $controller_path.'\dashboard\DashboardController@index')->name('dashboard')->middleware('permission:dashboard,view.dashboard_admin');
+    Route::get('/dashboard', $controller_path.'\dashboard\DashboardController@index')->name('dashboard')->middleware('permission:dashboard,view.dashboard_admin');
+    Route::get('/dashboard/metrics', $controller_path.'\dashboard\DashboardController@metrics')->name('metrics'); // JSON for charts (polling)
+    Route::get('/dashboard/list', $controller_path.'\dashboard\DashboardController@list')->name('dashboard.list');
+    Route::get('/dashboard/export-products', $controller_path.'\dashboard\DashboardController@exportProducts')->name('dashboard.exportProducts');
 
-        Route::post(
-            'bulkedit',
-            [LocationsController::class, 'postBulkDeleteStore']
-        )->name('locations.bulkdelete.store');
+    // Roles And Permissions
+    Route::get('/roles', $controller_path.'\user_management\Roles@index')->name('roles')->middleware('permission:roles,view.roles');
+    Route::get('/roles/list', $controller_path.'\user_management\Roles@list')->name('roles.list')->middleware('permission:roles,view.roles');
+    Route::post('/roles/save/{id?}', $controller_path.'\user_management\Roles@save')->name('roles.save');
+    Route::get('/roles/view/{id?}/{details?}', $controller_path.'\user_management\Roles@view')->name('roles.view')->middleware('permission:roles,view.roles');
+    Route::get('/roles/create', $controller_path.'\user_management\Roles@create')->name('roles.create')->middleware('permission:roles,create.roles');
+    Route::get('/roles/edit/{id?}', $controller_path.'\user_management\Roles@edit')->name('roles.edit')->middleware('permission:roles,edit.roles');
+    Route::post('/roles/delete/{id?}', $controller_path.'\user_management\Roles@delete')->name('roles.delete')->middleware('permission:roles,delete.roles');
+    Route::post('/roles/saveModulePermissions/{id?}', $controller_path.'\user_management\Roles@saveModulePermissions')->name('roles.saveModulePermissions')->middleware('permission:roles,create.roles');
 
-        Route::post(
-            '{location}/restore',
-            [LocationsController::class, 'postRestore']
-        )->name('locations.restore');
+    Route::get('/users', $controller_path.'\user_management\Users@index')->name('users')->middleware('permission:users,view.users');
+    Route::get('/users/view/{id?}', $controller_path.'\user_management\Users@view')->name('users.view')->middleware('permission:users,view.users');
+    Route::get('/users/activity/{id?}', $controller_path.'\user_management\Users@userActivity')->name('users.activity')->middleware('permission:users,view.users');
+    Route::get('/users/list', $controller_path.'\user_management\Users@list')->name('users.list');
+    Route::get('/users/create/{id?}', $controller_path.'\user_management\Users@create')->name('users.create')->middleware('permission:users,create.users');
+    Route::get('/users/edit/{user_code?}', $controller_path.'\user_management\Users@edit_user')->name('users.edit')->middleware('permission:users,edit.users');
+    Route::post('/users/save/{id?}', $controller_path.'\user_management\Users@save')->name('users.save');
+    Route::post('/users/delete/{id?}', $controller_path.'\user_management\Users@delete')->name('users.delete')->middleware('permission:users,create.users');
+    Route::get('/profile/{user_code?}', [Users::class, 'profile'])->name('profile');
 
+    Route::post('/users/changePassword/{id?}', $controller_path.'\user_management\Users@changePassword')->name('users.changePassword')->middleware('permission:users,create.users');
+    Route::post('/users/sendotp', $controller_path.'\user_management\Users@sendotp')->name('users.sendotp')->middleware('permission:users,create.users');
+    Route::post('/users/activityLogs/{id?}', $controller_path.'\user_management\Users@userActivityLogs')->name('users.activityLogs')->middleware('permission:users,view.users');
 
-        Route::get('{locationId}/clone',
-            [LocationsController::class, 'getClone']
-        )->name('clone/location');
+    // Routes for Config Settings Controller
+    Route::get('/settings', $controller_path.'\settings\SettingsController@index')->name('settings')->middleware('permission:config_settings,view.config_settings');
+    Route::get('/settings/list', $controller_path.'\settings\SettingsController@list')->name('settings.list')->middleware('permission:config_settings,view.settings');
+    Route::post('/settings/save', $controller_path.'\settings\SettingsController@save')->name('settings.save');
+    Route::get('/settings/save/locations', $controller_path.'\settings\SettingsController@saveLocations')->name('settings.save-locations')->middleware('permission:config_settings,create.config_settings');
+    Route::post('/settings/save_config', $controller_path.'\settings\SettingsController@save_config')->name('settings.save_config')->middleware('permission:config_settings,create.config_settings');
+    Route::get('/settings/view/{id?}', $controller_path.'\settings\SettingsController@view')->name('settings.view')->middleware('permission:config_settings,create.config_settings');
+    Route::get('/settings/create/{id?}', $controller_path.'\settings\SettingsController@create')->name('settings.create')->middleware('permission:config_settings,create.config_settings');
+    Route::post('/settings/delete/{id?}', $controller_path.'\settings\SettingsController@delete')->name('settings.delete')->middleware('permission:config_settings,delete.config_settings');
+    Route::get('/settings/getconfigValuesByConfigkey', $controller_path.'\settings\SettingsController@getconfigValuesByConfigkey')->name('settings.getconfigValuesByConfigkey');
+    Route::post('/settings/uploadRequiredDocuments/{code?}', $controller_path.'\settings\SettingsController@uploadRequiredDocuments')->name('settings.uploadRequiredDocuments');
 
-        Route::get(
-            '{locationId}/printassigned',
-            [LocationsController::class, 'print_assigned']
-        )->name('locations.print_assigned');
+    // ================================= PRODUCTS PLANNING ROUTES ================================ //
 
-        Route::get(
-            '{locationId}/printallassigned',
-            [LocationsController::class, 'print_all_assigned']
-        )->name('locations.print_all_assigned');
+    Route::get('/products', $controller_path.'\products\ProductsController@index')->name('products')->middleware('permission:products,view.products');
+    Route::get('/products/list', $controller_path.'\products\ProductsController@list')->name('products.list')->middleware('permission:products,view.products');
+    Route::get('/products/create/{id?}', $controller_path.'\products\ProductsController@create')->name('create.products')->middleware('permission:products,create.products');
+    Route::get('/products/edit/{id?}', $controller_path.'\products\ProductsController@edit')->name('edit.products')->middleware('permission:products,edit.products');
+    Route::get('/products/view/{code?}', $controller_path.'\products\ProductsController@view')->name('view.products')->middleware('permission:products,view.products');
+    Route::post('/products/bulk-product-upload', $controller_path.'\products\ProductsController@bulkProductUpload')->name('products.bulkProductUpload')->middleware('permission:products,create.products');
+    Route::get('/products/productImportFormat', $controller_path.'\products\ProductsController@productImportFormat')->name('products.productImportFormat');
+    Route::get('/products/export-products', $controller_path.'\products\ProductsController@exportProducts')->name('products.exportProducts');
+    Route::get('/products/export-products-stagewise', $controller_path.'\products\ProductsController@exportProductsStageWise')->name('products.exportProductsStageWise');
 
-    });
+    // AJAX routes
+    Route::post('/products/save/{id?}', $controller_path.'\products\ProductsController@save')->name('products.save');
+    Route::post('/products/delete/{id?}', $controller_path.'\products\ProductsController@delete')->name('delete.products')->middleware('permission:products,delete.products');
+    Route::post('/products/setlocationid', $controller_path.'\products\ProductsController@setlocationid')->name('products.setlocationid');
 
-    Route::resource('locations', LocationsController::class, [
-        'parameters' => ['location' => 'location_id'],
-    ]);
+    // ================================= Inventory PRODUCTS ROUTES ================================ //
 
+    Route::get('/inventory', $controller_path.'\inventory\InventoryController@index')->name('inventory')->middleware('permission:inventory,view.inventory');
+    Route::get('/inventory/list', $controller_path.'\inventory\InventoryController@list')->name('inventory.list')->middleware('permission:inventory,view.inventory');
+    Route::get('/inventory/create/{id?}', $controller_path.'\inventory\InventoryController@create')->name('create.inventory')->middleware('permission:inventory,create.inventory');
+    Route::get('/inventory/edit/{id?}', $controller_path.'\inventory\InventoryController@edit')->name('edit.inventory')->middleware('permission:inventory,edit.inventory');
+    Route::get('/inventory/view/{code?}', $controller_path.'\inventory\InventoryController@view')->name('view.inventory')->middleware('permission:inventory,view.inventory');
+    Route::post('/inventory/export-inventory', $controller_path.'\inventory\InventoryController@exportInventory')->name('inventory.exportInventory');
 
-    /*
-    * Manufacturers
-    */
+    // AJAX routes
+    Route::post('/inventory/save/{id?}', $controller_path.'\inventory\InventoryController@save')->name('inventory.save')->middleware('permission:inventory,create.inventory');
+    Route::post('/inventory/delete/{id?}', $controller_path.'\inventory\InventoryController@delete')->name('delete.inventory')->middleware('permission:inventory,delete.inventory');
+    // bulkBondingPlanUpload routes
+    Route::get('/inventory/bondingPlanImportFormat', $controller_path.'\inventory\InventoryController@bondingPlanImportFormat')->name('inventory.bondingPlanImportFormat');
+    Route::post('/inventory/bulkBondingPlanUpload', $controller_path.'\inventory\InventoryController@bulkBondingPlanUpload')->name('inventory.bulkBondingPlanUpload')->middleware('permission:bonding,create.inventory');
 
-    Route::group(['prefix' => 'manufacturers', 'middleware' => ['auth']], function () {
-        Route::post('{manufacturers_id}/restore', [ManufacturersController::class, 'restore'] )->name('restore/manufacturer');
-    });
+    // ================================= ALL TYPES OF REPORTS ROUTES ================================ //
 
-    Route::resource('manufacturers', ManufacturersController::class, [
-        'parameters' => ['manufacturer' => 'manufacturers_id'],
-    ]);
+    // Route::get('/reports', $controller_path . '\reports\ReportsController@index')->name('reports');
+    // Route::post('/reports/list', $controller_path . '\reports\ReportsController@list')->name('reports.list');
 
-    /*
-    * Suppliers
-    */
-    Route::resource('suppliers', SuppliersController::class, [
-        'parameters' => ['supplier' => 'supplier_id'],
-    ]);
+    Route::get('/reports', $controller_path.'\reports\ReportsController@index')->name('reports')->middleware('permission:reports,view.reports');
+    Route::post('/reports/list', $controller_path.'\reports\ReportsController@list')->name('reports.list')->middleware('permission:reports,view.reports');
+    Route::post('/reports/export', $controller_path.'\reports\ReportsController@exportReport')->name('reports.export')->middleware('permission:reports,view.reports');
+    Route::post('/reports/defect_export', $controller_path.'\reports\ReportsController@exportDefectReport')->name('reports.defect_export')->middleware('permission:reports,view.reports');
 
-    /*
-    * Depreciations
-     */
-    Route::resource('depreciations', DepreciationsController::class, [
-         'parameters' => ['depreciation' => 'depreciation_id'],
-     ]);
+    // ================================= User Locations ROUTES ================================ //
+    Route::get('/locations', $controller_path.'\locations\LocationController@index')->name('locations')->middleware('permission:locations,locations.view');
+    Route::get('/locations/list', $controller_path.'\locations\LocationController@list')->name('locations.list')->middleware('permission:locations,locations.view');
+    Route::get('/locations/view/{id?}', $controller_path.'\locations\LocationController@view')->name('locations.view')->middleware('permission:locations,locations.view');
+    Route::get('/locations/create', $controller_path.'\locations\LocationController@create')->name('locations.create')->middleware('permission:locations,locations.create');
+    Route::get('/locations/edit/{id?}', $controller_path.'\locations\LocationController@edit')->name('locations.edit')->middleware('permission:locations,locations.edit');
+    Route::post('/locations/save/{id?}', $controller_path.'\locations\LocationController@save')->name('locations.save');
+    Route::post('/locations/delete/{id?}', $controller_path.'\locations\LocationController@delete')->name('locations.delete')->middleware('permission:locations,locations.delete');
+    Route::get('/locations/getLocationOverview', $controller_path.'\locations\LocationController@getLocationOverview')->name('locations.getLocationOverview')->middleware('permission:locations,locations.view');
 
-    /*
-    * Status Labels
-     */
-    Route::resource('statuslabels', StatuslabelsController::class, [
-          'parameters' => ['statuslabel' => 'statuslabel_id'],
-      ]);
-
-    /*
-    * Departments
-    */
-    Route::resource('departments', DepartmentsController::class, [
-        'parameters' => ['department' => 'department_id'],
-    ]);
+    // ================================= Device registration ROUTES ================================ //
+    Route::get('/galla-device-registration', [DeviceRegistrationController::class, 'index'])->name('device_registration');
+    Route::get('/galla-device-registration/list', [DeviceRegistrationController::class, 'list'])->name('device_registration.list');
+    Route::get('/galla-device-registration/view/{id?}', [DeviceRegistrationController::class, 'view'])->name('device_registration.view');
+    Route::get('/galla-device-registration/create', [DeviceRegistrationController::class, 'create'])->name('device_registration.create');
+    Route::get('/galla-device-registration/edit/{id?}', [DeviceRegistrationController::class, 'edit'])->name('device_registration.edit');
+    Route::post('/galla-device-registration/save/{id?}', [DeviceRegistrationController::class, 'save'])->name('device_registration.save');
+    Route::post('/galla-device-registration/delete/{id?}', [DeviceRegistrationController::class, 'delete'])->name('device_registration.delete');
 });
-
-/*
-|
-|--------------------------------------------------------------------------
-| Re-Usable Modal Dialog routes.
-|--------------------------------------------------------------------------
-|
-| Routes for various modal dialogs to interstitially create various things
-|
-*/
-
-Route::group(['middleware' => 'auth', 'prefix' => 'modals'], function () {
-    Route::get('{type}/{itemId?}', [ModalController::class, 'show'] )->name('modal.show');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Log Routes
-|--------------------------------------------------------------------------
-|
-| Register all the admin routes.
-|
-*/
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::get(
-        'display-sig/{filename}',
-        [ActionlogController::class, 'displaySig']
-    )->name('log.signature.view');
-    Route::get(
-        'stored-eula-file/{filename}',
-        [ActionlogController::class, 'getStoredEula']
-    )->name('log.storedeula.download');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Admin Routes
-|--------------------------------------------------------------------------
-|
-| Register all the admin routes.
-|
-*/
-
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser']], function () {
-    Route::get('settings', [SettingsController::class, 'getSettings'])->name('settings.general.index');
-    Route::post('settings', [SettingsController::class, 'postSettings'])->name('settings.general.save');
-
-    Route::get('branding', [SettingsController::class, 'getBranding'])->name('settings.branding.index');
-    Route::post('branding', [SettingsController::class, 'postBranding'])->name('settings.branding.save');
-
-    Route::get('security', [SettingsController::class, 'getSecurity'])->name('settings.security.index');
-    Route::post('security', [SettingsController::class, 'postSecurity'])->name('settings.security.save');
-
-    Route::get('groups', [GroupsController::class, 'index'])->name('settings.groups.index');
-
-    Route::get('localization', [SettingsController::class, 'getLocalization'])->name('settings.localization.index');
-    Route::post('localization', [SettingsController::class, 'postLocalization'])->name('settings.localization.save');
-
-    Route::get('notifications', [SettingsController::class, 'getAlerts'])->name('settings.alerts.index');
-    Route::post('notifications', [SettingsController::class, 'postAlerts'])->name('settings.alerts.save');
-
-    Route::get('slack', [SettingsController::class, 'getSlack'])->name('settings.slack.index');
-    Route::post('slack', [SettingsController::class, 'postSlack'])->name('settings.slack.save');
-
-    Route::get('asset_tags', [SettingsController::class, 'getAssetTags'])->name('settings.asset_tags.index');
-    Route::post('asset_tags', [SettingsController::class, 'postAssetTags'])->name('settings.asset_tags.save');
-
-    Route::get('labels', [SettingsController::class, 'getLabels'])->name('settings.labels.index');
-    Route::post('labels', [SettingsController::class, 'postLabels'])->name('settings.labels.save');
-
-    Route::get('ldap', [SettingsController::class, 'getLdapSettings'])->name('settings.ldap.index');
-    Route::post('ldap', [SettingsController::class, 'postLdapSettings'])->name('settings.ldap.save');
-
-    Route::get('phpinfo', [SettingsController::class, 'getPhpInfo'])->name('settings.phpinfo.index');
-
-    Route::get('oauth', [SettingsController::class, 'api'])->name('settings.oauth.index');
-
-    Route::get('google', [SettingsController::class, 'getGoogleLoginSettings'])->name('settings.google.index');
-    Route::post('google', [SettingsController::class, 'postGoogleLoginSettings'])->name('settings.google.save');
-
-    Route::get('purge', [SettingsController::class, 'getPurge'])->name('settings.purge.index');
-    Route::post('purge', [SettingsController::class, 'postPurge'])->name('settings.purge.save');
-
-    Route::get('login-attempts', [SettingsController::class, 'getLoginAttempts'])->name('settings.logins.index');
-
-    // Backups
-    Route::group(['prefix' => 'backups', 'middleware' => 'auth'], function () {
-        Route::get('download/{filename}',
-            [SettingsController::class, 'downloadFile'])->name('settings.backups.download');
-
-        Route::delete('delete/{filename}',
-            [SettingsController::class, 'deleteFile'])->name('settings.backups.destroy');
-
-        Route::post('/', 
-            [SettingsController::class, 'postBackups']
-        )->name('settings.backups.create');
-
-        Route::post('/restore/{filename}', 
-            [SettingsController::class, 'postRestore']
-        )->name('settings.backups.restore');
-
-        Route::post('/upload', 
-            [SettingsController::class, 'postUploadBackup']
-        )->name('settings.backups.upload');
-
-        // Handle redirect from after POST request from backup restore
-        Route::get('/restore/{filename?}', function () {
-            return redirect(route('settings.backups.index'));
-        });
-
-        Route::get('/', [SettingsController::class, 'getBackups'])->name('settings.backups.index');
-    });
-
-    Route::resource('groups', GroupsController::class, [
-        'middleware' => ['auth'],
-        'parameters' => ['group' => 'group_id'],
-    ]);
-
-    Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Importer Routes
-|--------------------------------------------------------------------------
-|
-|
-|
-*/
-
-Route::get('/import',
-    Importer::class
-)->middleware('auth')->name('imports.index');
-
-/*
-|--------------------------------------------------------------------------
-| Account Routes
-|--------------------------------------------------------------------------
-|
-|
-|
-*/
-Route::group(['prefix' => 'account', 'middleware' => ['auth']], function () {
-
-    // Profile
-    Route::get('profile', [ProfileController::class, 'getIndex'])->name('profile');
-    Route::post('profile', [ProfileController::class, 'postIndex']);
-
-    Route::get('menu', [ProfileController::class, 'getMenuState'])->name('account.menuprefs');
-
-    Route::get('password', [ProfileController::class, 'password'])->name('account.password.index');
-    Route::post('password', [ProfileController::class, 'passwordSave']);
-
-    Route::get('api', [ProfileController::class, 'api'])->name('user.api');
-
-    // View Assets
-    Route::get('view-assets', [ViewAssetsController::class, 'getIndex'])->name('view-assets');
-
-    Route::get('requested', [ViewAssetsController::class, 'getRequestedAssets'])->name('account.requested');
-
-    // Profile
-    Route::get(
-        'requestable-assets',
-        [ViewAssetsController::class, 'getRequestableIndex']
-    )->name('requestable-assets');
-    Route::post(
-        'request-asset/{assetId}',
-        [ViewAssetsController::class, 'getRequestAsset']
-    )->name('account/request-asset');
-
-    Route::post(
-        'request/{itemType}/{itemId}/{cancel_by_admin?}/{requestingUser?}',
-        [ViewAssetsController::class, 'getRequestItem']
-    )->name('account/request-item');
-
-    // Account Dashboard
-    Route::get('/', [ViewAssetsController::class, 'getIndex'])->name('account');
-
-    Route::get('accept', [Account\AcceptanceController::class, 'index'])
-        ->name('account.accept');
-
-    Route::get('accept/{id}', [Account\AcceptanceController::class, 'create'])
-        ->name('account.accept.item');
-
-    Route::post('accept/{id}', [Account\AcceptanceController::class, 'store'])
-        ->name('account.store-acceptance');
-
-    Route::get(
-        'print',
-        [
-            ProfileController::class,
-            'printInventory'
-        ]
-    )->name('profile.print');
-
-    Route::post(
-        'email',
-        [
-            ProfileController::class,
-            'emailAssetList'
-        ]
-    )->name('profile.email_assets');
-
-});
-
-Route::group(['middleware' => ['auth']], function () {
-    Route::get('reports/audit', 
-        [ReportsController::class, 'audit']
-    )->name('reports.audit');
-
-    Route::get(
-        'reports/depreciation',
-        [ReportsController::class, 'getDeprecationReport']
-    )->name('reports/depreciation');
-    Route::get(
-        'reports/export/depreciation',
-        [ReportsController::class, 'exportDeprecationReport']
-    )->name('reports/export/depreciation');
-    Route::get(
-        'reports/asset_maintenances',
-        [ReportsController::class, 'getAssetMaintenancesReport']
-    )->name('reports/asset_maintenances');
-    Route::get(
-        'reports/export/asset_maintenances',
-        [ReportsController::class, 'exportAssetMaintenancesReport']
-    )->name('reports/export/asset_maintenances');
-    Route::get(
-        'reports/licenses',
-        [ReportsController::class, 'getLicenseReport']
-    )->name('reports/licenses');
-    Route::get(
-        'reports/export/licenses',
-        [ReportsController::class, 'exportLicenseReport']
-    )->name('reports/export/licenses');
-
-    Route::get('reports/accessories', [ReportsController::class, 'getAccessoryReport'])->name('reports/accessories');
-    Route::get(
-        'reports/export/accessories',
-        [ReportsController::class, 'exportAccessoryReport']
-    )->name('reports/export/accessories');
-    Route::get('reports/custom', [ReportsController::class, 'getCustomReport'])->name('reports/custom');
-    Route::post('reports/custom', [ReportsController::class, 'postCustom']);
-
-    Route::prefix('reports/templates')->name('report-templates')->group(function () {
-        Route::post('/', [ReportTemplatesController::class, 'store'])->name('.store');
-        Route::get('/{reportTemplate}', [ReportTemplatesController::class, 'show'])->name('.show');
-        Route::get('/{reportTemplate}/edit', [ReportTemplatesController::class, 'edit'])->name('.edit');
-        Route::post('/{reportTemplate}', [ReportTemplatesController::class, 'update'])->name('.update');
-        Route::delete('/{reportTemplate}', [ReportTemplatesController::class, 'destroy'])->name('.destroy');
-    });
-
-    Route::get(
-        'reports/activity',
-        [ReportsController::class, 'getActivityReport']
-    )->name('reports.activity');
-
-    Route::post('reports/activity', [ReportsController::class, 'postActivityReport']);
-
-    Route::get(
-        'reports/unaccepted_assets/{deleted?}',
-        [ReportsController::class, 'getAssetAcceptanceReport']
-    )->name('reports/unaccepted_assets');
-    Route::post(
-        'reports/unaccepted_assets/sent_reminder',
-        [ReportsController::class, 'sentAssetAcceptanceReminder']
-    )->name('reports/unaccepted_assets_sent_reminder');
-    Route::delete(
-        'reports/unaccepted_assets/{acceptanceId}/delete',
-        [ReportsController::class, 'deleteAssetAcceptance']
-    )->name('reports/unaccepted_assets_delete');
-    Route::post(
-        'reports/unaccepted_assets/{deleted?}',
-        [ReportsController::class, 'postAssetAcceptanceReport']
-    )->name('reports/export/unaccepted_assets');
-});
-
-Route::get(
-    'auth/signin',
-    [LoginController::class, 'legacyAuthRedirect']
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| Setup Routes
-|--------------------------------------------------------------------------
-|
-|
-|
-*/
-Route::group(['prefix' => 'setup', 'middleware' => 'web'], function () {
-    Route::get(
-        'user',
-        [SettingsController::class, 'getSetupUser']
-    )->name('setup.user');
-
-    Route::post(
-        'user',
-        [SettingsController::class, 'postSaveFirstAdmin']
-    )->name('setup.user.save');
-
-
-    Route::get(
-        'migrate',
-        [SettingsController::class, 'getSetupMigrate']
-    )->name('setup.migrate');
-
-    Route::get(
-        'done',
-        [SettingsController::class, 'getSetupDone']
-    )->name('setup.done');
-
-    Route::get(
-        'mailtest',
-        [SettingsController::class, 'ajaxTestEmail']
-    )->name('setup.mailtest');
-
-    Route::get(
-        '/',
-        [SettingsController::class, 'getSetupIndex']
-    )->name('setup');
-});
-
-
-
-
-
-Route::group(['middleware' => 'web'], function () {
-
-    Route::get(
-        'login',
-        [LoginController::class, 'showLoginForm']
-    )->name("login");
-
-    Route::post(
-        'login',
-        [LoginController::class, 'login']
-    );
-
-    Route::get(
-        'two-factor-enroll',
-        [LoginController::class, 'getTwoFactorEnroll']
-    )->name('two-factor-enroll');
-
-    Route::get(
-        'two-factor',
-        [LoginController::class, 'getTwoFactorAuth']
-    )->name('two-factor');
-
-    Route::post(
-        'two-factor',
-        [LoginController::class, 'postTwoFactorAuth']
-    );
-
-    Route::post(
-        'password/email',
-        [ForgotPasswordController::class, 'sendResetLinkEmail']
-    )->name('password.email')->middleware('throttle:forgotten_password');
-
-    Route::get(
-        'password/reset',
-        [ForgotPasswordController::class, 'showLinkRequestForm']
-    )->name('password.request')->middleware('throttle:forgotten_password');
-
-
-    Route::post(
-        'password/reset',
-        [ResetPasswordController::class, 'reset']
-    )->name('password.update')->middleware('throttle:forgotten_password');
-
-    Route::get(
-        'password/reset/{token}',
-        [ResetPasswordController::class, 'showResetForm']
-    )->name('password.reset');
-
-
-    Route::post(
-        'password/email',
-        [ForgotPasswordController::class, 'sendResetLinkEmail']
-    )->name('password.email')->middleware('throttle:forgotten_password');
-
-
-     // Socialite Google login
-    Route::get('google', 'App\Http\Controllers\GoogleAuthController@redirectToGoogle')->name('google.redirect');
-    Route::get('google/callback', 'App\Http\Controllers\GoogleAuthController@handleGoogleCallback')->name('google.callback');
-
-
-    Route::get(
-        '/',
-        [
-            'as' => 'home',
-            'middleware' => ['auth'],
-            'uses' => 'DashboardController@getIndex' ]
-    );
-
-    // need to keep GET /logout for SAML SLO
-    Route::get(
-        'logout',
-        [LoginController::class, 'logout']
-    )->name('logout.get');
-
-    Route::post(
-        'logout',
-        [LoginController::class, 'logout']
-    )->name('logout.post');
-});
-
-
-/**
- * Health check route - skip middleware
- */
-Route::withoutMiddleware(['web'])->get(
-    '/health',
-    [HealthController::class, 'get']
-)->name('health');
-
-
-Route::middleware(['auth'])->get(
-    '/',
-    [DashboardController::class, 'index']
-)->name('home');

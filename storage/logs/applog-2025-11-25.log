@@ -1,0 +1,6 @@
+[2025-11-25 13:43:23] local.INFO: --- CHECK UPDATE CALLED --- {"incoming_request":{"current_version_code":5,"device_id":"d5ee7f87f3ada95d"}} 
+[2025-11-25 13:43:23] local.INFO: Validated request {"device_id":"d5ee7f87f3ada95d","current_version_code":5} 
+[2025-11-25 13:43:23] local.INFO: Device found {"device_id":"d5ee7f87f3ada95d","registered_version_code":1,"is_update_required_flag":0} 
+[2025-11-25 13:43:23] local.INFO: Device is up to date {"device_id":"d5ee7f87f3ada95d","current_version":5} 
+[2025-11-25 13:43:23] local.INFO: checkDevice request: {"device_id":"d5ee7f87f3ada95d"}  
+[2025-11-25 17:03:02] local.INFO: Gathering stage counts between 2025-10-27 00:00:00 and 2025-11-25 23:59:59  

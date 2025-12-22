@@ -1,12 +1,13 @@
 <?php
+
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use Illuminate\Support\Facades\Log;
+use Monolog\Processor\PsrLogMessageProcessor;
 
-$config = [
+return [
 
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Default Log Channel
     |--------------------------------------------------------------------------
@@ -17,9 +18,25 @@ $config = [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+  'default' => env('LOG_CHANNEL', 'stack'),
 
-    /*
+  /*
+    |--------------------------------------------------------------------------
+    | Deprecations Log Channel
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the log channel that should be used to log warnings
+    | regarding deprecated PHP and library features. This allows you to get
+    | your application ready for upcoming major versions of dependencies.
+    |
+    */
+
+  'deprecations' => [
+    'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
+    'trace' => false,
+  ],
+
+  /*
     |--------------------------------------------------------------------------
     | Log Channels
     |--------------------------------------------------------------------------
@@ -34,111 +51,88 @@ $config = [
     |
     */
 
-    'channels' => [
-        // This will get overwritten to 'single' AND 'rollbar' in the code at the bottom of this file
-        // if a ROLLBAR_TOKEN is given in the .env file
-        'stack' => [
-            'driver' => 'stack',
-            'channels' => ['single'],
-            'ignore_exceptions' => false,
-        ],
-
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'warning'),
-        ],
-
-        'daily' => [
-            'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'warning'),
-            'days' => env('LOG_MAX_DAYS', 14),
-        ],
-
-        'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'Laravel Log',
-            'emoji' => ':boom:',
-            'level' => env('LOG_LEVEL', 'critical'),
-        ],
-
-        'papertrail' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'warning'),
-            'handler' => SyslogUdpHandler::class,
-            'handler_with' => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
-            ],
-        ],
-
-        'stderr' => [
-            'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'warning'),
-            'handler' => StreamHandler::class,
-            'formatter' => env('LOG_STDERR_FORMATTER'),
-            'with' => [
-                'stream' => 'php://stderr',
-            ],
-        ],
-
-        'syslog' => [
-            'driver' => 'syslog',
-            'level' => env('LOG_LEVEL', 'warning'),
-        ],
-
-        'errorlog' => [
-            'driver' => 'errorlog',
-            'level' => env('LOG_LEVEL', 'warning'),
-        ],
-
-        'null' => [
-            'driver' => 'monolog',
-            'handler' => NullHandler::class,
-        ],
-
-        'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
-        ],
-
-        'scimtrace' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/scim.log')
-        ],
-
-        'rollbar' => [
-            'driver' => 'monolog',
-            'handler' => \Rollbar\Laravel\MonologHandler::class,
-            'access_token' => env('ROLLBAR_TOKEN'),
-            'level' => env('ROLLBAR_LEVEL', 'error'),
-        ],
+  'channels' => [
+    'stack' => [
+      'driver' => 'stack',
+      'channels' => ['daily'],
+      'ignore_exceptions' => false,
     ],
 
+    'single' => [
+      'driver' => 'single',
+      'path' => storage_path('logs/laravel.log'),
+      'level' => env('LOG_LEVEL', 'debug'),
+      'replace_placeholders' => true,
+    ],
+
+    'daily' => [
+      'driver' => 'daily',
+      'path' => storage_path('logs/applog.log'),
+      'level' => env('LOG_LEVEL', 'debug'),
+      'days' => 15,
+      'replace_placeholders' => true,
+    ],
+
+    'api' => [
+      'driver' => 'daily',
+      'path' => storage_path('logs/api/api.log'),
+      'level' => 'debug',
+      'days' => 14, // Number of days to retain log files
+    ],
+
+    'slack' => [
+      'driver' => 'slack',
+      'url' => env('LOG_SLACK_WEBHOOK_URL'),
+      'username' => 'Laravel Log',
+      'emoji' => ':boom:',
+      'level' => env('LOG_LEVEL', 'critical'),
+      'replace_placeholders' => true,
+    ],
+
+    'papertrail' => [
+      'driver' => 'monolog',
+      'level' => env('LOG_LEVEL', 'debug'),
+      'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
+      'handler_with' => [
+        'host' => env('PAPERTRAIL_URL'),
+        'port' => env('PAPERTRAIL_PORT'),
+        'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
+      ],
+      'processors' => [PsrLogMessageProcessor::class],
+    ],
+
+    'stderr' => [
+      'driver' => 'monolog',
+      'level' => env('LOG_LEVEL', 'debug'),
+      'handler' => StreamHandler::class,
+      'formatter' => env('LOG_STDERR_FORMATTER'),
+      'with' => [
+        'stream' => 'php://stderr',
+      ],
+      'processors' => [PsrLogMessageProcessor::class],
+    ],
+
+    'syslog' => [
+      'driver' => 'syslog',
+      'level' => env('LOG_LEVEL', 'debug'),
+      'facility' => LOG_USER,
+      'replace_placeholders' => true,
+    ],
+
+    'errorlog' => [
+      'driver' => 'errorlog',
+      'level' => env('LOG_LEVEL', 'debug'),
+      'replace_placeholders' => true,
+    ],
+
+    'null' => [
+      'driver' => 'monolog',
+      'handler' => NullHandler::class,
+    ],
+
+    'emergency' => [
+      'path' => storage_path('logs/laravel.log'),
+    ],
+  ],
+
 ];
-
-
-if ((env('APP_ENV')=='production') && (env('ROLLBAR_TOKEN'))) {
-    // Only add rollbar if the .env has a rollbar token
-    $config['channels']['stack']['channels'] = ['single', 'rollbar'];
-
-    // and only add the rollbar filter under the same conditions
-    // Note: it will *not* be cacheable
-    $config['channels']['rollbar']['check_ignore'] = function ($isUncaught, $args, $payload) {
-        if (App::environment('production') && is_object($args) && get_class($args) == Rollbar\ErrorWrapper::class && $args->errorLevel == E_WARNING ) {
-            Log::info("IGNORING E_WARNING in production mode: ".$args->getMessage());
-            return true; // "TRUE - you should ignore it!"
-        }
-        $needle = "ArieTimmerman\\Laravel\\SCIMServer\\Exceptions\\SCIMException";
-        if (App::environment('production') && is_string($args) && strncmp($args, $needle, strlen($needle) ) === 0 ) {
-            Log::info("String: '$args' looks like a SCIM Exception; ignoring error");
-            return true; //yes, *do* ignore it
-        }
-        return false;
-    };
-
-}
-
-
-return $config;

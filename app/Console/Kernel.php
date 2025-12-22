@@ -2,9 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\ImportLocations;
-use App\Console\Commands\ReEncodeCustomFieldNames;
-use App\Console\Commands\RestoreDeletedUsers;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -12,29 +9,21 @@ class Kernel extends ConsoleKernel
 {
     /**
      * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('snipeit:inventory-alerts')->daily();
-        $schedule->command('snipeit:expiring-alerts')->daily();
-        $schedule->command('snipeit:expected-checkin')->daily();
-        $schedule->command('snipeit:backup')->weekly();
-        $schedule->command('backup:clean')->daily();
-        $schedule->command('snipeit:upcoming-audits')->daily();
-        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
-        $schedule->command('saml:clear_expired_nonces')->weekly();
+        // $schedule->command('inspire')->hourly();
+        // run daily at 00:05
+        $schedule->command('devices:mark-expired')->dailyAt('00:05');
     }
 
     /**
-     * This method is required by Laravel to handle any console routes
-     * that are defined in routes/console.php.
+     * Register the commands for the application.
      */
-    protected function commands()
+    protected function commands(): void
     {
-        require base_path('routes/console.php');
         $this->load(__DIR__.'/Commands');
+
+        require base_path('routes/console.php');
     }
 }

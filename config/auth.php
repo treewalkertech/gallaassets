@@ -7,9 +7,7 @@ return [
     | Authentication Defaults
     |--------------------------------------------------------------------------
     |
-    | This option controls the default authentication "guard" and password
-    | reset options for your application. You may change these defaults
-    | as required, but they're a perfect start for most applications.
+    | Set default guard and password reset options for the application.
     |
     */
 
@@ -23,15 +21,7 @@ return [
     | Authentication Guards
     |--------------------------------------------------------------------------
     |
-    | Next, you may define every authentication guard for your application.
-    | Of course, a great default configuration has been defined for you
-    | here which uses session storage and the Eloquent user provider.
-    |
-    | All authentication drivers have a user provider. This defines how the
-    | users are actually retrieved out of your database or other storage
-    | mechanisms used by this application to persist your user's data.
-    |
-    | Supported: "session", "token"
+    | Define authentication guards for web and API, both using the 'users' provider.
     |
     */
 
@@ -42,9 +32,8 @@ return [
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver' => 'sanctum',
             'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -53,15 +42,7 @@ return [
     | User Providers
     |--------------------------------------------------------------------------
     |
-    | All authentication drivers have a user provider. This defines how the
-    | users are actually retrieved out of your database or other storage
-    | mechanisms used by this application to persist your user's data.
-    |
-    | If you have multiple user tables or models you may configure multiple
-    | sources which represent each model / table. These sources may then
-    | be assigned to any extra authentication guards you have defined.
-    |
-    | Supported: "database", "eloquent"
+    | Define the user provider using the Eloquent model for users.
     |
     */
 
@@ -70,78 +51,35 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Resetting Passwords
+    | Password Resetting
     |--------------------------------------------------------------------------
     |
-    | You may specify multiple password reset configurations if you have more
-    | than one user table or model in the application and you want to have
-    | separate password reset settings based on the specific user types.
-    |
-    | The expire time is the number of minutes that the reset token should be
-    | considered valid. This security feature keeps tokens short-lived so
-    | they have less time to be guessed. You may change this as needed.
+    | Reset password settings for the 'users' provider.
     |
     */
 
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'email' => 'auth.emails.password',
-            'table' => 'password_resets',
-            'expire' => env('RESET_PASSWORD_LINK_EXPIRES', 900),
-            'throttle' => [
-                'max_attempts' => env('LOGIN_MAX_ATTEMPTS', 5),
-                'lockout_duration' => env('LOGIN_LOCKOUT_DURATION', 60),
-            ]
-
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
         ],
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Resetting Password Requests
-    |--------------------------------------------------------------------------
-    | This sets the throttle for forgotten password requests
-    |
-    */
-    'password_reset' => [
-       'max_attempts_per_min' => env('PASSWORD_RESET_MAX_ATTEMPTS_PER_MIN', 50),
-    ],
-
-
 
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout
     |--------------------------------------------------------------------------
     |
-    | Here you may define the amount of seconds before a password confirmation
-    | times out and the user is prompted to re-enter their password via the
-    | confirmation screen. By default, the timeout lasts for three hours.
+    | Duration in seconds before password confirmation times out.
     |
     */
 
-    'password_timeout' =>  env('PASSWORD_CONFIRM_TIMEOUT', 10800),
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Login form autocomplete
-    |--------------------------------------------------------------------------
-    |
-    | Determine whether to include autocomplete="off" on the login form. Some users may want to disable
-    | autocomplete for compliance with security requirements.
-    |
-    */
-    'login_autocomplete' => env('LOGIN_AUTOCOMPLETE', false),
+    'password_timeout' => 10800,
 
 ];

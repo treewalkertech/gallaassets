@@ -2,88 +2,149 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Response;
-use Illuminate\Http\RedirectResponse;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\Validator;
+
 class StorageHelper
 {
-    public static function downloader($filename, $disk = 'default') : BinaryFileResponse | RedirectResponse | StreamedResponse
-    {
-        if ($disk == 'default') {
-            $disk = config('filesystems.default');
-        }
-        switch (config("filesystems.disks.$disk.driver")) {
-            case 'local':
-                return response()->download(Storage::disk($disk)->path($filename)); //works for PRIVATE or public?!
+  /**
+   * Upload a file to a specific disk.
+   *
+   * @param mixed  $file      UploadedFile instance or path string
+   * @param string $filePath  Path + filename to save
+   * @param string $disk      Disk to use (public, attachments, zips, s3, etc.)
+   * @return string           File path or URL
+   */
+  public static function uploadFile($file, $filePath, $disk = 'public')
+  {
+    try {
+      $storage = Storage::disk($disk);
 
-            case 's3':
-                return redirect()->away(Storage::disk($disk)->temporaryUrl($filename, now()->addMinutes(5))); //works for private or public, I guess?
+      if (is_string($file)) {
+        // If $file is a local path
+        $storage->put($filePath, file_get_contents($file));
+      } else {
+        // If $file is an UploadedFile instance
+        $storage->put($filePath, file_get_contents($file->getRealPath()));
+      }
 
-            default:
-                return Storage::disk($disk)->download($filename);
-        }
+      $storage->setVisibility($filePath, 'public');
+
+      Log::info("File uploaded to disk '{$disk}' at path: {$filePath}");
+
+      // For S3 or cloud disks, return full URL
+      return $storage->url($filePath);
+    } catch (\Exception $e) {
+      Log::error("File upload failed on disk '{$disk}': " . $e->getMessage());
+      throw $e;
+    }
+  }
+
+  /**
+   * Delete a file from a specific disk.
+   *
+   * @param string $path
+   * @param string $fileName
+   * @param string $disk
+   * @return bool
+   */
+  public static function deleteFile($path, $fileName, $disk = 'public')
+  {
+    $storage = Storage::disk($disk);
+    $filePath = rtrim($path, '/') . '/' . $fileName;
+
+    if ($storage->exists($filePath)) {
+      $storage->delete($filePath);
+      Log::info("File deleted from disk '{$disk}' at path: {$filePath}");
+      return true;
     }
 
+    return false;
+  }
 
-    /**
-     * This determines the file types that should be allowed inline and checks their fileinfo extension
-     * to determine that they are safe to display inline.
-     *
-     * @author <A. Gianotto> [<snipe@snipe.net]>
-     * @since v7.0.14
-     * @param $file_with_path
-     * @return bool
-     */
-    public static function allowSafeInline($file_with_path) {
+  /**
+   * Get the public URL of a file from a specific disk.
+   *
+   * @param string $path
+   * @param string $fileName
+   * @param string $disk
+   * @return string
+   */
+  public static function getFileUrl($path, $fileName, $disk = 'public')
+  {
+    $storage = Storage::disk($disk);
+    $filePath = rtrim($path, '/') . '/' . $fileName;
+    return $storage->url($filePath);
+  }
 
-        $allowed_inline = [
-            'pdf',
-            'svg',
-            'jpg',
-            'gif',
-            'svg',
-            'avif',
-            'webp',
-            'png',
-        ];
+  /**
+   * Store logo files (company_logo, company_brand_logo) either locally or on S3.
+   *
+   * @param mixed  $file       UploadedFile instance
+   * @param string $configKey  'company_logo' or 'company_brand_logo'
+   * @param string $disk       Disk to save file ('public' or 's3')
+   * @return array
+   */
+  public static function storeLogoFile($file, $configKey, $disk = 'public')
+  {
+    $validationRules = [
+      'company_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+      'company_brand_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ];
 
+    $fileNames = [
+      'company_logo' => 'logo.png',
+      'company_brand_logo' => 'logo-icon.png',
+    ];
 
-        // The file exists and is allowed to be displayed inline
-        if (Storage::exists($file_with_path) && (in_array(pathinfo($file_with_path, PATHINFO_EXTENSION), $allowed_inline))) {
-            return true;
-        }
-        return false;
+    // Validate file
+    $validator = Validator::make(
+      [$configKey => $file],
+      [$configKey => $validationRules[$configKey]]
+    );
 
+    if ($validator->fails()) {
+      return [
+        'success' => false,
+        'path' => '',
+      ];
     }
 
-    /**
-     * Decide whether to show the file inline or download it.
-     */
-    public static function showOrDownloadFile($file, $filename) {
+    // Determine file path
+    $fileName = $fileNames[$configKey];
+    $filePath = 'logos/' . $fileName;
 
-        $headers = [];
-
-        if (request('inline') == 'true') {
-
-            $headers = [
-                'Content-Disposition' => 'inline',
-            ];
-
-            // This is NOT allowed as inline - force it to be displayed as text in the browser
-            if (self::allowSafeInline($file) != true) {
-                $headers = array_merge($headers, ['Content-Type' => 'text/plain']);
-            }
+    try {
+      if ($disk === 'public') {
+        // Save locally in public/logos
+        $destinationPath = public_path('logos');
+        if (!is_dir($destinationPath)) {
+          mkdir($destinationPath, 0755, true);
         }
 
-        // Everything else seems okay, but the file doesn't exist on the server.
-        if (Storage::missing($file)) {
-            throw new FileNotFoundException();
+        $existingFile = $destinationPath . '/' . $fileName;
+        if (file_exists($existingFile)) {
+          unlink($existingFile);
         }
 
-        return Storage::download($file, $filename, $headers);
+        $file->move($destinationPath, $fileName);
+        $url = asset('logos/' . $fileName);
+      } else {
+        // Save to S3 or other disk
+        $url = self::uploadFile($file, $filePath, $disk);
+      }
 
+      return [
+        'success' => true,
+        'path' => $url,
+      ];
+    } catch (\Exception $e) {
+      Log::error("Failed to store {$configKey}: " . $e->getMessage());
+      return [
+        'success' => false,
+        'path' => '',
+      ];
     }
+  }
 }

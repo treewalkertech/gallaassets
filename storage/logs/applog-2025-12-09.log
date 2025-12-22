@@ -1,0 +1,413 @@
+[2025-12-09 15:25:07] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:07.181970Z","qty":1}]}  
+[2025-12-09 15:25:07] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:07.181970Z","qty":1}]}  
+[2025-12-09 15:25:10] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"A60000000000000000000000","read_time":"2025-12-09T09:55:10.167874100Z","qty":1},{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:10.167874100Z","qty":1}]}  
+[2025-12-09 15:25:10] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"A60000000000000000000000","read_time":"2025-12-09T09:55:10.167874100Z","qty":1},{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:10.167874100Z","qty":1}]}  
+[2025-12-09 15:25:13] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:13.176095500Z","qty":1}]}  
+[2025-12-09 15:25:13] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:13.176095500Z","qty":1}]}  
+[2025-12-09 15:25:19] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"B2000000B124572500000000","read_time":"2025-12-09T09:55:19.198380700Z","qty":1},{"epc":"12345678C5643700000000000000000044532D9C6D31B4EF0E5A3D87","read_time":"2025-12-09T09:55:19.198380700Z","qty":1},{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:19.198380700Z","qty":1}]}  
+[2025-12-09 15:25:19] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"B2000000B124572500000000","read_time":"2025-12-09T09:55:19.198380700Z","qty":1},{"epc":"12345678C5643700000000000000000044532D9C6D31B4EF0E5A3D87","read_time":"2025-12-09T09:55:19.198380700Z","qty":1},{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T09:55:19.198380700Z","qty":1}]}  
+[2025-12-09 15:27:29] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:28.503602800Z","qty":1}]}  
+[2025-12-09 15:27:29] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:28.503602800Z","qty":1}]}  
+[2025-12-09 15:27:32] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:31.507489600Z","qty":1}]}  
+[2025-12-09 15:27:32] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:31.507489600Z","qty":1}]}  
+[2025-12-09 15:27:35] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:34.508433900Z","qty":1}]}  
+[2025-12-09 15:27:35] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:57:34.508433900Z","qty":1}]}  
+[2025-12-09 15:28:32] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:58:31.656295600Z","qty":1}]}  
+[2025-12-09 15:28:32] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T09:58:31.656295600Z","qty":1}]}  
+[2025-12-09 15:29:23] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"D13131440000000000000000","read_time":"2025-12-09T09:59:22.822367600Z","qty":1}]}  
+[2025-12-09 15:29:23] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"D13131440000000000000000","read_time":"2025-12-09T09:59:22.822367600Z","qty":1}]}  
+[2025-12-09 15:31:02] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"12345678C5643700000000000000000044532D9C6D31B4EF0E5A3D87","read_time":"2025-12-09T10:01:02.095220900Z","qty":1}]}  
+[2025-12-09 15:31:02] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"12345678C5643700000000000000000044532D9C6D31B4EF0E5A3D87","read_time":"2025-12-09T10:01:02.095220900Z","qty":1}]}  
+[2025-12-09 15:31:08] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"A60000000000000000000000","read_time":"2025-12-09T10:01:08.102963Z","qty":1}]}  
+[2025-12-09 15:31:08] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"A60000000000000000000000","read_time":"2025-12-09T10:01:08.102963Z","qty":1}]}  
+[2025-12-09 15:31:17] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T10:01:17.129553600Z","qty":1}]}  
+[2025-12-09 15:31:17] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"55550000000122222222220100000000000000000000000000000000000000000000000000000000","read_time":"2025-12-09T10:01:17.129553600Z","qty":1}]}  
+[2025-12-09 15:31:59] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T10:01:59.249854600Z","qty":1}]}  
+[2025-12-09 15:31:59] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T10:01:59.249854600Z","qty":1}]}  
+[2025-12-09 15:32:05] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700BA71662B01EC81F7","read_time":"2025-12-09T10:02:05.258550300Z","qty":1}]}  
+[2025-12-09 15:32:05] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700BA71662B01EC81F7","read_time":"2025-12-09T10:02:05.258550300Z","qty":1}]}  
+[2025-12-09 15:32:09] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700E511662B01EC84A1","read_time":"2025-12-09T10:02:08.262600200Z","qty":1}]}  
+[2025-12-09 15:32:09] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700E511662B01EC84A1","read_time":"2025-12-09T10:02:08.262600200Z","qty":1}]}  
+[2025-12-09 15:32:11] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"5555555500000000D3572129","read_time":"2025-12-09T10:02:11.276969200Z","qty":1}]}  
+[2025-12-09 15:32:11] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"5555555500000000D3572129","read_time":"2025-12-09T10:02:11.276969200Z","qty":1}]}  
+[2025-12-09 15:32:14] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T10:02:14.278320700Z","qty":1}]}  
+[2025-12-09 15:32:14] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T10:02:14.278320700Z","qty":1}]}  
+[2025-12-09 15:33:36] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T10:03:35.483765300Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T10:03:35.483765300Z","qty":1}]}  
+[2025-12-09 15:33:36] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T10:03:35.483765300Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T10:03:35.483765300Z","qty":1}]}  
+[2025-12-09 15:34:24] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T10:04:23.632383600Z","qty":1}]}  
+[2025-12-09 15:34:24] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T10:04:23.632383600Z","qty":1}]}  
+[2025-12-09 15:34:39] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T10:04:38.660368200Z","qty":1}]}  
+[2025-12-09 15:34:39] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T10:04:38.660368200Z","qty":1}]}  
+[2025-12-09 15:34:54] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T10:04:53.704236100Z","qty":1}]}  
+[2025-12-09 15:34:54] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T10:04:53.704236100Z","qty":1}]}  
+[2025-12-09 15:35:00] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD3F","read_time":"2025-12-09T10:04:59.725779900Z","qty":1}]}  
+[2025-12-09 15:35:00] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD3F","read_time":"2025-12-09T10:04:59.725779900Z","qty":1}]}  
+[2025-12-09 15:35:09] local.INFO: fixedReaderScan called{"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700E511662B01EC84A1","read_time":"2025-12-09T10:05:08.753632800Z","qty":1}]}  
+[2025-12-09 15:35:09] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700E511662B01EC84A1","read_time":"2025-12-09T10:05:08.753632800Z","qty":1}]}  
+[2025-12-09 18:31:14] local.ERROR: Call to undefined method App\Helpers\LocaleHelper::getProductSummaryCounts() {"userId":50,"exception":"[object] (Error(code: 0): Call to undefined method App\\Helpers\\LocaleHelper::getProductSummaryCounts() at /var/www/html/laundryApp/app/Http/Controllers/reports/ReportsController.php:35)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\reports\\ReportsController->index()
+#1 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#2 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#6 /var/www/html/laundryApp/app/Http/Middleware/CheckPermission.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\CheckPermission->handle()
+#8 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#9 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#10 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#17 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#19 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#49 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#50 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#51 {main}
+"} 
+[2025-12-09 18:46:49] local.ERROR: Call to undefined method App\Models\products\Product::inventoryTags() {"userId":50,"exception":"[object] (BadMethodCallException(code: 0): Call to undefined method App\\Models\\products\\Product::inventoryTags() at /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php:67)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(36): Illuminate\\Database\\Eloquent\\Model::throwBadMethodCallException()
+#1 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2335): Illuminate\\Database\\Eloquent\\Model->forwardCallTo()
+#2 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/QueriesRelationships.php(876): Illuminate\\Database\\Eloquent\\Model->__call()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/Relation.php(110): Illuminate\\Database\\Eloquent\\Builder->Illuminate\\Database\\Eloquent\\Concerns\\{closure}()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/QueriesRelationships.php(875): Illuminate\\Database\\Eloquent\\Relations\\Relation::noConstraints()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/QueriesRelationships.php(39): Illuminate\\Database\\Eloquent\\Builder->getRelationWithoutConstraints()
+#6 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/QueriesRelationships.php(152): Illuminate\\Database\\Eloquent\\Builder->has()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Support/Traits/ForwardsCalls.php(23): Illuminate\\Database\\Eloquent\\Builder->whereHas()
+#8 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2335): Illuminate\\Database\\Eloquent\\Model->forwardCallTo()
+#9 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(2347): Illuminate\\Database\\Eloquent\\Model->__call()
+#10 /var/www/html/laundryApp/app/Http/Controllers/products/ProductsController.php(54): Illuminate\\Database\\Eloquent\\Model::__callStatic()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\products\\ProductsController->index()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#17 /var/www/html/laundryApp/app/Http/Middleware/CheckPermission.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\CheckPermission->handle()
+#19 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#49 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#50 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#51 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#52 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#53 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#54 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#55 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#56 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#57 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#58 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#59 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#60 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#61 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#62 {main}
+"} 
+[2025-12-09 19:26:44] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T13:56:44.391406700Z","qty":1}]}  
+[2025-12-09 19:26:44] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2004700B7B1662B01EC81CB","read_time":"2025-12-09T13:56:44.391406700Z","qty":1}]}  
+[2025-12-09 19:26:57] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:56:56.410047900Z","qty":1}]}  
+[2025-12-09 19:26:57] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:56:56.410047900Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:56:56.410047900Z","qty":1}]}  
+[2025-12-09 19:26:59] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:56:59.419915500Z","qty":1}]}  
+[2025-12-09 19:26:59] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:56:59.419915500Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:56:59.419915500Z","qty":1}]}  
+[2025-12-09 19:27:51] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:57:50.592696400Z","qty":1}]}  
+[2025-12-09 19:27:51] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:57:50.592696400Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:57:50.592696400Z","qty":1}]}  
+[2025-12-09 19:27:54] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1}]}  
+[2025-12-09 19:27:54] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:57:53.592562600Z","qty":1}]}  
+[2025-12-09 19:28:21] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:58:20.683143900Z","qty":1}]}  
+[2025-12-09 19:28:21] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2DD4F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2DD1F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2DD2F","read_time":"2025-12-09T13:58:20.683143900Z","qty":1},{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:58:20.683143900Z","qty":1}]}  
+[2025-12-09 19:29:21] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:20.826198600Z","qty":1}]}  
+[2025-12-09 19:29:21] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:20.826198600Z","qty":1}]}  
+[2025-12-09 19:29:24] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:23.834120500Z","qty":1}]}  
+[2025-12-09 19:29:24] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:23.834120500Z","qty":1}]}  
+[2025-12-09 19:29:30] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:29.855979900Z","qty":1}]}  
+[2025-12-09 19:29:30] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T13:59:29.855979900Z","qty":1}]}  
+[2025-12-09 19:30:24] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T14:00:24.006231900Z","qty":1}]}  
+[2025-12-09 19:30:24] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T14:00:24.006231900Z","qty":1}]}  
+[2025-12-09 19:31:21] local.INFO: fixedReaderScan called {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T14:01:21.144792200Z","qty":1}]}  
+[2025-12-09 19:31:21] local.INFO: fixedReaderScan payload: {"reader_code":"GATE_A_01","movement":"inward","reads":[{"epc":"E2801170000002136AA2C3FF","read_time":"2025-12-09T14:01:21.144792200Z","qty":1}]}  
+[2025-12-09 20:27:32] local.ERROR: Undefined property: stdClass::$staus {"userId":50,"exception":"[object] (ErrorException(code: 0): Undefined property: stdClass::$staus at /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php:97)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(97): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(225): App\\Http\\Controllers\\dashboard\\DashboardController->tableHeaderRowData()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\dashboard\\DashboardController->list()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#6 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#8 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#9 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#10 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#17 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#19 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#49 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#50 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#51 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#52 {main}
+"} 
+[2025-12-09 20:27:35] local.ERROR: Undefined property: stdClass::$staus {"userId":50,"exception":"[object] (ErrorException(code: 0): Undefined property: stdClass::$staus at /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php:97)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(97): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(225): App\\Http\\Controllers\\dashboard\\DashboardController->tableHeaderRowData()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\dashboard\\DashboardController->list()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#6 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#8 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#9 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#10 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#17 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#19 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#49 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#50 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#51 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#52 {main}
+"} 
+[2025-12-09 20:28:49] local.ERROR: Undefined property: stdClass::$staus {"userId":50,"exception":"[object] (ErrorException(code: 0): Undefined property: stdClass::$staus at /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php:97)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(97): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(225): App\\Http\\Controllers\\dashboard\\DashboardController->tableHeaderRowData()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\dashboard\\DashboardController->list()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#6 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#8 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#9 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#10 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#17 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#19 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#49 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#50 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#51 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#52 {main}
+"} 
+[2025-12-09 20:29:12] local.ERROR: Undefined property: stdClass::$status {"userId":50,"exception":"[object] (ErrorException(code: 0): Undefined property: stdClass::$status at /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php:97)
+[stacktrace]
+#0 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError()
+#1 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(97): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}()
+#2 /var/www/html/laundryApp/app/Http/Controllers/dashboard/DashboardController.php(225): App\\Http\\Controllers\\dashboard\\DashboardController->tableHeaderRowData()
+#3 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\dashboard\\DashboardController->list()
+#4 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction()
+#5 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#6 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#7 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#8 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}()
+#9 /var/www/html/laundryApp/app/Http/Middleware/PreventBackHistory.php(17): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#10 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\PreventBackHistory->handle()
+#11 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#12 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#13 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Auth/Middleware/Authenticate.php(57): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#14 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Auth\\Middleware\\Authenticate->handle()
+#15 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle()
+#17 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#19 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#21 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle()
+#22 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#23 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#24 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#25 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#26 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#27 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then()
+#28 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack()
+#29 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute()
+#30 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute()
+#31 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#32 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#33 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#36 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#38 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#39 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#40 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle()
+#41 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#42 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#43 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#45 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#46 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#47 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#48 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#49 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#50 /var/www/html/laundryApp/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle()
+#51 /var/www/html/laundryApp/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(16): require_once('...')
+#52 {main}
+"} 
