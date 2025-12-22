@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Api\AssetRfidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,28 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::withoutMiddleware(['auth:api'])->group(function () {
+
+    Route::post(
+        '/assets/update-rfid',
+        [AssetRfidController::class, 'update']
+    );
+
+    Route::post(
+        '/assets/update-rfid-bulk',
+        [AssetRfidController::class, 'bulkUpdate']
+    );
+
+    Route::get(
+        '/assets/all-details',
+        [AssetRfidController::class, 'index']
+    );
+
+});
+
+
+
 
 Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], function () {
 
@@ -674,6 +697,24 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], functi
             Route::get('', [ Api\LabelsController::class, 'index'])
                 ->name('api.labels.index');
         });
+
+        Route::resource(
+        'purchase-orders',
+        Api\PurchaseOrdersController::class,
+        [
+            'names' => [
+                'index'   => 'api.purchase-orders.index',
+                'show'    => 'api.purchase-orders.show',
+                'update'  => 'api.purchase-orders.update',
+                'store'   => 'api.purchase-orders.store',
+                'destroy' => 'api.purchase-orders.destroy',
+            ],
+            'except' => ['create', 'edit'],
+            'parameters' => ['purchase-orders' => 'purchase_order_id'],
+        ]
+    );
+
+
 
         /**
          * Licenses API routes

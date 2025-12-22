@@ -13,6 +13,7 @@ class CustomFieldSeeder extends Seeder
 {
     public function run()
     {
+        // Remove old snipeit columns only
         $columns = DB::getSchemaBuilder()->getColumnListing('assets');
 
         foreach ($columns as $column) {
@@ -22,94 +23,42 @@ class CustomFieldSeeder extends Seeder
                 });
             }
         }
+
+        // Clean tables
         CustomField::truncate();
         CustomFieldset::truncate();
         DB::table('custom_field_custom_fieldset')->truncate();
 
-        CustomFieldset::factory()->count(1)->mobile()->create();
-        CustomFieldset::factory()->count(1)->computer()->create();
-        CustomField::factory()->count(1)->imei()->create();
-        CustomField::factory()->count(1)->phone()->create();
-        CustomField::factory()->count(1)->ram()->create();
-        CustomField::factory()->count(1)->cpu()->create();
-        CustomField::factory()->count(1)->macAddress()->create();
-        CustomField::factory()->count(1)->testEncrypted()->create();
-        CustomField::factory()->count(1)->testCheckbox()->create();
-        CustomField::factory()->count(1)->testRadio()->create();
+        /* -----------------------------------
+         | 1️⃣ CREATE FIELDSETS (THIS PART YOU ASKED)
+         ----------------------------------- */
+        $assetFieldset = CustomFieldset::create([
+            'name'       => 'Barcode',
+            'created_by' => 1, // admin user id
+        ]);
 
+        /* -----------------------------------
+         | 2️⃣ CREATE ONLY REQUIRED FIELDS
+         ----------------------------------- */
+        $macField = CustomField::factory()->macAddress()->create();
+        $barcodeField = CustomField::factory()->barcode()->create();
 
+        /* -----------------------------------
+         | 3️⃣ MAP FIELDS TO FIELDSET
+         ----------------------------------- */
         DB::table('custom_field_custom_fieldset')->insert([
             [
-                'custom_field_id' => '1',
-                'custom_fieldset_id' => '1',
-                'order' => 0,
-                'required' => 0,
+                'custom_field_id'     => $macField->id,
+                'custom_fieldset_id'  => $assetFieldset->id,
+                'order'               => 0,
+                'required'            => 0,
             ],
             [
-                'custom_field_id' => '2',
-                'custom_fieldset_id' => '1',
-                'order' => 0,
-                'required' => 0,
+                'custom_field_id'     => $barcodeField->id,
+                'custom_fieldset_id'  => $assetFieldset->id,
+                'order'               => 1,
+                'required'            => 0,
             ],
-            [
-                'custom_field_id' => '3',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-            [
-                'custom_field_id' => '4',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-            [
-                'custom_field_id' => '5',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-
-            [
-                'custom_field_id' => '6',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-
-            [
-                'custom_field_id' => '6',
-                'custom_fieldset_id' => '1',
-                'order' => 0,
-                'required' => 0,
-            ],
-
-            [
-                'custom_field_id' => '7',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-            [
-                'custom_field_id' => '7',
-                'custom_fieldset_id' => '1',
-                'order' => 0,
-                'required' => 0,
-            ],
-
-            [
-                'custom_field_id' => '8',
-                'custom_fieldset_id' => '2',
-                'order' => 0,
-                'required' => 0,
-            ],
-            [
-                'custom_field_id' => '8',
-                'custom_fieldset_id' => '1',
-                'order' => 0,
-                'required' => 0,
-            ],
-
         ]);
     }
 }

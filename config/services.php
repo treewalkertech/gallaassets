@@ -48,4 +48,12 @@ return [
         'maps_api_key' => env('GOOGLE_MAPS_API'),
     ],
 
+     'sdp' => [
+        'url' => env('SDP_API_URL'),
+        'po_url' => env('SDP_BASE_URL'),
+        // 'key' => env('SDP_TECHNICIAN_KEY'),
+        'base_url' => env('SDP_BASE_URL'),
+        'key'      => env('SDP_KEY'),
+    ],
+
 ];

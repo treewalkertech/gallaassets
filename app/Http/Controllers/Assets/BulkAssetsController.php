@@ -101,6 +101,8 @@ class BulkAssetsController extends Controller
                 ->whereIn('assets.id', $asset_ids)
                 ->withTrashed();
 
+        
+
         $assets = $assets->get();
 
         if ($assets->isEmpty()) {

@@ -117,4 +117,23 @@ class CustomFieldFactory extends Factory
         });
     }
 
+    public function barcode()
+    {
+        return $this->state(function () {
+            return [
+                'name'        => 'Barcode',
+                'format'      => 'string',
+                'element'     => 'text',
+                'is_unique'     => '1',
+                'display_in_user_view'     => '1',
+                'show_in_listview'     => '1',
+                'auto_add_to_fieldsets'     => '1',
+                'field_encrypted' => 0,
+                'help_text'   => 'Asset barcode value',
+            ];
+        });
+    }
+
+
+
 }

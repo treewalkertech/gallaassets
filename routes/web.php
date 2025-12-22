@@ -10,8 +10,10 @@ use App\Http\Controllers\DepreciationsController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\ImportsController;
+use App\Http\Controllers\Asyncassetcontroller;
 use App\Http\Controllers\LabelsController;
 use App\Http\Controllers\LocationsController;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\ModalController;
 use App\Http\Controllers\ProfileController;
@@ -176,8 +178,40 @@ Route::group(['middleware' => 'auth'], function () {
 | Register all the admin routes.
 |
 */
+Route::get('/test-sdp', function () {
+
+   $response = Http::withOptions([
+        'verify' => false,        // allow self-signed cert
+        'timeout' => 60,
+        'curl' => [
+            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+        ],
+    ])
+    ->withHeaders([
+        'TECHNICIAN_KEY' => config('services.sdp.key'),
+        'Accept' => 'application/json',
+    ])
+    ->withCookies([
+        'SDPSESSIONID'   => '607966AEF40D646D04AE525184F5D12D',
+        '_zcsr_tmp'      => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
+        'sdpcsrfcookie'  => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
+    ], 'localhost')
+    ->get('https://localhost:8080/api/v3/assets');
+
+
+    return response()->json([
+        'status_code' => $response->status(),
+        'headers'     => $response->headers(),
+        'body'        => $response->body(),
+    ]);
+});
+
+
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser']], function () {
+    Route::get('/assets', [Asyncassetcontroller::class, 'index']);
+    Route::post('/assets/sync', [Asyncassetcontroller::class, 'sync'])->name('sync.assets');
+    
     Route::get('settings', [SettingsController::class, 'getSettings'])->name('settings.general.index');
     Route::post('settings', [SettingsController::class, 'postSettings'])->name('settings.general.save');
 

@@ -85,7 +85,45 @@ dir="{{ Helper::determineLanguageDirection() }}">
     <script src="{{ url(asset('js/html5shiv.js')) }}" nonce="{{ csrf_token() }}"></script>
     <script src="{{ url(asset('js/respond.js')) }}" nonce="{{ csrf_token() }}"></script>
 
+<style>
+    /* Full-page sync overlay */
+.sync-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.75);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+/* Loader box */
+.sync-overlay-content {
+    text-align: center;
+    background: #fff;
+    padding: 30px 40px;
+    /* border-radius: 6px; */
+    /* box-shadow: 0 5px 20px rgba(0,0,0,0.15); */
+}
+
+.sync-overlay-content i {
+    color: #3c8dbc; /* Snipe-IT blue */
+}
+
+.sync-overlay-content .sync-text {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Disabled dropdown link */
+.dropdown-link.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+</style>
 
 </head>
 
@@ -94,6 +132,14 @@ dir="{{ Helper::determineLanguageDirection() }}">
     @else
         <body class="sidebar-mini skin-{{ $snipeSettings->skin!='' ? $snipeSettings->skin : 'blue' }} {{ (session('menu_state')!='open') ? 'sidebar-mini sidebar-collapse' : ''  }}">
         @endif
+
+        <!-- Global Center Loader -->
+<div id="globalSyncOverlay" class="sync-overlay" style="display:none;">
+    <div class="sync-overlay-content">
+        <i class="fa fa-spinner fa-spin fa-3x"></i>
+        <div class="sync-text">Syncing assets…</div>
+    </div>
+</div>
 
 
         <a class="skip-main" href="#main">{{ trans('general.skip_to_main_content') }}</a>
@@ -362,6 +408,23 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 <x-icon type="checkmark" class="fa-fw" />
                                                 {{ trans('general.accept_assets_menu') }}
                                             </a></li>
+                                        
+                                        <li>
+                                            <a
+                                                href="#"
+                                                id="syncAssets"
+                                                class="dropdown-link"
+                                                title="{{ trans('general.syncasset') ?? 'Sync Asset' }}"
+                                            >
+                                                <x-icon type="download" class="fa-fw" />
+                                                <span id="syncText">{{ trans('general.syncasset') ?? 'Sync Asset' }}</span>
+                                                <span id="syncLoader" style="display:none;margin-left:8px;">
+                                                    <i class="fa fa-spinner fa-spin"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+
+
 
 
                                         @can('self.profile')
@@ -418,10 +481,13 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                         <span class="sr-only">{{ trans('general.admin') }}</span>
                                     </a>
                                 </li>
+                                
                             @endcan
                         </ul>
                     </div>
                 </nav>
+
+          
                 <a href="#" style="float:left" class="sidebar-toggle-mobile visible-xs btn" data-toggle="push-menu"
                    role="button">
                     <span class="sr-only">{{ trans('general.toggle_navigation') }}</span>
@@ -1153,6 +1219,62 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
 
         </script>
+       <script>
+document.getElementById('syncAssets').addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const link   = this;
+    const text   = document.getElementById('syncText');
+    const loader = document.getElementById('syncLoader');
+    const overlay = document.getElementById('globalSyncOverlay');
+
+    // Disable link
+    link.classList.add('disabled');
+
+    // Dropdown loader
+    text.textContent = 'Syncing…';
+    loader.style.display = 'inline-block';
+
+    // Center loader
+    overlay.style.display = 'flex';
+
+    // Force repaint before fetch
+    setTimeout(() => {
+        fetch('{{ route('sync.assets') }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status !== 'success') {
+                throw new Error(data.message || 'Sync failed');
+            }
+
+            // Refresh asset table only
+            if (window.$ && $('#assetsListingTable').length) {
+                $('#assetsListingTable').bootstrapTable('refresh');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert(err.message || 'Network or server error');
+        })
+        .finally(() => {
+            // Reset UI
+            overlay.style.display = 'none';
+            loader.style.display = 'none';
+            text.textContent = '{{ trans('general.syncasset') ?? 'Sync Asset' }}';
+            link.classList.remove('disabled');
+        });
+    }, 50);
+});
+</script>
+
+
 
         @if ((Session::get('topsearch')=='true') || (Request::is('/')))
             <script nonce="{{ csrf_token() }}">
