@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Asset extends Depreciable
 {
+     use SoftDeletes;
 
     protected $presenter = AssetPresenter::class;
     protected $with = ['model', 'adminuser'];
@@ -133,6 +134,8 @@ class Asset extends Depreciable
    * @var array
    */
     protected $fillable = [
+        'external_asset_id',
+        'external_source',
         'asset_tag',
         'assigned_to',
         'assigned_type',

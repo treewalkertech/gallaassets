@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::truncate();
+        // User::truncate();
 
         if (! Company::count()) {
             $this->call(CompanySeeder::class);
@@ -40,40 +40,40 @@ class UserSeeder extends Seeder
             ]))
             ->create();
 
-        User::factory()->count(1)->snipeAdmin()
-            ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
-                'department_id' => $departmentIds->random(),
-            ]))
-            ->create();
+        // User::factory()->count(1)->snipeAdmin()
+        //     ->state(new Sequence(fn($sequence) => [
+        //         'company_id' => $companyIds->random(),
+        //         'department_id' => $departmentIds->random(),
+        //     ]))
+        //     ->create();
 
-        User::factory()->count(1)->testAdmin()
-            ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
-                'department_id' => $departmentIds->random(),
-            ]))
-            ->create();
+        // User::factory()->count(1)->testAdmin()
+        //     ->state(new Sequence(fn($sequence) => [
+        //         'company_id' => $companyIds->random(),
+        //         'department_id' => $departmentIds->random(),
+        //     ]))
+        //     ->create();
 
-        User::factory()->count(3)->superuser()
-            ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
-                'department_id' => $departmentIds->random(),
-            ]))
-            ->create();
+        // User::factory()->count(3)->superuser()
+        //     ->state(new Sequence(fn($sequence) => [
+        //         'company_id' => $companyIds->random(),
+        //         'department_id' => $departmentIds->random(),
+        //     ]))
+        //     ->create();
 
-        User::factory()->count(3)->admin()
-            ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
-                'department_id' => $departmentIds->random(),
-            ]))
-            ->create();
+        // User::factory()->count(3)->admin()
+        //     ->state(new Sequence(fn($sequence) => [
+        //         'company_id' => $companyIds->random(),
+        //         'department_id' => $departmentIds->random(),
+        //     ]))
+        //     ->create();
 
-        User::factory()->count(50)->viewAssets()
-            ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
-                'department_id' => $departmentIds->random(),
-            ]))
-            ->create();
+        // User::factory()->count(50)->viewAssets()
+        //     ->state(new Sequence(fn($sequence) => [
+        //         'company_id' => $companyIds->random(),
+        //         'department_id' => $departmentIds->random(),
+        //     ]))
+        //     ->create();
 
         $src = public_path('/img/demo/avatars/');
         $dst = 'avatars'.'/';

@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Asset;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
+class AssetRfidController extends Controller
+{
+    public function update(Request $request)
+    {
+        // ✅ Validate request
+        $validator = Validator::make($request->all(), [
+            'asset_tag' => 'required|string',
+            'rfid'      => 'required|string|max:200',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        // ✅ Find asset by asset_tag
+        $asset = Asset::where('asset_tag', $request->asset_tag)->first();
+
+        if (!$asset) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Asset not found',
+            ], 404);
+        }
+
+        // ✅ Update RFID
+        $asset->rfid = $request->rfid;
+        $asset->save();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'RFID updated successfully',
+            'data'    => [
+                'asset_id'  => $asset->id,
+                'asset_tag' => $asset->asset_tag,
+                'rfid'      => $asset->rfid,
+            ],
+        ]);
+    }
+
+
+     /**
+     * BULK RFID UPDATE
+     */
+    public function bulkUpdate(Request $request)
+    {
+        // ✅ Validate structure
+        $validator = Validator::make($request->all(), [
+            'items' => 'required|array|min:1',
+            'items.*.asset_tag' => 'required|string',
+            'items.*.rfid' => 'required|string|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $updated = [];
+        $notFound = [];
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($request->items as $row) {
+
+                $asset = Asset::where('asset_tag', $row['asset_tag'])->first();
+
+                if (!$asset) {
+                    $notFound[] = $row['asset_tag'];
+                    continue;
+                }
+
+                $asset->rfid = $row['rfid'];
+                $asset->save();
+
+                $updated[] = [
+                    'asset_id'  => $asset->id,
+                    'asset_tag' => $asset->asset_tag,
+                    'rfid'      => $asset->rfid,
+                ];
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'updated_count' => count($updated),
+                'not_found_count' => count($notFound),
+                'updated' => $updated,
+                'not_found_asset_tags' => $notFound,
+            ]);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Bulk update failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+      /**
+     * Get all asset details
+     */
+    public function index()
+    {
+        $assets = Asset::query()
+            ->select([
+                'id',
+                'external_asset_id',
+                'external_source',
+                'name',
+                'asset_tag',
+                'rfid',
+                'model_id',
+                'serial',
+                'purchase_date',
+                'asset_eol_date',
+                'purchase_cost',
+                'status_id',
+                'company_id',
+                'location_id',
+                'created_at',
+                'updated_at',
+            ])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'count'  => $assets->count(),
+            'data'   => $assets,
+        ]);
+    }
+}

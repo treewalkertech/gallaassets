@@ -113,6 +113,7 @@ return [
     'download'				=> 'Download',
     'download_all'		    => 'Download All',
     'editprofile'  			=> 'Edit Your Profile',
+    'syncasset'  			=> 'Sync Your Assets',
     'eol'					=> 'EOL',
     'email_domain'			=> 'Email Domain',
     'email_format'			=> 'Email Format',
