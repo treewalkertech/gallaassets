@@ -16,24 +16,24 @@ use App\Http\Controllers\Api\AssetRfidController;
 |
 */
 
-Route::withoutMiddleware(['auth:api'])->group(function () {
+    Route::withoutMiddleware(['auth:api'])->group(function () {
 
-    Route::post(
-        '/assets/update-rfid',
-        [AssetRfidController::class, 'update']
-    );
+        Route::post(
+            '/assets/update-rfid',
+            [AssetRfidController::class, 'update']
+        );
 
-    Route::post(
-        '/assets/update-rfid-bulk',
-        [AssetRfidController::class, 'bulkUpdate']
-    );
+        Route::post(
+            '/assets/update-rfid-bulk',
+            [AssetRfidController::class, 'bulkUpdate']
+        );
 
-    Route::get(
-        '/assets/all-details',
-        [AssetRfidController::class, 'index']
-    );
+        Route::get(
+            '/assets/all-details',
+            [AssetRfidController::class, 'index']
+        );
 
-});
+    });
 
 
 

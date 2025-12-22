@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -121,8 +122,9 @@ class AssetRfidController extends Controller
       /**
      * Get all asset details
      */
-    public function index()
+        public function index()
     {
+        // 🔹 Assets
         $assets = Asset::query()
             ->select([
                 'id',
@@ -145,10 +147,26 @@ class AssetRfidController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
+        // 🔹 Locations
+        $locations = Location::query()
+            ->select([
+                'id',
+                'name',
+                'city',
+                'country',
+                'address',
+                'created_at',
+                'updated_at',
+            ])
+            ->orderBy('name')
+            ->get();
+
         return response()->json([
             'status' => 'success',
-            'count'  => $assets->count(),
-            'data'   => $assets,
+            'assets_count' => $assets->count(),
+            'locations_count' => $locations->count(),
+            'assets' => $assets,
+            'locations' => $locations,
         ]);
     }
 }
