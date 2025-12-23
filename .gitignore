@@ -1,26 +1,19 @@
-# Composer dependencies (ONLY root vendor)
-vendor/
-
-# Node
-node_modules/
-
-# Environment files
+# Ignore environment files
 .env
 .env.*
 !.env.example
 
+# Ignore dependencies
+/vendor/
+/node_modules/
+
 # Laravel cache & logs
-/storage/*.key
 /storage/logs/*
-/storage/framework/cache/*
-/storage/framework/sessions/*
-/storage/framework/views/*
-
-# Public build artifacts
-/public/hot
+/storage/framework/*
 /public/storage
+/public/hot
 
-# IDE & OS
+# IDE
 .idea
 .vscode
 .DS_Store
