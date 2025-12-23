@@ -23,7 +23,7 @@
                             data-show-columns="true"
                             data-show-export="true"
                             data-show-refresh="true"
-                            data-sort-order="asc"
+                            data-sort-order="desc"
                             id="auditReport"
                             data-url="{{ route('api.activity.index', ['action_type' => 'audit']) }}"
                             class="table table-striped snipe-table"

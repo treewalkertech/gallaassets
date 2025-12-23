@@ -60,6 +60,14 @@ class AssetPresenter extends Presenter
                 'visible' => true,
                 'formatter' => 'hardwareLinkFormatter',
             ], [
+                'field' => 'rfid',
+                'searchable' => true,
+                'sortable' => true,
+                'switchable' => false,
+                'title' => trans('admin/hardware/table.rfid'),
+                'visible' => true,
+            ],
+            [
                 'field' => 'serial',
                 'searchable' => true,
                 'sortable' => true,

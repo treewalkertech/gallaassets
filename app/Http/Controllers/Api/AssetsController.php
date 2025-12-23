@@ -95,6 +95,7 @@ class AssetsController extends Controller
             'model_number',
             'last_checkout',
             'last_checkin',
+            'rfid',
             'notes',
             'expected_checkin',
             'order_number',

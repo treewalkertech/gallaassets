@@ -182,90 +182,91 @@ class AssetRfidController extends Controller
     
         
         
-     public function auditStoreRaw(Request $request): JsonResponse
-{
-    /* ----------------------------------
-    | Validate array input
-    ---------------------------------- */
-    $validator = Validator::make($request->all(), [
-        '*.asset_tag'   => 'required|string|max:255',
-        '*.rfid'        => 'required|string|max:255',
-        '*.location_id' => 'required|integer|exists:locations,id',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json(
-            Helper::formatStandardApiResponse(
-                'error',
-                null,
-                $validator->errors()->all()
-            ),
-            422
-        );
-    }
-
-    $success = [];
-    $notMatched = [];
-
-    foreach ($request->all() as $row) {
-
+        public function auditStoreRaw(Request $request): JsonResponse
+    {
         /* ----------------------------------
-        | Try matching asset_tag + rfid
+        | Validate array input
         ---------------------------------- */
-        $asset = Asset::where('asset_tag', $row['asset_tag'])
-            ->where('rfid', $row['rfid'])
-            ->first();
+        $validator = Validator::make($request->all(), [
+            '*.asset_tag'   => 'required|string|max:255',
+            '*.rfid'        => 'required|string|max:255',
+            '*.location_id' => 'required|integer|exists:locations,id',
+        ]);
 
-        if (!$asset) {
-            // ❌ Collect but DO NOT stop
-            $notMatched[] = [
-                'asset_tag' => $row['asset_tag'],
-                'rfid'      => $row['rfid'],
-                'reason'    => 'Asset tag and RFID mismatch',
+        if ($validator->fails()) {
+            return response()->json(
+                Helper::formatStandardApiResponse(
+                    'error',
+                    null,
+                    $validator->errors()->all()
+                ),
+                422
+            );
+        }
+
+        $success = [];
+        $notMatched = [];
+
+        foreach ($request->all() as $row) {
+
+            /* ----------------------------------
+            | Try matching asset_tag + rfid
+            ---------------------------------- */
+            $asset = Asset::where('asset_tag', $row['asset_tag'])
+                ->where('rfid', $row['rfid'])
+                ->first();
+
+            if (!$asset) {
+                // ❌ Collect but DO NOT stop
+                $notMatched[] = [
+                    'asset_tag' => $row['asset_tag'],
+                    'rfid'      => $row['rfid'],
+                    'reason'    => 'Asset tag and RFID mismatch',
+                ];
+                continue;
+            }
+
+            /* ----------------------------------
+            | Update audit for matched asset
+            ---------------------------------- */
+            $asset->last_audit_date = now();
+            $asset->location_id     = $row['location_id'];
+            $asset->save();
+
+            /* ----------------------------------
+            | Log audit
+            ---------------------------------- */
+            $asset->logAudit(
+                'Audit completed via bulk RFID scan',
+                $row['location_id'],
+                null
+            );
+
+            $success[] = [
+                'asset_id'        => $asset->id,
+                'asset_tag'       => $asset->asset_tag,
+                'rfid'            => $asset->rfid,
+                'location_id'     => $asset->location_id,
+                'last_audit_date' => $asset->last_audit_date,
+                'created_by'      => 1,
             ];
-            continue;
         }
 
         /* ----------------------------------
-        | Update audit for matched asset
+        | FINAL RESPONSE (NO ERRORS)
         ---------------------------------- */
-        $asset->last_audit_date = now();
-        $asset->location_id     = $row['location_id'];
-        $asset->save();
-
-        /* ----------------------------------
-        | Log audit
-        ---------------------------------- */
-        $asset->logAudit(
-            'Audit completed via bulk RFID scan',
-            $row['location_id'],
-            null
+        return response()->json(
+            Helper::formatStandardApiResponse(
+                'success',
+                [
+                    'total_received' => count($request->all()),
+                    'updated'        => count($success),
+                    'not_matched'    => $notMatched,
+                    'updated_assets' => $success,
+                ],
+                'Bulk audit completed'
+            )
         );
-
-        $success[] = [
-            'asset_id'        => $asset->id,
-            'asset_tag'       => $asset->asset_tag,
-            'rfid'            => $asset->rfid,
-            'location_id'     => $asset->location_id,
-            'last_audit_date' => $asset->last_audit_date,
-        ];
     }
-
-    /* ----------------------------------
-    | FINAL RESPONSE (NO ERRORS)
-    ---------------------------------- */
-    return response()->json(
-        Helper::formatStandardApiResponse(
-            'success',
-            [
-                'total_received' => count($request->all()),
-                'updated'        => count($success),
-                'not_matched'    => $notMatched,
-                'updated_assets' => $success,
-            ],
-            'Bulk audit completed'
-        )
-    );
-}
 
 }
