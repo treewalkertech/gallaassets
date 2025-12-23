@@ -33,6 +33,11 @@ use App\Http\Controllers\Api\AssetRfidController;
             [AssetRfidController::class, 'index']
         );
 
+        Route::post('/audit/public-store', [
+        AssetRfidController::class,
+        'auditStoreRaw'
+         ]);
+
     });
 
 

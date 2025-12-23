@@ -142,6 +142,7 @@ class AssetSyncService
 
                 // 🔗 PO CONNECTION
                 $asset->order_number = $item['purchase_order_no'] ?? null;
+                $asset->last_audit_date = now();
 
                 // REQUIRED FIELDS (SNIPE-IT)
                $modelId = null;
