@@ -13,6 +13,10 @@
 /public/storage
 /public/hot
 
+# Laravel compiled / cache files
+/bootstrap/cache/*
+!.gitignore
+
 # IDE
 .idea
 .vscode

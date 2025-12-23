@@ -174,59 +174,55 @@ public function update(Request $request)
       /**
      * Get all asset details
      */
-        public function index()
-    {
-        // 🔹 Assets
-        $assets = Asset::query()
-            ->select([
-                'id',
-                'external_asset_id',
-                'external_source',
-                'name',
-                'asset_tag',
-                'rfid',
-                'model_id',
-                'serial',
-                'purchase_date',
-                'asset_eol_date',
-                'purchase_cost',
-                'status_id',
-                'company_id',
-                'location_id',
-                'created_at',
-                'updated_at',
-            ])
-            ->orderBy('id', 'desc')
-            ->get();
+public function indexBK()
+{
+    // 🔹 Assets with location name (SAFE ADDITION)
+    $assets = Asset::query()
+        ->leftJoin('locations', 'assets.location_id', '=', 'locations.id')
+        ->select([
+            'assets.id',
+            'assets.external_asset_id',
+            'assets.external_source',
+            'assets.name',
+            'assets.asset_tag',
+            'assets.rfid',
+            'assets.model_id',
+            'assets.serial',
+            'assets.purchase_date',
+            'assets.asset_eol_date',
+            'assets.purchase_cost',
+            'assets.status_id',
+            'assets.company_id',
+            'assets.location_id',
+            'locations.name as location_name', // ✅ NEW (non-breaking)
+            'assets.created_at',
+            'assets.updated_at',
+        ])
+        ->orderBy('assets.id', 'desc')
+        ->get();
 
-        // 🔹 Locations
-        $locations = Location::query()
-            ->select([
-                'id',
-                'name',
-                'city',
-                'country',
-                'address',
-                'created_at',
-                'updated_at',
-            ])
-            ->orderBy('name')
-            ->get();
+    // 🔹 Locations (UNCHANGED)
+    $locations = Location::query()
+        ->select([
+            'id',
+            'name',
+            'city',
+            'country',
+            'address',
+            'created_at',
+            'updated_at',
+        ])
+        ->orderBy('name')
+        ->get();
 
-        return response()->json([
-            'status' => 'success',
-            'assets_count' => $assets->count(),
-            'locations_count' => $locations->count(),
-            'assets' => $assets,
-            'locations' => $locations,
-        ]);
-    }
-
-
-    
-    
-        
-        
+    return response()->json([
+        'status' => 'success',
+        'assets_count' => $assets->count(),
+        'locations_count' => $locations->count(),
+        'assets' => $assets,     // same key
+        'locations' => $locations, // same key
+    ]);
+}
         public function auditStoreRaw(Request $request): JsonResponse
     {
         /* ----------------------------------
