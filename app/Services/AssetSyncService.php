@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class AssetSyncService
 {
+
+    private const SDP_BASE_URL = 'https://localhost:8080/api/v3';
+
     public function sync(): array
     {
         DB::beginTransaction();
@@ -41,11 +44,21 @@ class AssetSyncService
 
             /**
              * ------------------------------------------------
+             * STEP 1.5: SYNC ASSET CATEGORIES (MASTER)
+             * ------------------------------------------------
+             */
+            $assetCategories = $this->fetchAssetCategories();
+            $this->syncAssetCategories($assetCategories);
+
+            /**
+             * ------------------------------------------------
              * STEP 2: FETCH ASSETS (YOUR EXISTING LOGIC)
              * ------------------------------------------------
              */
            
-            $assetsUrl = 'https://localhost:8080/api/v3/assets';
+            // $assetsUrl = 'https://localhost:8080/api/v3/assets';
+            $assetsUrl = self::SDP_BASE_URL . '/assets';
+
 
             $response = Http::withOptions([
                 'verify'  => false,
@@ -132,7 +145,11 @@ class AssetSyncService
                     (int) $item['id']
                 );
 
-                $asset->_snipeit_barcode_2       = $item['barcode'] ?? null; 
+                $asset->order_number = $item['purchase_order_no'] ?? null;
+                $asset->current_value = $item['current_cost'] ?? null;
+
+
+                // $asset->_snipeit_barcode_2       = $item['barcode'] ?? null; 
                 $asset->purchase_cost = $item['purchase_cost'] ?? 0;
                 // $asset->purchase_cost = $item['current_cost'] ?? 0;
                 $asset->location_id = $locationId; 
@@ -140,8 +157,126 @@ class AssetSyncService
                 $asset->purchase_date  = $this->date($item['acquisition_date']['value'] ?? null);
                 $asset->asset_eol_date = $this->date($item['expiry_date']['value'] ?? null);
 
-                // 🔗 PO CONNECTION
-                $asset->order_number = $item['purchase_order_no'] ?? null;
+               // 🔗 PURCHASE ORDER (SAFE RESOLUTION)
+                $poNumber = $item['purchase_order_no'] ?? null;
+
+                $purchaseOrder = DB::table('purchase_orders')
+                    ->where('custom_po_id', (string) $poNumber)
+                    ->orWhere('external_po_id', (int) $poNumber)
+                    ->first();
+
+                $asset->purchase_order_id = $purchaseOrder->id ?? null;
+
+                // 🔹 REQUESTABLE LOGIC
+                $requestable = 0;
+
+                if (!empty($purchaseOrder)) {
+                    $poStatus = strtolower($purchaseOrder->status_name ?? '');
+
+                    if (in_array($poStatus, ['received', 'completed', 'closed'])) {
+                        $requestable = 1;
+                    }
+                }
+
+                $asset->requestable = $requestable;
+
+                // 🔹 SUPPLIER
+                if (!empty($item['vendor']['id'])) {
+                    $asset->supplier_id = $item['vendor']['id'];
+                }
+
+                // 🔹 ASSIGNED USER (IF ANY)
+                // if (!empty($item['user']['id'])) {
+                //     $asset->assigned_to   = $item['user']['id'];
+                //     $asset->assigned_type = 'App\\Models\\User';
+                // }
+
+                // --------------------------------------------------
+                // 🔹 ASSIGNED USER (ASSET → PO FALLBACK)
+                // --------------------------------------------------
+
+                if (!empty($item['user']['id'])) {
+
+                    // Highest priority: asset assigned user
+                    $asset->assigned_to   = $item['user']['id'];
+                    $asset->assigned_type = 'App\\Models\\User';
+
+                } elseif (!empty($purchaseOrder?->requested_by)) {
+
+                    // Fallback: purchase order requester
+                    $asset->assigned_to   = $purchaseOrder->requested_by;
+                    $asset->assigned_type = 'App\\Models\\User';
+
+                } else {
+
+                    // Not assigned
+                    $asset->assigned_to   = null;
+                    $asset->assigned_type = null;
+                }
+
+
+
+                // $purchaseOrder = DB::table('purchase_orders')
+                //                 ->where('custom_po_id', $poNumber)
+                //                 ->select('id', 'po_name')
+                //                 ->first();
+
+              
+                 // --------------------------------------------------
+                // 🔹 BARCODE GENERATION (ONLY IF SDP DID NOT SEND ONE)
+                // --------------------------------------------------
+
+                if (empty($item['barcode'])) {
+
+                    // -----------------------------
+                    // REQUIRED STATIC VALUES
+                    // -----------------------------
+                    $company = 'KWE';
+
+                    $siteMap = [
+                        'tree walker' => 'BOM-VADAPE',
+                    ];
+
+                    $siteName = strtolower($item['site']['name'] ?? '');
+                    $location = $siteMap[$siteName] ?? 'BOM-VADAPE';
+
+                    $logisticsType = 'C&F';
+                    $department    = 'DTP';
+
+                    // -----------------------------
+                    // PURCHASE ORDER (SAFE)
+                    // -----------------------------
+                    $poRef = $purchaseOrder->name
+                        ?? $purchaseOrder->po_name
+                        ?? ('PO' . ($purchaseOrder->custom_po_id ?? $purchaseOrder->id ?? 'NA')) ?? ('PO-' . ($poNumber ?? 'NA'));
+
+                    // -----------------------------
+                    // UNIQUE IDENTIFIER (KEY FIX)
+                    // -----------------------------
+                    // SDP Asset ID → always unique
+                    $assetId = $item['id'];
+
+                    // -----------------------------
+                    // FINAL BARCODE VALUE
+                    // -----------------------------
+                    $barcodeValue = implode('/', [
+                        $company,
+                        $location,
+                        $logisticsType,
+                        $poRef,
+                        $department,
+                        $assetId
+                    ]);
+
+                    $asset->_snipeit_barcode_2 = $barcodeValue;
+
+                } else {
+                    // SDP barcode exists → keep it
+                    $asset->_snipeit_barcode_2 = $item['barcode'];
+                }
+
+
+
                 $asset->last_audit_date = now();
 
                 // REQUIRED FIELDS (SNIPE-IT)
@@ -159,7 +294,7 @@ class AssetSyncService
 
                 $asset->company_id = 1;
 
-                $asset->saveQuietly();
+                $asset->save();
                 $inserted++;
             }
 
@@ -277,7 +412,76 @@ class AssetSyncService
      * ------------------------------------------------
      */
 
-    private function syncCategory(array $product): int
+        private function fetchAssetCategories(): array
+    {
+        // $url = 'https://localhost:8080/api/v3/asset_categories';
+        $url = self::SDP_BASE_URL . '/asset_categories';
+
+        $response = Http::withOptions([
+            'verify'  => false,
+            'timeout' => 60,
+            'curl' => [
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            ],
+        ])
+        ->withHeaders([
+            'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+            'Accept'         => 'application/json',
+        ])
+        ->withHeaders([
+            'Cookie' =>
+                'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+                '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+                'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+        ])
+        ->get($url);
+
+        Log::error('ASSET CATEGORY API DEBUG', [
+            'status' => $response->status(),
+            'body'   => $response->body(),
+        ]);
+
+        if (!$response->successful()) {
+            throw new \Exception(
+                'Asset Category API failed → ' .
+                $response->status() . ' : ' . $response->body()
+            );
+        }
+
+        return $response->json('asset_categories', []);
+    }
+
+        private function syncAssetCategories(array $categories): void
+    {
+        foreach ($categories as $category) {
+            DB::table('categories')->updateOrInsert(
+                ['external_category_id' => $category['id']],
+                [
+                    'name'          => $category['name'],
+                    'category_type' => 'asset',
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]
+            );
+        }
+    }
+
+        private function syncDepartment(array $dept)
+    {
+        return DB::table('departments')->updateOrInsert(
+            ['id' => $dept['id']],
+            [
+                'name'       => $dept['name'],
+                'updated_at' => now(),
+                'created_at' => now(),
+            ]
+        );
+    }
+
+
+
+
+        private function syncCategory(array $product): int
     {
         $externalCategoryId =
             $product['category']['id']
@@ -288,31 +492,23 @@ class AssetSyncService
             throw new \Exception('Category ID missing in product payload');
         }
 
-        $categoryName =
-            $product['product_type']['display_plural_name']
-            ?? $product['product_type']['name']
-            ?? 'Assets';
-
         $category = DB::table('categories')
             ->where('external_category_id', $externalCategoryId)
             ->first();
 
-        if ($category) {
-            return $category->id;
+        if (!$category) {
+            throw new \Exception(
+                'Category not synced for external ID: ' . $externalCategoryId
+            );
         }
 
-        return DB::table('categories')->insertGetId([
-            'name' => $categoryName,
-            'external_category_id' => $externalCategoryId,
-            'category_type' => 'asset',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        return $category->id;
     }
 
 
 
-    private function syncModel(array $product): int
+
+        private function syncModel(array $product): int
     {
         if (empty($product['id'])) {
             throw new \Exception('Product ID missing in asset payload');
@@ -328,27 +524,29 @@ class AssetSyncService
             return $model->id;
         }
 
-        // category must be resolved from PRODUCT
+        // Category already synced
         $categoryId = $this->syncCategory($product);
 
         return DB::table('models')->insertGetId([
-            'name' => $product['name'] ?? 'Unknown Model',
-            'model_number' => $product['part_no'] ?? null,
-            'category_id' => $categoryId,
+            'name'              => $product['name'] ?? 'Unknown Model', // iphone 17
+            'model_number'      => $product['part_no'] ?? null,
+            'category_id'       => $categoryId,
             'external_model_id' => $externalModelId,
-            'created_by' => 1,
-            'fieldset_id' => 1,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_by'        => 1,
+            'fieldset_id'       => 1,
+            'created_at'        => now(),
+            'updated_at'        => now(),
         ]);
     }
 
 
 
 
+
   private function fetchPurchaseOrders(): array
 {
-    $url = 'https://localhost:8080/api/v3/purchase_orders';
+    // $url = 'https://localhost:8080/api/v3/purchase_orders';
+    $url = self::SDP_BASE_URL . '/purchase_orders';
 
     $response = Http::withOptions([
         'verify'  => false, // allow self-signed cert
@@ -446,6 +644,19 @@ class AssetSyncService
             'updated_at' => now(),
         ]);
     }
+    
+
+        private function resolvePurchaseOrderId(?int $externalPoId): ?int
+    {
+        if (!$externalPoId) {
+            return null;
+        }
+
+        return DB::table('purchase_orders')
+            ->where('external_po_id', $externalPoId)
+            ->value('id');
+    }
+
 
 
     private function syncPurchaseOrder(array $po)
@@ -464,6 +675,8 @@ class AssetSyncService
                 'owner_id'         => $po['owner']['id'] ?? null,
                 'created_date'     => $this->date($po['created_date']['value'] ?? null),
                 'required_date'    => $this->date($po['required_date']['value'] ?? null),
+                'created_at'    => now(),
+                'updated_at'    => now(),
             ]
         );
     }

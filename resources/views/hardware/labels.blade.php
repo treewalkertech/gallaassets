@@ -25,7 +25,7 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
     .label {
         width: {{ $settings->labels_width }}in;
         height: {{ $settings->labels_height }}in;
-        padding: 0in;
+        padding: 0.8in;
         margin-right: {{ $settings->labels_display_sgutter }}in; /* the gutter */
         margin-bottom: {{ $settings->labels_display_bgutter }}in;
         display: inline-block;
@@ -73,6 +73,7 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
         display: inline;
         word-wrap: break-word;
         word-break: break-all;
+        text-align: center;
     }
     div.barcode_container {
 
@@ -94,7 +95,8 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
     }
     @media screen {
         .label {
-            outline: .02in black solid; /* outline doesn't occupy space like border does */
+            outline: .01in rgb(111 111 111) solid; /* outline doesn't occupy space like border does */
+            border-radius: 40px;
         }
         .noprint {
             font-size: 13px;
@@ -115,6 +117,14 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
                 <img src="{{ config('app.url') }}/hardware/{{ $asset->id }}/qr_code" class="qr_img">
             </div>
         @endif
+
+        
+        @if ((($settings->alt_barcode_enabled=='1') && $settings->label2_1d_type!=''))
+            <div class="barcode_container">
+                <img src="{{ config('app.url') }}/hardware/{{ $asset->id }}/barcode" class="barcode">
+            </div>
+        @endif
+
 
         <div class="qr_text">
             @if ($settings->label_logo)
@@ -148,6 +158,12 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
                     S: {{ $asset->serial }}
                 </div>
             @endif
+            @if (($settings->labels_display_barcode == '1')&& ($asset->_snipeit_barcode_2))
+                <div class="pull-left">
+                     {{ $asset->_snipeit_barcode_2 }}
+                </div>
+            @endif
+
             @if (($settings->labels_display_model=='1') && ($asset->model->name!=''))
                 <div class="pull-left">
                     M: {{ $asset->model->name }} {{ $asset->model->model_number }}
@@ -155,12 +171,6 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
             @endif
 
         </div>
-
-        @if ((($settings->alt_barcode_enabled=='1') && $settings->label2_1d_type!=''))
-            <div class="barcode_container">
-                <img src="{{ config('app.url') }}/hardware/{{ $asset->id }}/barcode" class="barcode">
-            </div>
-        @endif
 
 
 

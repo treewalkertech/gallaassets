@@ -569,37 +569,137 @@ class AssetsController extends Controller
      * @since [v1.0]
      * @return Response
      */
-    public function getBarCode($assetId = null)
+    // public function getBarCode($assetId = null)
+    // {
+    //     $settings = Setting::getSettings();
+    //     if ($asset = Asset::withTrashed()->find($assetId)) {
+    //             // $barcodeValue = trim($asset->_snipeit_barcode_2);
+    //         $barcode_file = public_path().'/uploads/barcodes/'.str_slug($settings->label2_1d_type).'-'.str_slug($asset->asset_tag).'.png';
+
+    //         if (isset($asset->id, $asset->asset_tag)) {
+    //             if (file_exists($barcode_file)) {
+    //                 $header = ['Content-type' => 'image/png'];
+
+    //                 return response()->file($barcode_file, $header);
+    //             } else {
+    //                 // Calculate barcode width in pixel based on label width (inch)
+    //                 $barcode_width = ($settings->labels_width - $settings->labels_display_sgutter) * 200.000000000001;
+
+    //                 $barcode = new \Com\Tecnick\Barcode\Barcode();
+    //                 try {
+    //                     $barcode_obj = $barcode->getBarcodeObj($settings->label2_1d_type, $asset->asset_tag, ($barcode_width < 300 ? $barcode_width : 300), 50);
+    //                     file_put_contents($barcode_file, $barcode_obj->getPngData());
+
+    //                     return response($barcode_obj->getPngData())->header('Content-type', 'image/png');
+    //                 } catch (\Exception $e) {
+    //                     Log::debug('The barcode format is invalid.');
+
+    //                     return response(file_get_contents(public_path('uploads/barcodes/invalid_barcode.gif')))->header('Content-type', 'image/gif');
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
+
+    // barcode scanning below code
+
+        public function getBarCode($assetId = null)
     {
-        $settings = Setting::getSettings();
-        if ($asset = Asset::withTrashed()->find($assetId)) {
-            $barcode_file = public_path().'/uploads/barcodes/'.str_slug($settings->label2_1d_type).'-'.str_slug($asset->asset_tag).'.png';
-
-            if (isset($asset->id, $asset->asset_tag)) {
-                if (file_exists($barcode_file)) {
-                    $header = ['Content-type' => 'image/png'];
-
-                    return response()->file($barcode_file, $header);
-                } else {
-                    // Calculate barcode width in pixel based on label width (inch)
-                    $barcode_width = ($settings->labels_width - $settings->labels_display_sgutter) * 200.000000000001;
-
-                    $barcode = new \Com\Tecnick\Barcode\Barcode();
-                    try {
-                        $barcode_obj = $barcode->getBarcodeObj($settings->label2_1d_type, $asset->asset_tag, ($barcode_width < 300 ? $barcode_width : 300), 50);
-                        file_put_contents($barcode_file, $barcode_obj->getPngData());
-
-                        return response($barcode_obj->getPngData())->header('Content-type', 'image/png');
-                    } catch (\Exception $e) {
-                        Log::debug('The barcode format is invalid.');
-
-                        return response(file_get_contents(public_path('uploads/barcodes/invalid_barcode.gif')))->header('Content-type', 'image/gif');
-                    }
-                }
-            }
+        $asset = Asset::withTrashed()->find($assetId);
+        if (!$asset || empty($asset->_snipeit_barcode_2)) {
+            return response('', 404);
         }
-        return null;
-    }
+
+        // ✅ EXACT value (do not modify)
+        $barcodeValue = trim($asset->_snipeit_barcode_2);
+
+        // ✅ SAFE filename (hash only)
+        $barcodeFile = public_path(
+            '/uploads/barcodes/c128-' . md5($barcodeValue) . '.png'
+        );
+
+        if (file_exists($barcodeFile) && filesize($barcodeFile) > 1000) {
+            return response()->file($barcodeFile, ['Content-Type' => 'image/png']);
+        }
+
+        try {
+            $barcode = new \Com\Tecnick\Barcode\Barcode();
+
+            $barcodeObj = $barcode->getBarcodeObj(
+                'C128',            // ✅ correct type
+                $barcodeValue,     // ✅ exact value
+                -2,                // ✅ auto width
+                50,               // ✅ height (CRITICAL)
+                'black',
+                [8, 8, 8, 8]   // ✅ quiet zone
+            );
+
+            file_put_contents($barcodeFile, $barcodeObj->getPngData());
+
+            return response($barcodeObj->getPngData())
+                ->header('Content-Type', 'image/png');
+
+        } catch (\Exception $e) {
+            Log::error('Barcode error', [
+                'value' => $barcodeValue,
+                'error' => $e->getMessage(),
+            ]);
+            return response('', 500);
+        }
+        }
+
+    // public function getBarCode($assetId = null)
+    // {
+    //     $asset = Asset::withTrashed()->find($assetId);
+    //     if (!$asset || empty($asset->_snipeit_barcode_2)) {
+    //         return response('', 404);
+    //     }
+
+    //     $barcodeValue = trim((string) $asset->_snipeit_barcode_2);
+
+    //     $barcodeFile = public_path(
+    //         '/uploads/barcodes/c128-' . md5($barcodeValue) . '.png'
+    //     );
+
+    //     if (file_exists($barcodeFile) && filesize($barcodeFile) > 1000) {
+    //         return response()->file($barcodeFile, [
+    //             'Content-Type' => 'image/png',
+    //             'Cache-Control' => 'public, max-age=31536000'
+    //         ]);
+    //     }
+
+    //     try {
+    //         $barcode = new \Com\Tecnick\Barcode\Barcode();
+
+    //         $barcodeObj = $barcode->getBarcodeObj(
+    //             'C128',
+    //             $barcodeValue,
+    //             -2,          // MUST stay auto
+    //             45,          // 🔽 smaller height
+    //             'black',
+    //             [6, 6, 6, 6] // 🔽 smaller quiet zone
+    //         );
+
+    //         file_put_contents($barcodeFile, $barcodeObj->getPngData());
+
+    //         return response($barcodeObj->getPngData())
+    //             ->header('Content-Type', 'image/png')
+    //             ->header('Cache-Control', 'public, max-age=31536000');
+
+    //     } catch (\Exception $e) {
+    //         Log::error('Barcode error', [
+    //             'asset_id' => $assetId,
+    //             'value' => $barcodeValue,
+    //             'error' => $e->getMessage(),
+    //         ]);
+    //         return response('', 500);
+    //     }
+    // }
+
+
+
+
 
     /**
      * Return a label for an individual asset.

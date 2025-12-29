@@ -494,6 +494,16 @@
                                             {{ Form::checkbox('labels_display_company_name', '1', old('labels_display_company_name',   $setting->labels_display_company_name),['class' => 'minimal', 'aria-label'=>'labels_display_company_name']) }}
                                             {{ trans('admin/companies/table.name') }}
                                         </label>
+                                       <label class="form-control">
+                                            {{ Form::checkbox(
+                                                'labels_display_barcode',
+                                                '1',
+                                                old('labels_display_barcode', $setting->labels_display_barcode),
+                                                ['class' => 'minimal', 'aria-label'=>'labels_display_barcode']
+                                            ) }}
+                                            {{ trans('admin/companies/table.barcode') }}
+                                        </label>
+
                                 </div> <!--/.col-md-9-->
                             </div> <!--/.form-group-->
                         @endif

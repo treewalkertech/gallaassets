@@ -242,7 +242,7 @@ class ShowSetUpPageTest extends TestCase
     {
         $url = URL::to('setup');
 
-        $errorMessage = "Uh oh! Snipe-IT thinks your URL is http://www.github.com/setup, but your real URL is {$url}";
+        $errorMessage = "Uh oh! Tree walker thinks your URL is http://www.github.com/setup, but your real URL is {$url}";
         $successMessage = 'That URL looks right! Good job!';
 
         if ($shouldSee) {

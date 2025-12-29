@@ -224,6 +224,7 @@ return [
     'note_deleted'            => 'Note Deleted',
     'delete_note'              => 'Delete Note',
     'order_number'          => 'Order Number',
+    'current_value'          => 'Current Value',
     'only_deleted'          => 'Only Deleted Assets',
     'page_menu'				=> 'Showing _MENU_ items',
     'pagination_info'		=> 'Showing _START_ to _END_ of _TOTAL_ items',

@@ -4,7 +4,7 @@
     <head>
       <title>
         @section('title')
-         Snipe-IT {{ trans('general.setup') }}
+         Tree walker {{ trans('general.setup') }}
         @show
       </title>
         <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">

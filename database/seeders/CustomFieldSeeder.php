@@ -14,15 +14,15 @@ class CustomFieldSeeder extends Seeder
     public function run()
     {
         // Remove old snipeit columns only
-        $columns = DB::getSchemaBuilder()->getColumnListing('assets');
+        // $columns = DB::getSchemaBuilder()->getColumnListing('assets');
 
-        foreach ($columns as $column) {
-            if (strpos($column, '_snipeit_') !== false) {
-                Schema::table('assets', function (Blueprint $table) use ($column) {
-                    $table->dropColumn($column);
-                });
-            }
-        }
+        // foreach ($columns as $column) {
+        //     if (strpos($column, '_snipeit_') !== false) {
+        //         Schema::table('assets', function (Blueprint $table) use ($column) {
+        //             $table->dropColumn($column);
+        //         });
+        //     }
+        // }
 
         // Clean tables
         CustomField::truncate();
@@ -41,7 +41,7 @@ class CustomFieldSeeder extends Seeder
          | 2️⃣ CREATE ONLY REQUIRED FIELDS
          ----------------------------------- */
         $macField = CustomField::factory()->macAddress()->create();
-        $barcodeField = CustomField::factory()->barcode()->create();
+        // $barcodeField = CustomField::factory()->barcode()->create();
 
         /* -----------------------------------
          | 3️⃣ MAP FIELDS TO FIELDSET
@@ -53,12 +53,12 @@ class CustomFieldSeeder extends Seeder
                 'order'               => 0,
                 'required'            => 0,
             ],
-            [
-                'custom_field_id'     => $barcodeField->id,
-                'custom_fieldset_id'  => $assetFieldset->id,
-                'order'               => 1,
-                'required'            => 0,
-            ],
+            // [
+            //     'custom_field_id'     => $barcodeField->id,
+            //     'custom_fieldset_id'  => $assetFieldset->id,
+            //     'order'               => 1,
+            //     'required'            => 0,
+            // ],
         ]);
     }
 }

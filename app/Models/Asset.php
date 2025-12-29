@@ -124,7 +124,8 @@ class Asset extends Depreciable
         'requestable'       => ['nullable', 'boolean'],
         'assigned_user'     => ['nullable', 'exists:users,id,deleted_at,NULL'],
         'assigned_location' => ['nullable', 'exists:locations,id,deleted_at,NULL'],
-        'assigned_asset'    => ['nullable', 'exists:assets,id,deleted_at,NULL']
+        'assigned_asset'    => ['nullable', 'exists:assets,id,deleted_at,NULL'],
+        'purchase_order_id' => ['nullable', 'integer', 'exists:purchase_orders,id'],
     ];
 
 
@@ -163,6 +164,7 @@ class Asset extends Depreciable
         'next_audit_date',
         'asset_eol_date',
         'last_checkin',
+        'purchase_order_id',
         'last_checkout',
     ];
 
@@ -1962,6 +1964,15 @@ class Asset extends Depreciable
             ->join('depreciations', 'models.depreciation_id', '=', 'depreciations.id')->where('models.depreciation_id', '=', $search);
 
     }
+
+        public function purchaseOrder()
+    {
+        return $this->belongsTo(
+            \App\Models\PurchaseOrder::class,
+            'purchase_order_id'
+        );
+    }
+
 
 
 }

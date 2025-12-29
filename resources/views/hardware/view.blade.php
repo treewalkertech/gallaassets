@@ -403,6 +403,28 @@
                                         </div>
                                     @endif
 
+                                    @if ($asset->purchaseOrder)
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>{{ __('Purchase Order') }}</strong>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <span class="js-copy-po-name">
+                                                    {{ $asset->purchaseOrder->po_name }}
+                                                </span>
+
+                                                <i class="fa-regular fa-clipboard js-copy-link hidden-print"
+                                                data-clipboard-target=".js-copy-po-name"
+                                                aria-hidden="true"
+                                                data-tooltip="true"
+                                                data-placement="top"
+                                                title="{{ __('Copy to clipboard') }}">
+                                                    <span class="sr-only">{{ __('Copy to clipboard') }}</span>
+                                                </i>
+                                            </div>
+                                        </div>
+                                    @endif
+
 
                                     @if ($asset->deleted_at!='')
                                         <div class="row">
@@ -415,6 +437,29 @@
                                             </div>
                                         </div>
                                     @endif
+
+                                    @if ($asset->_snipeit_barcode_2)
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>{{ __('Logistics Barcode') }}</strong>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <span class="js-copy-barcode">
+                                                    {{ $asset->_snipeit_barcode_2 }}
+                                                </span>
+
+                                                <i class="fa-regular fa-clipboard js-copy-link hidden-print"
+                                                data-clipboard-target=".js-copy-barcode"
+                                                aria-hidden="true"
+                                                data-tooltip="true"
+                                                data-placement="top"
+                                                title="{{ __('Copy to clipboard') }}">
+                                                    <span class="sr-only">{{ __('Copy to clipboard') }}</span>
+                                                </i>
+                                            </div>
+                                        </div>
+                                    @endif
+
 
 
 
@@ -667,14 +712,14 @@
                                     </div>
 
                                     <!-- byod -->
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="col-md-3">
                                             <strong>{{ trans('general.byod') }}</strong>
                                         </div>
                                         <div class="col-md-9">
                                             {!! ($asset->byod=='1') ? '<i class="fas fa-check text-success" aria-hidden="true"></i> '.trans('general.yes') : '<i class="fas fa-times text-danger" aria-hidden="true"></i> '.trans('general.no')  !!}
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                     <!-- requestable -->
                                     <div class="row">
@@ -822,6 +867,18 @@
                                             </div>
                                         </div>
                                     @endif
+                                    @if ($asset->current_value)
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <strong>
+                                                    {{ trans('general.current_value') }}
+                                                </strong>
+                                            </div>
+                                            <div class="col-md-9">
+                                                INR {{ $asset->current_value }}
+                                            </div>
+                                        </div>
+                                    @endif
                                     @if ($asset->order_number)
                                         <div class="row">
                                             <div class="col-md-3">
@@ -834,6 +891,7 @@
                                             </div>
                                         </div>
                                     @endif
+                                    
 
                                     @if ($asset->supplier)
                                         <div class="row">

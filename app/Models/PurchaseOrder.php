@@ -43,8 +43,12 @@ class PurchaseOrder extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function assets()
+        public function assets()
     {
-        return $this->hasMany(Asset::class, 'order_number', 'external_po_id');
+        return $this->hasMany(
+            Asset::class,
+            'purchase_order_id'
+        );
     }
+
 }

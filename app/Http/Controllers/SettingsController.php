@@ -775,6 +775,13 @@ class SettingsController extends Controller
             $setting->labels_display_name = 0;
         }
 
+        if ($request->filled('labels_display_barcode')) {
+            $setting->labels_display_barcode = 1;
+        } else {
+            $setting->labels_display_barcode = 0;
+        }
+
+
         if ($request->filled('labels_display_serial')) {
             $setting->labels_display_serial = 1;
         } else {
