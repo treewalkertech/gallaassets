@@ -174,7 +174,7 @@ public function update(Request $request)
       /**
      * Get all asset details
      */
-public function indexBK()
+public function index()
 {
     // 🔹 Assets with location name (SAFE ADDITION)
     $assets = Asset::query()
