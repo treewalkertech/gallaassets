@@ -6,6 +6,8 @@ use App\Models\Asset;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AssetSyncService
 {
@@ -106,6 +108,35 @@ class AssetSyncService
             $skipped  = 0;
 
             foreach ($assets as $item) {
+
+                // --------------------------------------------------
+                // 🔹 FETCH ASSET DETAILS (REQUIRED FOR ATTACHMENTS)
+                // --------------------------------------------------
+                $assetDetailsResponse = Http::withOptions([
+                    'verify'  => false,
+                    'timeout' => 60,
+                ])
+                ->withHeaders([
+                    'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+                    'Accept'         => 'application/json',
+                ])
+                ->withHeaders([
+                    'Cookie' =>
+                        'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+                        '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+                        'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+                ])
+                ->get(self::SDP_BASE_URL . '/assets/' . $item['id']);
+
+                if (!$assetDetailsResponse->successful()) {
+                    Log::warning('Asset detail fetch failed', [
+                        'asset_id' => $item['id'],
+                    ]);
+                    continue;
+                }
+
+                $assetDetails = $assetDetailsResponse->json('asset', []);
+
 
                 if (in_array($item['id'], $existingIds)) {
                     $skipped++;
@@ -295,10 +326,13 @@ class AssetSyncService
                 $asset->company_id = 1;
 
                 $asset->save();
+                DB::commit();
+
+                $this->downloadAssetImage($asset, $assetDetails);
                 $inserted++;
             }
 
-            DB::commit();
+         
 
             return [
                 'inserted' => $inserted,
@@ -374,6 +408,65 @@ class AssetSyncService
         // Guaranteed fallback
         return 'SDP-SN-' . $externalAssetId . '-' . now()->timestamp;
     }
+
+        private function downloadAssetImage(Asset $asset, array $assetDetails): void
+    {
+        $attachments = $assetDetails['attachments'] ?? [];
+
+        if (empty($attachments)) {
+            return;
+        }
+
+        // Take first attachment (image)
+        $attachment = $attachments[0];
+
+        if (
+            empty($attachment['content_url']) ||
+            !str_starts_with($attachment['content_type'] ?? '', 'image/')
+        ) {
+            return;
+        }
+
+        $downloadUrl = 'https://localhost:8080' . $attachment['content_url'];
+
+        $imageResponse = Http::withOptions([
+                'verify'  => false,
+                'timeout' => 60,
+            ])
+            ->withHeaders([
+                'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+                'Cookie' =>
+                    'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+                    '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+                    'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+            ])
+            ->get($downloadUrl);
+
+        if (!$imageResponse->successful()) {
+            return;
+        }
+
+        // ---------------------------------------
+        // ✅ SAVE USING STORAGE (IMPORTANT FIX)
+        // ---------------------------------------
+
+        $ext = pathinfo($attachment['name'], PATHINFO_EXTENSION) ?: 'jpg';
+        $filename = 'asset-image-' . $asset->id . '.' . $ext;
+
+        // assets_upload_path = 'uploads/assets/'
+        $path = app('assets_upload_path') . $filename;
+
+        Storage::disk('public')->put(
+            $path,
+            $imageResponse->body()
+        );
+
+        // Save only filename (NOT full path)
+        $asset->update([
+            'image' => $filename
+        ]);
+    }
+
 
     private function uniqueAssetTag(?string $tag, int $externalAssetId): string
     {
