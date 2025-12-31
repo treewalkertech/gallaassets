@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageUploadRequest;
 use App\Models\Actionlog;
 use App\Http\Requests\UploadFileRequest;
+use App\Helpers\BarcodeGenerator;
 use Illuminate\Support\Facades\Log;
 use App\Models\Asset;
 use App\Models\AssetModel;
@@ -186,6 +187,9 @@ class AssetsController extends Controller
 
             // Validate the asset before saving
             if ($asset->isValid() && $asset->save()) {
+                 $asset->_snipeit_barcode_2 = BarcodeGenerator::generate($asset);
+                 $asset->save(); 
+
                 if (request('assigned_user')) {
                     $target = User::find(request('assigned_user'));
                     $location = $target->location_id;

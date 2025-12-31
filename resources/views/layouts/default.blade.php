@@ -408,6 +408,11 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 <x-icon type="checkmark" class="fa-fw" />
                                                 {{ trans('general.accept_assets_menu') }}
                                             </a></li>
+                                        <li {!! (Request::is('admin/barcode-templates') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('admin.barcode.templates') }}">
+                                                <x-icon type="checkmark" class="fa-fw" />
+                                                {{ trans('general.barcodegenerate') }}
+                                            </a></li>
                                         
                                         <li>
                                             <a

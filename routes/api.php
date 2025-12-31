@@ -4,6 +4,7 @@ use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AssetRfidController;
+use App\Http\Controllers\Api\BarcodeTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,19 @@ use App\Http\Controllers\Api\AssetRfidController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/barcode-templates',
+        [BarcodeTemplateController::class, 'index']
+    );
+
+    Route::post('/barcode-templates',
+        [BarcodeTemplateController::class, 'store']
+    );
+});
+
+
 
     Route::withoutMiddleware(['auth:api'])->group(function () {
 

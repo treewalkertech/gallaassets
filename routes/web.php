@@ -16,6 +16,8 @@ use App\Http\Controllers\LocationsController;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\ModalController;
+use App\Http\Controllers\BarcodeTemplateController;
+use App\Http\Controllers\Api\BarcodeTemplateControllers;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\ReportTemplatesController;
@@ -29,6 +31,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Livewire\Importer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 
 Route::group(['middleware' => 'auth'], function () {
     /*
@@ -205,6 +208,50 @@ Route::get('/test-sdp', function () {
         'body'        => $response->body(),
     ]);
 });
+
+Route::middleware('auth')->group(function () {
+
+    // Blade pages
+    Route::get('/admin/barcode-templates',
+        [BarcodeTemplateController::class, 'index']
+    )->name('admin.barcode.templates');
+
+    Route::get('/admin/barcode-templates/create',
+        [BarcodeTemplateController::class, 'create']
+    )->name('admin.barcode.templates.create');
+
+    Route::get('/admin/barcode-templates/{id}/edit',
+        [BarcodeTemplateController::class, 'edit']
+    )->name('admin.barcode.templates.edit');
+    
+
+    // JSON data (used by JS)
+    Route::get('/barcode-templates-data',
+        [BarcodeTemplateControllers::class, 'index']
+    );
+
+    Route::post('/barcode-templates-data',
+        [BarcodeTemplateControllers::class, 'store']
+    );
+
+        Route::get('/barcode-templates/{id}',
+        [BarcodeTemplateControllers::class, 'show']
+    );
+
+     // Update
+    Route::put('/barcode-templates/{id}',
+        [BarcodeTemplateControllers::class, 'update']
+    );
+
+    Route::patch('/barcode-templates/{id}/toggle',
+        [BarcodeTemplateControllers::class, 'toggle']
+    );
+
+    Route::delete('/barcode-templates/{id}',
+        [BarcodeTemplateControllers::class, 'destroy']
+    );
+});
+
 
 
 

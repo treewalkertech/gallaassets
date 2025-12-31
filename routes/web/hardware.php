@@ -163,17 +163,17 @@ Route::group(
 
     });
 
-Route::resource('hardware', 
-        AssetsController::class, 
-        [
-            'middleware' => ['auth'],
-            'parameters' => ['asset' => 'asset_id',
-                'names' => [
-                    'show' => 'view',
-                ],
-        ],
-]);
+    Route::resource('hardware', 
+            AssetsController::class, 
+            [
+                'middleware' => ['auth'],
+                'parameters' => ['asset' => 'asset_id',
+                    'names' => [
+                        'show' => 'view',
+                    ],
+            ],
+    ]);
 
-Route::get('ht/{any?}',
-    [AssetsController::class, 'getAssetByTag']
-)->where('any', '.*')->name('ht/assetTag');
+    Route::get('ht/{any?}',
+        [AssetsController::class, 'getAssetByTag']
+    )->where('any', '.*')->name('ht/assetTag');

@@ -29,6 +29,7 @@ return [
     'assets_available'		=> 'Assets available',
     'accept_assets'         => 'Accept Assets :name',
     'accept_assets_menu'    => 'Accept Assets',
+    'barcodegenerate'       => 'Barcode Generate',
     'audit'				    => 'Audit',
     'audit_report'			=> 'Audit Log',
     'assets'				=> 'Assets',
