@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use App\Models\BarcodeTemplate;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -723,10 +724,15 @@ class SettingsController extends Controller
     {
         $is_gd_installed = extension_loaded('gd');
 
+        $barcodeTemplate = BarcodeTemplate::where('company_id', auth()->user()->company_id)
+        ->first(); 
+
+
         return view('settings.labels')
             ->with('setting', Setting::getSettings())
             ->with('is_gd_installed', $is_gd_installed)
-            ->with('customFields', CustomField::where('field_encrypted', '=', 0)->get());
+            ->with('customFields', CustomField::where('field_encrypted', '=', 0)->get())
+            ->with('barcodeTemplate', $barcodeTemplate);
     }
 
     /**
@@ -805,6 +811,32 @@ class SettingsController extends Controller
         } else {
             $setting->labels_display_model = 0;
         }
+
+        /* -------------------------------------------------
+        | SAVE SINGLE BARCODE TEMPLATE (PER COMPANY)
+        -------------------------------------------------*/
+
+        $barcodeData = $request->input('barcode_template');
+
+        if (
+            !empty($barcodeData['name']) &&
+            !empty($barcodeData['template'])
+        ) {
+
+            BarcodeTemplate::updateOrCreate(
+                [
+                    // UNIQUE PER COMPANY
+                    'company_id' => auth()->user()->company_id,
+                ],
+                [
+                    'created_by' => auth()->id(),
+                    'name'       => $barcodeData['name'],
+                    'template'   => $barcodeData['template'],
+                    'is_active'  => isset($barcodeData['is_active']) ? 1 : 0,
+                ]
+            );
+        }
+
 
         if ($setting->save()) {
             return redirect()->route('settings.labels.index')

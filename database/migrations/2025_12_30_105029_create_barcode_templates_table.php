@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('barcode_templates', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('created_by');
+            $table->integer('company_id')->unsigned()->nullable();
+            $table->integer('created_by')->unsigned()->nullable();
+      
 
             $table->string('name'); // Template name
             $table->string('template'); 
@@ -26,6 +27,16 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index(['company_id', 'is_active']);
+
+            $table->foreign('company_id')
+            ->references('id')
+            ->on('companies')
+            ->onDelete('cascade');
+
+            $table->foreign('created_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('restrict');
         });
 
     }

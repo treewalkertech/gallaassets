@@ -123,6 +123,46 @@ dir="{{ Helper::determineLanguageDirection() }}">
     cursor: not-allowed;
 }
 
+.service-desk-card .form-control {
+    margin-bottom: 0;
+}
+
+.service-desk-card .form-group {
+    margin-bottom: 14px;
+}
+/* Slack-style form layout */
+.form-row-horizontal {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.form-row-label {
+    width: 220px;
+    font-weight: 600;
+    padding-top: 6px;
+}
+
+.form-row-control {
+    flex: 1;
+}
+
+.form-row-help {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* Card polish */
+.service-desk-card .card-header {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.service-desk-card .card-body {
+    padding-top: 20px;
+}
+
 </style>
 
 </head>
@@ -407,20 +447,14 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                             <a href="{{ route('account.accept') }}">
                                                 <x-icon type="checkmark" class="fa-fw" />
                                                 {{ trans('general.accept_assets_menu') }}
-                                            </a></li>
-                                        <li {!! (Request::is('admin/barcode-templates') ? ' class="active"' : '') !!}>
-                                            <a href="{{ route('admin.barcode.templates') }}">
-                                                <x-icon type="checkmark" class="fa-fw" />
-                                                {{ trans('general.barcodegenerate') }}
-                                            </a></li>
+                                            </a>
+                                        </li>
                                         
+                                        
+                                        @if (!empty($isServiceDeskSyncEnabled) && $isServiceDeskSyncEnabled)
+
                                         <li>
-                                            <a
-                                                href="#"
-                                                id="syncAssets"
-                                                class="dropdown-link"
-                                                title="{{ trans('general.syncasset') ?? 'Sync Asset' }}"
-                                            >
+                                            <a href="#" id="syncAssets" class="dropdown-link" title="Sync Asset">
                                                 <x-icon type="download" class="fa-fw" />
                                                 <span id="syncText">{{ trans('general.syncasset') ?? 'Sync Asset' }}</span>
                                                 <span id="syncLoader" style="display:none;margin-left:8px;">
@@ -428,6 +462,22 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </span>
                                             </a>
                                         </li>
+
+                                        <li>
+                                            <a href="#" id="pushAllBarcodes" class="dropdown-link" title="Push Barcodes to SDP">
+                                                <x-icon type="import" class="fa-fw" />
+                                                <span id="barcodeAllText">{{ trans('general.pushbarcode') ?? 'Push Barcodes to SD' }}</span>
+                                                <span id="barcodeAllLoader" style="display:none;margin-left:8px;">
+                                                    <i class="fa fa-spinner fa-spin"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+
+                                    @endif
+
+
+
+
 
 
 
@@ -1225,59 +1275,114 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
         </script>
        <script>
-document.getElementById('syncAssets').addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
+        document.getElementById('syncAssets').addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
 
-    const link   = this;
-    const text   = document.getElementById('syncText');
-    const loader = document.getElementById('syncLoader');
-    const overlay = document.getElementById('globalSyncOverlay');
+            const link   = this;
+            const text   = document.getElementById('syncText');
+            const loader = document.getElementById('syncLoader');
+            const overlay = document.getElementById('globalSyncOverlay');
 
-    // Disable link
-    link.classList.add('disabled');
+            // Disable link
+            link.classList.add('disabled');
 
-    // Dropdown loader
-    text.textContent = 'Syncing…';
-    loader.style.display = 'inline-block';
+            // Dropdown loader
+            text.textContent = 'Syncing…';
+            loader.style.display = 'inline-block';
 
-    // Center loader
-    overlay.style.display = 'flex';
+            // Center loader
+            overlay.style.display = 'flex';
 
-    // Force repaint before fetch
-    setTimeout(() => {
-        fetch('{{ route('sync.assets') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status !== 'success') {
-                throw new Error(data.message || 'Sync failed');
-            }
+            // Force repaint before fetch
+            setTimeout(() => {
+                fetch('{{ route('sync.assets') }}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status !== 'success') {
+                        throw new Error(data.message || 'Sync failed');
+                    }
 
-            // Refresh asset table only
-            if (window.$ && $('#assetsListingTable').length) {
-                $('#assetsListingTable').bootstrapTable('refresh');
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert(err.message || 'Network or server error');
-        })
-        .finally(() => {
-            // Reset UI
-            overlay.style.display = 'none';
-            loader.style.display = 'none';
-            text.textContent = '{{ trans('general.syncasset') ?? 'Sync Asset' }}';
-            link.classList.remove('disabled');
+                    // Refresh asset table only
+                    if (window.$ && $('#assetsListingTable').length) {
+                        $('#assetsListingTable').bootstrapTable('refresh');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert(err.message || 'Network or server error');
+                })
+                .finally(() => {
+                    // Reset UI
+                    overlay.style.display = 'none';
+                    loader.style.display = 'none';
+                    text.textContent = '{{ trans('general.syncasset') ?? 'Sync Asset' }}';
+                    link.classList.remove('disabled');
+                });
+            }, 50);
         });
-    }, 50);
-});
-</script>
+        </script>
+
+        <script>
+            document.getElementById('pushAllBarcodes')?.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const link    = this;
+                const text    = document.getElementById('barcodeAllText');
+                const loader  = document.getElementById('barcodeAllLoader');
+                const overlay = document.getElementById('globalSyncOverlay');
+
+                link.classList.add('disabled');
+                text.textContent = 'Pushing…';
+                loader.style.display = 'inline-block';
+                overlay.style.display = 'flex';
+
+                setTimeout(() => {
+                    fetch('{{ route('assets.push-barcodes') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document
+                                .querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!['success', 'partial'].includes(data.status)) {
+                            throw new Error('Bulk barcode push failed');
+                        }
+
+                        alert(
+                            `✅ Barcode Push Completed\n\n` +
+                            `Total: ${data.total}\n` +
+                            `Success: ${data.success}\n` +
+                            `Failed: ${data.failed}`
+                        );
+
+                        if (window.$ && $('#assetsListingTable').length) {
+                            $('#assetsListingTable').bootstrapTable('refresh');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert(err.message || 'Network or server error');
+                    })
+                    .finally(() => {
+                        overlay.style.display = 'none';
+                        loader.style.display = 'none';
+                        text.textContent = 'Push All Barcodes';
+                        link.classList.remove('disabled');
+                    });
+                }, 50);
+            });
+        </script>
 
 
 

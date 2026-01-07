@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
-
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use App\Models\ServiceDeskConfig;
 /**
  * This service provider handles setting the observers on models
  *
@@ -73,6 +75,24 @@ class AppServiceProvider extends ServiceProvider
         Consumable::observe(ConsumableObserver::class);
         License::observe(LicenseObserver::class);
         Setting::observe(SettingObserver::class);
+
+        // --------------------------------------------------
+        // ServiceDesk Sync visibility (global)
+        // --------------------------------------------------
+        View::composer('*', function ($view) {
+
+            $isServiceDeskSyncEnabled = false;
+
+            if (Auth::check()) {
+                $isServiceDeskSyncEnabled = ServiceDeskConfig::where('company_id', Auth::user()->company_id)
+                    ->where('is_active', true)
+                    ->where('is_sync_enabled', true)
+                    ->exists();
+            }
+
+            $view->with('isServiceDeskSyncEnabled', $isServiceDeskSyncEnabled);
+        });
+
     }
 
     /**

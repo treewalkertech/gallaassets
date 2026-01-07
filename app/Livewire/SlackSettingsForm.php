@@ -67,6 +67,13 @@ class SlackSettingsForm extends Component
                 "link" => "https://support.microsoft.com/en-us/office/create-incoming-webhooks-with-workflows-for-microsoft-teams-8ae491c7-0394-4861-ba59-055e33f75498",
                 "test" => "msTeamTestWebhook"
             ),
+            "microsof_1" => array(
+                "name" => trans('admin/settings/general.ms_teams'),
+                "icon" => "fa-brands fa-microsoft",
+                "placeholder" => "https://abcd.webhook.office.com/webhookb2/XXXXXXX",
+                "link" => "https://support.microsoft.com/en-us/office/create-incoming-webhooks-with-workflows-for-microsoft-teams-8ae491c7-0394-4861-ba59-055e33f75498",
+                "test" => "msTeamTestWebhook"
+            ),
         ];
 
         $this->setting = Setting::getSettings();

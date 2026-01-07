@@ -184,18 +184,18 @@
                                 </div>
                             </div>
                                 
-                @if($setting->label2_enable == 0)
+                            @if($setting->label2_enable == 0)
 
-                        <!-- qr code -->
-                        <div class="form-group">
-                            <div class="col-md-9 col-md-offset-3">
-                                <label class="form-control">
-                                    {{ Form::checkbox('qr_code', '1', old('qr_code', $setting->qr_code),array('aria-label'=>'qr_code')) }}
-                                    {{ trans('admin/settings/general.display_qr') }}
-                                </label>
-                            </div>
-                        </div>
-                    @endif
+                                    <!-- qr code -->
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-md-offset-3">
+                                            <label class="form-control">
+                                                {{ Form::checkbox('qr_code', '1', old('qr_code', $setting->qr_code),array('aria-label'=>'qr_code')) }}
+                                                {{ trans('admin/settings/general.display_qr') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endif
                                 <!-- 2D Barcode Type -->
                                 <div class="form-group{{ $errors->has('label2_2d_type') ? ' has-error' : '' }}">
                                     <div class="col-md-3 text-right">
@@ -508,6 +508,127 @@
                             </div> <!--/.form-group-->
                         @endif
                     </div>
+                    <div class="col-md-12">
+  
+
+                        <div class="panel box box-default">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    <x-icon type="barcode" />
+                                    Barcode Format 
+                                </h3>
+                                <p class="help-block">
+                                    This format will be used to generate barcodes for assets.
+                                </p>
+                            </div>
+
+                            <div class="box-body">
+
+                                {{-- Hidden ID if exists --}}
+                                @if($barcodeTemplate)
+                                    <input type="hidden"
+                                        name="barcode_template[id]"
+                                        value="{{ $barcodeTemplate->id }}">
+                                @endif
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Name</label>
+                                    <div class="col-md-7">
+                                        <input class="form-control"
+                                            name="barcode_template[name]"
+                                            value="{{ old('barcode_template.name', $barcodeTemplate->name ?? 'Default barcode') }}"
+                                            placeholder="Barcode format name">
+                                    </div>
+                                </div>
+
+                               {{-- Template Builder --}}
+                               <div class="form-group">
+                                    <label class="control-label col-md-3">Template Builder</label>
+                                    <div class="col-md-7">
+
+                                        <div class="row">
+                                            {{-- Multi select --}}
+                                            <div class="col-md-7">
+                                                <select id="barcodeFieldSelect"
+                                                        class="form-control"
+                                                        multiple
+                                                        size="8">
+                                                    <option value="{company}">Company</option>
+                                                    <option value="{location}">Location</option>
+                                                    <option value="{logistics}">Logistics</option>
+                                                    <option value="{po}">Purchase Order</option>
+                                                    <option value="{department}">Department</option>
+                                                    <option value="{asset_id}">Asset ID</option>
+                                                    <option value="{serial}">Serial</option>
+                                                    <option value="{year}">Year</option>
+                                                    <option value="{month}">Month</option>
+                                                </select>
+
+                                                <p class="help-block">
+                                                    Hold <strong>Ctrl</strong> (Windows) or <strong>Cmd</strong> (Mac) to select multiple fields.
+                                                </p>
+
+                                                <button type="button"
+                                                        id="clearBarcodeTemplate"
+                                                        class="btn btn-sm btn-danger">
+                                                    Clear
+                                                </button>
+                                            </div>
+
+                                            {{-- Order preview --}}
+                                            <div class="col-md-5">
+                                                <strong>Field Order</strong>
+                                                <ol id="barcodeOrderList" style="margin-top:10px;"></ol>
+                                            </div>
+                                        </div>
+
+                                        {{-- Readonly template --}}
+                                        <input type="text"
+                                            id="barcodeTemplateInput"
+                                            name="barcode_template[template]"
+                                            class="form-control"
+                                            readonly
+                                            style="margin-top:10px;"
+                                            value="{{ old('barcode_template.template', $barcodeTemplate->template ?? '') }}"
+                                            required>
+
+                                        <p class="help-block" style="margin-top:10px;">
+                                            Preview:
+                                            <code id="barcode-preview"></code>
+                                        </p>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">Active</label>
+                                    <div class="col-md-7">
+                                        <label class="form-control">
+                                            <input type="checkbox"
+                                                name="barcode_template[is_active]"
+                                                {{ old('barcode_template.is_active', $barcodeTemplate->is_active ?? false) ? 'checked' : 'checked' }}>
+                                            Enable this barcode format
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <p class="help-block">
+                                    Allowed placeholders:
+                                    <code>{company}</code>,
+                                    <code>{location}</code>,
+                                    <code>{department}</code>,
+                                    <code>{asset_id}</code>,
+                                    <code>{serial}</code>,
+                                    <code>{year}</code>,
+                                    <code>{month}</code>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+
 
                 </div> <!--/.box-body-->
                 <div class="box-footer">
@@ -581,6 +702,74 @@
         });
 
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const select = document.getElementById('barcodeFieldSelect');
+        const clearBtn = document.getElementById('clearBarcodeTemplate');
+        const input = document.getElementById('barcodeTemplateInput');
+        const preview = document.getElementById('barcode-preview');
+        const orderList = document.getElementById('barcodeOrderList');
+
+        if (!select || !input || !preview || !orderList) return;
+
+        let parts = [];
+
+        // Load existing template
+        if (input.value) {
+            parts = input.value.split('/');
+        }
+
+        function previewBarcode(template) {
+            return template
+                .replaceAll('{company}', 'KWE')
+                .replaceAll('{location}', 'BOM-VADAPE')
+                .replaceAll('{logistics}', 'C&F')
+                .replaceAll('{po}', '4239')
+                .replaceAll('{department}', 'DTP')
+                .replaceAll('{asset_id}', '1')
+                .replaceAll('{serial}', 'SN001')
+                .replaceAll('{year}', new Date().getFullYear())
+                .replaceAll('{month}', String(new Date().getMonth() + 1).padStart(2, '0'));
+        }
+
+        function updateUI() {
+            // Build template
+            input.value = parts.join('/');
+            preview.textContent = previewBarcode(input.value);
+
+            // Build order list
+            orderList.innerHTML = '';
+            parts.forEach((p, i) => {
+                const li = document.createElement('li');
+                li.textContent = p.replace(/[{}]/g, '');
+                orderList.appendChild(li);
+            });
+        }
+
+        // Handle multi-select
+        select.addEventListener('change', function () {
+            const selected = Array.from(this.selectedOptions).map(o => o.value);
+
+            // Keep order & avoid duplicates
+            parts = [...new Set([...parts, ...selected])];
+
+            updateUI();
+        });
+
+        // Clear everything
+        clearBtn.addEventListener('click', function () {
+            parts = [];
+            Array.from(select.options).forEach(o => o.selected = false);
+            updateUI();
+        });
+
+        // Initial render
+        updateUI();
+    });
+    </script>
+
+
     {{-- Can't use @script here because we're not in a livewire component so let's manually load --}}
     @livewireScripts
 @endpush

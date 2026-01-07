@@ -194,6 +194,11 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         return $this->checkPermissionSection($section);
     }
 
+        public function canManageServiceDesk(): bool
+    {
+        return $this->hasAccess('admin') || $this->isSuperUser();
+    }
+
     /**
      * Checks if the user is a SuperUser
      *

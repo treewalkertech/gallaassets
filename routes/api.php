@@ -17,16 +17,16 @@ use App\Http\Controllers\Api\BarcodeTemplateController;
 |
 */
 
-Route::middleware('auth')->group(function () {
+// Route::middleware('auth')->group(function () {
 
-    Route::get('/barcode-templates',
-        [BarcodeTemplateController::class, 'index']
-    );
+//     Route::get('/barcode-templates',
+//         [BarcodeTemplateController::class, 'index']
+//     );
 
-    Route::post('/barcode-templates',
-        [BarcodeTemplateController::class, 'store']
-    );
-});
+//     Route::post('/barcode-templates',
+//         [BarcodeTemplateController::class, 'store']
+//     );
+// });
 
 
 

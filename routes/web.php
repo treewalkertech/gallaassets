@@ -13,6 +13,7 @@ use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\Asyncassetcontroller;
 use App\Http\Controllers\LabelsController;
 use App\Http\Controllers\LocationsController;
+use App\Http\Controllers\Admin\ServiceDeskSettingsController;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ManufacturersController;
 use App\Http\Controllers\ModalController;
@@ -209,56 +210,10 @@ Route::get('/test-sdp', function () {
     ]);
 });
 
-Route::middleware('auth')->group(function () {
-
-    // Blade pages
-    Route::get('/admin/barcode-templates',
-        [BarcodeTemplateController::class, 'index']
-    )->name('admin.barcode.templates');
-
-    Route::get('/admin/barcode-templates/create',
-        [BarcodeTemplateController::class, 'create']
-    )->name('admin.barcode.templates.create');
-
-    Route::get('/admin/barcode-templates/{id}/edit',
-        [BarcodeTemplateController::class, 'edit']
-    )->name('admin.barcode.templates.edit');
-    
-
-    // JSON data (used by JS)
-    Route::get('/barcode-templates-data',
-        [BarcodeTemplateControllers::class, 'index']
-    );
-
-    Route::post('/barcode-templates-data',
-        [BarcodeTemplateControllers::class, 'store']
-    );
-
-        Route::get('/barcode-templates/{id}',
-        [BarcodeTemplateControllers::class, 'show']
-    );
-
-     // Update
-    Route::put('/barcode-templates/{id}',
-        [BarcodeTemplateControllers::class, 'update']
-    );
-
-    Route::patch('/barcode-templates/{id}/toggle',
-        [BarcodeTemplateControllers::class, 'toggle']
-    );
-
-    Route::delete('/barcode-templates/{id}',
-        [BarcodeTemplateControllers::class, 'destroy']
-    );
-});
-
-
-
-
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser']], function () {
     Route::get('/assets', [Asyncassetcontroller::class, 'index']);
     Route::post('/assets/sync', [Asyncassetcontroller::class, 'sync'])->name('sync.assets');
-    
+    Route::post('/assets/push-barcodes',[Asyncassetcontroller::class, 'pushAllBarcodesToSdp'])->name('assets.push-barcodes');
     Route::get('settings', [SettingsController::class, 'getSettings'])->name('settings.general.index');
     Route::post('settings', [SettingsController::class, 'postSettings'])->name('settings.general.save');
 
@@ -277,6 +232,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser
     Route::post('notifications', [SettingsController::class, 'postAlerts'])->name('settings.alerts.save');
 
     Route::get('slack', [SettingsController::class, 'getSlack'])->name('settings.slack.index');
+    Route::get('/servicedesk', [ServiceDeskSettingsController::class,'index'])->name('settings.servicedesk.index');
     Route::post('slack', [SettingsController::class, 'postSlack'])->name('settings.slack.save');
 
     Route::get('asset_tags', [SettingsController::class, 'getAssetTags'])->name('settings.asset_tags.index');

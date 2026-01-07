@@ -58,9 +58,10 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
     div.label-logo {
         float: right;
         display: inline-block;
+        /* min-width:4in; */
     }
     img.label-logo {
-        height: 0.5in;
+        height: 1in;
     }
     .qr_text {
         width: {{ $settings->labels_width }}in;

@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
 
         User::factory()->count(1)->firstAdmin()
             ->state(new Sequence(fn($sequence) => [
-                'company_id' => $companyIds->random(),
+                'company_id' => 1,
                 'department_id' => $departmentIds->random(),
             ]))
             ->create();

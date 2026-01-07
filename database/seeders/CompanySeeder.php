@@ -13,11 +13,11 @@ class CompanySeeder extends Seeder
     {
         Log::debug('Seed companies');
 
-        Company::truncate();
+        // Company::truncate();
 
         // 1️⃣ Create company FIRST
         $company = Company::factory()->create([
-            'name' => 'Treewalker Technology',
+            'name' => 'KWE',
             'image' => 'favicon.png', // ✅ THIS WAS MISSING
         ]);
 

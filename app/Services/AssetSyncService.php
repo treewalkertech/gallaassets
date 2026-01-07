@@ -7,12 +7,54 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\BarcodeGenerator;
 use Illuminate\Support\Str;
-
+use App\Services\ServiceDeskConfigResolver;
+use App\Models\ServiceDeskConfig;
+use Illuminate\Support\Facades\Auth;
 class AssetSyncService
 {
+    private ServiceDeskConfig $config;
+    private string $baseUrl;
+    private string $baseApiUrl;
 
-    private const SDP_BASE_URL = 'https://localhost:8080/api/v3';
+    private array $httpOptions;
+    private array $headers;
+
+    // private const SDP_BASE_URL = 'https://localhost:8080/api/v3';
+
+        public function __construct()
+    {
+        $this->config = ServiceDeskConfig::where('company_id', Auth::user()->company_id)
+            ->where('is_active', true)
+            ->where('is_sync_enabled', true)
+            ->firstOrFail();
+
+        // https://host/api/v3
+        $this->baseApiUrl = rtrim($this->config->base_url, '/')
+            . '/api/' . $this->config->api_version;
+
+        $this->httpOptions = [
+            'verify'  => (bool) $this->config->verify_ssl,
+            'timeout' => (int) $this->config->timeout,
+            'curl' => [
+                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            ],
+        ];
+
+        $this->headers = [
+            'TECHNICIAN_KEY' => $this->config->technician_key,
+            'Accept'         => 'application/json',
+        ];
+
+        // Cookies only needed in production
+        if ($this->config->mode === 'production') {
+            $this->headers['Cookie'] =
+                'SDPSESSIONID=' . $this->config->session_id . '; ' .
+                '_zcsr_tmp=' . $this->config->csrf_token . '; ' .
+                'sdpcsrfcookie=' . $this->config->csrf_token;
+        }
+    }
 
     public function sync(): array
     {
@@ -59,27 +101,27 @@ class AssetSyncService
              */
            
             // $assetsUrl = 'https://localhost:8080/api/v3/assets';
-            $assetsUrl = self::SDP_BASE_URL . '/assets';
+            $response = $this->sdpGet('/assets');
 
 
-            $response = Http::withOptions([
-                'verify'  => false,
-                'timeout' => 60,
-                'curl' => [
-                    CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-                ],
-            ])
-            ->withHeaders([
-                'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
-                'Accept'         => 'application/json',
-            ])
-            ->withHeaders([
-                'Cookie' =>
-                    'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
-                    '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
-                    'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
-            ])
-            ->get($assetsUrl);
+            // $response = Http::withOptions([
+            //     'verify'  => false,
+            //     'timeout' => 60,
+            //     'curl' => [
+            //         CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+            //     ],
+            // ])
+            // ->withHeaders([
+            //     'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+            //     'Accept'         => 'application/json',
+            // ])
+            // ->withHeaders([
+            //     'Cookie' =>
+            //         'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+            //         '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+            //         'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+            // ])
+            // ->get($assetsUrl);
 
             
             /**
@@ -112,21 +154,22 @@ class AssetSyncService
                 // --------------------------------------------------
                 // 🔹 FETCH ASSET DETAILS (REQUIRED FOR ATTACHMENTS)
                 // --------------------------------------------------
-                $assetDetailsResponse = Http::withOptions([
-                    'verify'  => false,
-                    'timeout' => 60,
-                ])
-                ->withHeaders([
-                    'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
-                    'Accept'         => 'application/json',
-                ])
-                ->withHeaders([
-                    'Cookie' =>
-                        'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
-                        '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
-                        'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
-                ])
-                ->get(self::SDP_BASE_URL . '/assets/' . $item['id']);
+                $assetDetailsResponse = $this->sdpGet('/assets/' . $item['id']);
+                // $assetDetailsResponse = Http::withOptions([
+                //     'verify'  => false,
+                //     'timeout' => 60,
+                // ])
+                // ->withHeaders([
+                //     'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+                //     'Accept'         => 'application/json',
+                // ])
+                // ->withHeaders([
+                //     'Cookie' =>
+                //         'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+                //         '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+                //         'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+                // ])
+                // ->get(self::SDP_BASE_URL . '/assets/' . $item['id']);
 
                 if (!$assetDetailsResponse->successful()) {
                     Log::warning('Asset detail fetch failed', [
@@ -180,10 +223,9 @@ class AssetSyncService
                 $asset->current_value = $item['current_cost'] ?? null;
 
 
-                // $asset->_snipeit_barcode_2       = $item['barcode'] ?? null; 
                 $asset->purchase_cost = $item['purchase_cost'] ?? 0;
                 // $asset->purchase_cost = $item['current_cost'] ?? 0;
-                $asset->location_id = $locationId; 
+                $asset->rtd_location_id = $locationId; 
 
                 $asset->purchase_date  = $this->date($item['acquisition_date']['value'] ?? null);
                 $asset->asset_eol_date = $this->date($item['expiry_date']['value'] ?? null);
@@ -257,58 +299,58 @@ class AssetSyncService
                 // 🔹 BARCODE GENERATION (ONLY IF SDP DID NOT SEND ONE)
                 // --------------------------------------------------
 
-                if (empty($item['barcode'])) {
+                // if (empty($item['barcode'])) {
 
-                    // -----------------------------
-                    // REQUIRED STATIC VALUES
-                    // -----------------------------
-                    $company = 'KWE';
+                //     // -----------------------------
+                //     // REQUIRED STATIC VALUES
+                //     // -----------------------------
+                //     $company = 'KWE';
 
-                    $siteMap = [
-                        'tree walker' => 'BOM-VADAPE',
-                    ];
+                //     $siteMap = [
+                //         'tree walker' => 'BOM-VADAPE',
+                //     ];
 
-                    $siteName = strtolower($item['site']['name'] ?? '');
-                    $location = $siteMap[$siteName] ?? 'BOM-VADAPE';
+                //     $siteName = strtolower($item['site']['name'] ?? '');
+                //     $location = $siteMap[$siteName] ?? 'BOM-VADAPE';
 
-                    $logisticsType = 'C&F';
-                    $department    = 'DTP';
+                //     $logisticsType = 'C&F';
+                //     $department    = 'DTP';
 
-                    // -----------------------------
-                    // PURCHASE ORDER (SAFE)
-                    // -----------------------------
-                    $poRef = $purchaseOrder->name
-                        ?? $purchaseOrder->po_name
-                        ?? ('PO' . ($purchaseOrder->custom_po_id ?? $purchaseOrder->id ?? 'NA')) ?? ('PO-' . ($poNumber ?? 'NA'));
+                //     // -----------------------------
+                //     // PURCHASE ORDER (SAFE)
+                //     // -----------------------------
+                //     $poRef = $purchaseOrder->name
+                //         ?? $purchaseOrder->po_name
+                //         ?? ('PO' . ($purchaseOrder->custom_po_id ?? $purchaseOrder->id ?? 'NA')) ?? ('PO-' . ($poNumber ?? 'NA'));
 
-                    // -----------------------------
-                    // UNIQUE IDENTIFIER (KEY FIX)
-                    // -----------------------------
-                    // SDP Asset ID → always unique
-                    $assetId = $item['id'];
+                //     // -----------------------------
+                //     // UNIQUE IDENTIFIER (KEY FIX)
+                //     // -----------------------------
+                //     // SDP Asset ID → always unique
+                //     $assetId = $item['id'];
 
-                    // -----------------------------
-                    // FINAL BARCODE VALUE
-                    // -----------------------------
-                    $barcodeValue = implode('/', [
-                        $company,
-                        $location,
-                        $logisticsType,
-                        $poRef,
-                        $department,
-                        $assetId
-                    ]);
+                //     // -----------------------------
+                //     // FINAL BARCODE VALUE
+                //     // -----------------------------
+                //     $barcodeValue = implode('/', [
+                //         $company,
+                //         $location,
+                //         $logisticsType,
+                //         $poRef,
+                //         $department,
+                //         $assetId
+                //     ]);
 
-                    $asset->_snipeit_barcode_2 = $barcodeValue;
+                //     $asset->_snipeit_barcode_2 = $barcodeValue;
 
-                } else {
-                    // SDP barcode exists → keep it
-                    $asset->_snipeit_barcode_2 = $item['barcode'];
-                }
+                // } else {
+                //     // SDP barcode exists → keep it
+                //     $asset->_snipeit_barcode_2 = $item['barcode'];
+                // }
 
 
+              
 
-                $asset->last_audit_date = now();
 
                 // REQUIRED FIELDS (SNIPE-IT)
                $modelId = null;
@@ -323,15 +365,37 @@ class AssetSyncService
                 $statusId = $this->syncStatus($item['state'] ?? []);
                 $asset->status_id = $statusId;
 
-                $asset->company_id = 1;
+                // $asset->company_id = 1;
+                $asset->company_id = $this->config->company_id;
+                $asset->last_audit_date = now();
+
+                // 🔹 ASSET DEPARTMENT FROM SDP (HIGHEST PRIORITY)
+                if (!empty($item['department'])) {
+                    $this->syncDepartment($item['department']);
+                    $asset->department_id = $item['department']['id'];
+                }
+
+
 
                 $asset->save();
-                DB::commit();
+                // 🔒 BARCODE: generate ONLY ONCE
+                if (empty($asset->_snipeit_barcode_2)) {
+
+                    // if SDP sent barcode → trust it
+                    if (!empty($item['barcode'])) {
+                        $asset->_snipeit_barcode_2 = $item['barcode'];
+                    } else {
+                        $asset->_snipeit_barcode_2 = BarcodeGenerator::generate($asset);
+                    }
+
+                    $asset->save(); // 2️⃣ save barcode only once
+                }
+                // DB::commit();
 
                 $this->downloadAssetImage($asset, $assetDetails);
                 $inserted++;
             }
-
+            DB::commit();
          
 
             return [
@@ -350,6 +414,17 @@ class AssetSyncService
             throw $e;
         }
     }
+
+    
+
+        private function sdpGet(string $endpoint)
+    {
+        return Http::withOptions($this->httpOptions)
+            ->withHeaders($this->headers)
+            ->get($this->baseApiUrl . $endpoint);
+    }
+    
+
 
         private function syncStatus(array $state): int
     {
@@ -392,81 +467,142 @@ class AssetSyncService
 
 
 
-        private function uniqueSerial(?string $serial, int $externalAssetId): string
+    //     private function uniqueSerial(?string $serial, int $externalAssetId): string
+    // {
+    //     // Preferred serial from SDP
+    //     if (!empty($serial)) {
+    //         $exists = DB::table('assets')
+    //             ->where('serial', $serial)
+    //             ->exists();
+
+    //         if (!$exists) {
+    //             return $serial;
+    //         }
+    //     }
+
+    //     // Guaranteed fallback
+    //     return 'SDP-SN-' . $externalAssetId . '-' . now()->timestamp;
+    // }
+
+    private function uniqueSerial(?string $serial, int $externalAssetId): string
     {
-        // Preferred serial from SDP
         if (!empty($serial)) {
-            $exists = DB::table('assets')
-                ->where('serial', $serial)
-                ->exists();
-
-            if (!$exists) {
-                return $serial;
-            }
+            return $serial;
         }
 
-        // Guaranteed fallback
-        return 'SDP-SN-' . $externalAssetId . '-' . now()->timestamp;
+        return 'SDP-SN-' . $externalAssetId;
     }
 
-        private function downloadAssetImage(Asset $asset, array $assetDetails): void
-    {
-        $attachments = $assetDetails['attachments'] ?? [];
 
-        if (empty($attachments)) {
-            return;
-        }
+    //     private function downloadAssetImage(Asset $asset, array $assetDetails): void
+    // {
+    //     $attachments = $assetDetails['attachments'] ?? [];
 
-        // Take first attachment (image)
-        $attachment = $attachments[0];
+    //     if (empty($attachments)) {
+    //         return;
+    //     }
 
-        if (
-            empty($attachment['content_url']) ||
-            !str_starts_with($attachment['content_type'] ?? '', 'image/')
-        ) {
-            return;
-        }
+    //     // Take first attachment (image)
+    //     $attachment = $attachments[0];
 
-        $downloadUrl = 'https://localhost:8080' . $attachment['content_url'];
+    //     if (
+    //         empty($attachment['content_url']) ||
+    //         !str_starts_with($attachment['content_type'] ?? '', 'image/')
+    //     ) {
+    //         return;
+    //     }
 
-        $imageResponse = Http::withOptions([
-                'verify'  => false,
-                'timeout' => 60,
-            ])
-            ->withHeaders([
-                'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
-                'Cookie' =>
-                    'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
-                    '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
-                    'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
-            ])
-            ->get($downloadUrl);
+    //     // $downloadUrl = 'https://localhost:8080' . $attachment['content_url'];
+    //     $downloadUrl = rtrim($this->config->base_url, '/') . $attachment['content_url'];
 
-        if (!$imageResponse->successful()) {
-            return;
-        }
 
-        // ---------------------------------------
-        // ✅ SAVE USING STORAGE (IMPORTANT FIX)
-        // ---------------------------------------
+    //     $imageResponse = Http::withOptions([
+    //             'verify'  => false,
+    //             'timeout' => 60,
+    //         ])
+    //         ->withHeaders([
+    //             'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+    //             'Cookie' =>
+    //                 'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+    //                 '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+    //                 'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+    //         ])
+    //         ->get($downloadUrl);
 
-        $ext = pathinfo($attachment['name'], PATHINFO_EXTENSION) ?: 'jpg';
-        $filename = 'asset-image-' . $asset->id . '.' . $ext;
+    //     if (!$imageResponse->successful()) {
+    //         return;
+    //     }
 
-        // assets_upload_path = 'uploads/assets/'
-        $path = app('assets_upload_path') . $filename;
+    //     // ---------------------------------------
+    //     // ✅ SAVE USING STORAGE (IMPORTANT FIX)
+    //     // ---------------------------------------
 
-        Storage::disk('public')->put(
-            $path,
-            $imageResponse->body()
-        );
+    //     $ext = pathinfo($attachment['name'], PATHINFO_EXTENSION) ?: 'jpg';
+    //     $filename = 'asset-image-' . $asset->id . '.' . $ext;
 
-        // Save only filename (NOT full path)
-        $asset->update([
-            'image' => $filename
+    //     // assets_upload_path = 'uploads/assets/'
+    //     $path = app('assets_upload_path') . $filename;
+
+    //     Storage::disk('public')->put(
+    //         $path,
+    //         $imageResponse->body()
+    //     );
+
+    //     // Save only filename (NOT full path)
+    //     $asset->update([
+    //         'image' => $filename
+    //     ]);
+    // }
+
+
+
+    private function downloadAssetImage(Asset $asset, array $assetDetails): void
+{
+    $attachments = $assetDetails['attachments'] ?? [];
+
+    if (empty($attachments)) {
+        return;
+    }
+
+    // Take first attachment only
+    $attachment = $attachments[0];
+
+    if (
+        empty($attachment['content_url']) ||
+        !str_starts_with($attachment['content_type'] ?? '', 'image/')
+    ) {
+        return;
+    }
+
+    // Build full download URL
+    $downloadUrl = rtrim($this->config->base_url, '/') . $attachment['content_url'];
+
+    $imageResponse = Http::withOptions($this->httpOptions)
+        ->withHeaders($this->headers)
+        ->get($downloadUrl);
+
+    if (!$imageResponse->successful()) {
+        Log::warning('Asset image download failed', [
+            'asset_id' => $asset->id,
+            'status'   => $imageResponse->status(),
         ]);
+        return;
     }
 
+    // Determine extension
+    $ext = pathinfo($attachment['name'], PATHINFO_EXTENSION) ?: 'jpg';
+    $filename = 'asset-image-' . $asset->id . '.' . $ext;
+
+    // assets_upload_path = uploads/assets/
+    $path = app('assets_upload_path') . $filename;
+
+    Storage::disk('public')->put($path, $imageResponse->body());
+
+    // Save ONLY filename
+    $asset->update([
+        'image' => $filename,
+    ]);
+}
 
     private function uniqueAssetTag(?string $tag, int $externalAssetId): string
     {
@@ -507,27 +643,28 @@ class AssetSyncService
 
         private function fetchAssetCategories(): array
     {
-        // $url = 'https://localhost:8080/api/v3/asset_categories';
-        $url = self::SDP_BASE_URL . '/asset_categories';
+        // $url = self::SDP_BASE_URL . '/asset_categories';
+        $response = $this->sdpGet('/asset_categories');
 
-        $response = Http::withOptions([
-            'verify'  => false,
-            'timeout' => 60,
-            'curl' => [
-                CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-            ],
-        ])
-        ->withHeaders([
-            'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
-            'Accept'         => 'application/json',
-        ])
-        ->withHeaders([
-            'Cookie' =>
-                'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
-                '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
-                'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
-        ])
-        ->get($url);
+
+        // $response = Http::withOptions([
+        //     'verify'  => false,
+        //     'timeout' => 60,
+        //     'curl' => [
+        //         CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+        //     ],
+        // ])
+        // ->withHeaders([
+        //     'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+        //     'Accept'         => 'application/json',
+        // ])
+        // ->withHeaders([
+        //     'Cookie' =>
+        //         'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+        //         '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+        //         'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+        // ])
+        // ->get($url);
 
         Log::error('ASSET CATEGORY API DEBUG', [
             'status' => $response->status(),
@@ -561,10 +698,11 @@ class AssetSyncService
 
         private function syncDepartment(array $dept)
     {
-        return DB::table('departments')->updateOrInsert(
+        DB::table('departments')->updateOrInsert(
             ['id' => $dept['id']],
             [
                 'name'       => $dept['name'],
+                'company_id' => $this->config->company_id,
                 'updated_at' => now(),
                 'created_at' => now(),
             ]
@@ -639,28 +777,30 @@ class AssetSyncService
   private function fetchPurchaseOrders(): array
 {
     // $url = 'https://localhost:8080/api/v3/purchase_orders';
-    $url = self::SDP_BASE_URL . '/purchase_orders';
+    // $url = self::SDP_BASE_URL . '/purchase_orders';
+    
+    $response = $this->sdpGet('/purchase_orders');
 
-    $response = Http::withOptions([
-        'verify'  => false, // allow self-signed cert
-        'timeout' => 60,
-        'curl' => [
-            CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
-        ],
-    ])
-    ->withHeaders([
-        // SAME AS POSTMAN
-        'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
-        'Accept'         => 'application/json',
-    ])
-    ->withHeaders([
-        // 🔥 THIS IS IMPORTANT
-        'Cookie' =>
-            'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
-            '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
-            'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
-    ])
-    ->get($url);
+    // $response = Http::withOptions([
+    //     'verify'  => false, // allow self-signed cert
+    //     'timeout' => 60,
+    //     'curl' => [
+    //         CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
+    //     ],
+    // ])
+    // ->withHeaders([
+    //     // SAME AS POSTMAN
+    //     'TECHNICIAN_KEY' => env('SDP_TECHNICIAN_KEY'),
+    //     'Accept'         => 'application/json',
+    // ])
+    // ->withHeaders([
+    //     // 🔥 THIS IS IMPORTANT
+    //     'Cookie' =>
+    //         'SDPSESSIONID=' . env('SDPSESSIONID') . '; ' .
+    //         '_zcsr_tmp=' . env('SDP_CSRF_COOKIE') . '; ' .
+    //         'sdpcsrfcookie=' . env('SDP_CSRF_COOKIE'),
+    // ])
+    // ->get($url);
 
     // FULL DEBUG (NO MORE GUESSING)
     Log::error('PO API DEBUG', [
@@ -709,18 +849,28 @@ class AssetSyncService
         );
     }
 
-        private function syncLocation(?string $location): ?int
+            private function syncLocation(?string $location): ?int
     {
-        if (empty($location)) {
+        // 🔒 1️⃣ Normalize input
+        $location = trim((string) $location);
+
+        // ❌ 2️⃣ Invalid / junk values → skip
+        if (
+            $location === '' ||
+            $location === '-' ||
+            strtoupper($location) === 'NA' ||
+            strtoupper($location) === 'N/A'
+        ) {
             return null;
         }
 
-        // Example: "Banglore, India"
+        // Example: "Bangalore, India"
         $parts = array_map('trim', explode(',', $location));
 
         $city    = $parts[0] ?? null;
         $country = $parts[1] ?? null;
 
+        // 🔍 3️⃣ Check existing location
         $existing = DB::table('locations')
             ->where('name', $location)
             ->first();
@@ -729,6 +879,7 @@ class AssetSyncService
             return $existing->id;
         }
 
+        // ✅ 4️⃣ Create only VALID location
         return DB::table('locations')->insertGetId([
             'name'       => $location,
             'city'       => $city,
@@ -737,6 +888,7 @@ class AssetSyncService
             'updated_at' => now(),
         ]);
     }
+
     
 
         private function resolvePurchaseOrderId(?int $externalPoId): ?int

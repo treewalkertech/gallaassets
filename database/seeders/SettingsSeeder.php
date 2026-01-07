@@ -18,14 +18,14 @@ class SettingsSeeder extends Seeder
         $settings->auto_increment_assets = 1;
         $settings->logo = 'galla.png';
         $settings->alert_email = 'service@galla.io';
-        $settings->header_color = null;
+        $settings->header_color = '#000000';
         $settings->label2_2d_type = 'QRCODE';
-        $settings->default_currency = 'USD';
+        $settings->default_currency = 'INR';
         $settings->brand = 3;
         $settings->ldap_enabled = 0;
         $settings->full_multiple_companies_support = 0;
         $settings->label2_1d_type = 'C128';
-        $settings->skin = '';
+        $settings->skin = 'contrast';
         $settings->email_domain = 'example.org';
         $settings->email_format = 'filastname';
         $settings->username_format = 'filastname';
