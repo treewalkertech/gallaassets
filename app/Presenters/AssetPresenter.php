@@ -59,12 +59,21 @@ class AssetPresenter extends Presenter
                 'title' => trans('admin/hardware/table.asset_tag'),
                 'visible' => true,
                 'formatter' => 'hardwareLinkFormatter',
-            ], [
-                'field' => 'rfid',
+            ], 
+            // [
+            //     'field' => 'rfid',
+            //     'searchable' => true,
+            //     'sortable' => true,
+            //     'switchable' => false,
+            //     'title' => trans('admin/hardware/table.rfid'),
+            //     'visible' => true,
+            // ],
+            [
+                'field' => 'barcode',
                 'searchable' => true,
                 'sortable' => true,
                 'switchable' => false,
-                'title' => trans('admin/hardware/table.rfid'),
+                'title' => trans('admin/hardware/table.barcode'),
                 'visible' => true,
             ],
             [
@@ -299,15 +308,16 @@ class AssetPresenter extends Presenter
                 'visible' => false,
                 'title' => trans('general.next_audit_date'),
                 'formatter' => 'dateDisplayFormatter',
-            ], [
-                'field' => 'byod',
-                'searchable' => false,
-                'sortable' => true,
-                'visible' => false,
-                'title' => trans('general.byod'),
-                'formatter' => 'trueFalseFormatter',
+            ], 
+            // [
+            //     'field' => 'byod',
+            //     'searchable' => false,
+            //     'sortable' => true,
+            //     'visible' => false,
+            //     'title' => trans('general.byod'),
+            //     'formatter' => 'trueFalseFormatter',
 
-            ],
+            // ],
         ];
 
         // This looks complicated, but we have to confirm that the custom fields exist in custom fieldsets

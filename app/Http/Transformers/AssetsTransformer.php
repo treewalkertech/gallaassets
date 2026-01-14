@@ -42,6 +42,7 @@ class AssetsTransformer
             'requestable' => ($asset->requestable ? true : false),
             // 'rfid' => e($asset->rfid),
             'rfid' => $asset->rfid,
+            'barcode' => $asset->_snipeit_barcode_2,
             'model_number' => (($asset->model) && ($asset->model->model_number)) ? e($asset->model->model_number) : null,
             'eol' => (($asset->asset_eol_date != '') && ($asset->purchase_date != '')) ? Carbon::parse($asset->asset_eol_date)->diffInMonths($asset->purchase_date).' months' : null,
             'asset_eol_date' => ($asset->asset_eol_date != '') ? Helper::getFormattedDateObject($asset->asset_eol_date, 'date') : null,

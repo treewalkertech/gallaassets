@@ -107,7 +107,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 }
 
 .sync-overlay-content i {
-    color: #3c8dbc; /* Snipe-IT blue */
+    color: #3c8dbc; 
 }
 
 .sync-overlay-content .sync-text {
@@ -995,7 +995,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                 <div class="1hidden-xs pull-left">
 		   {{--
                       <div class="pull-left" >
-                        <a target="_blank" href="https://snipeitapp.com" rel="noopener">Snipe-IT</a> is open source software, made with <x-icon type="heart" style="color: #a94442; font-size: 10px" />
+                        <a target="_blank" href="https://snipeitapp.com" rel="noopener">Treewalker</a> is open source software, made with <x-icon type="heart" style="color: #a94442; font-size: 10px" />
                             <span class="sr-only">love</span> by <a href="https://bsky.app/profile/snipeitapp.com" rel="noopener">@snipeitapp</a>.
                     </div>
                     <div class="pull-right">
@@ -1029,6 +1029,43 @@ dir="{{ Helper::determineLanguageDirection() }}">
                         </div>
 			@endif
 	         --}}		
+
+           
+
+       <div class="pull-left">
+            © 2026 made with 
+            <span style="display:inline-flex; align-items:center; margin: 0 3px;">
+                <x-icon type="heart" style="color:#ff413e; font-size:11px; line-height:1;" />
+            </span>
+            by <strong>Treewalker Technologies Pvt Ltd</strong>
+        </div>
+
+
+        <div class="pull-right">
+            <strong>Version</strong> v1
+        </div>
+
+        <br>
+
+        @if ($snipeSettings->footer_text != '')
+            <div class="pull-left">
+                {!! Helper::parseEscapedMarkedown($snipeSettings->footer_text) !!}
+            </div>
+        @endif
+
+        @if ($snipeSettings->privacy_policy_link != '')
+            <div class="pull-right">
+                <a target="_blank"
+                   class="btn btn-default btn-xs"
+                   rel="noopener"
+                   href="{{ $snipeSettings->privacy_policy_link }}">
+                    {{ trans('admin/settings/general.privacy_policy') }}
+                </a>
+            </div>
+        @endif
+        
+
+
                 </div>
             </footer>
         </div><!-- ./wrapper -->
