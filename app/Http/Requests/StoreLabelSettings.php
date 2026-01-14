@@ -36,6 +36,9 @@ class StoreLabelSettings extends FormRequest
             'labels_pagewidth'                    => 'numeric|nullable',
             'labels_pageheight'                   => 'numeric|nullable',
             'qr_text'                             => 'max:31|nullable',
+            'barcode_width_in'                    => 'required|numeric',
+            'barcode_height_in'                   => 'required|numeric',
+          
         ];
     }
 }

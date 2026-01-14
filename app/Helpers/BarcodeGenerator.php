@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 use App\Models\Asset;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\BarcodeCounter;
 
 class BarcodeGenerator
 {
@@ -52,6 +53,7 @@ class BarcodeGenerator
     {
 
           $date = $asset->created_at ?? now();
+        $serial = BarcodeCounter::next($asset->company_id);
 
         return [
             'company'     => self::companyCode($asset),
@@ -62,7 +64,8 @@ class BarcodeGenerator
             'asset_seq'   => self::assetSequence($asset),
             'asset_id'   => (string) ($asset->external_asset_id ?? $asset->id),
             // 'asset_id'    => (string) $asset->id,
-            'serial'      => $asset->serial ?? '',
+            // 'serial'      => $asset->serial ?? '',
+            'serial'     =>    $serial,  
             'year'       => $date->format('Y'),
             'month'      => $date->format('m'),
         ];

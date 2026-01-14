@@ -209,6 +209,17 @@ class Asset extends Depreciable
         'model.manufacturer' => ['name'],
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($asset) {
+
+            if (empty($asset->_snipeit_barcode_2)) {
+                $asset->_snipeit_barcode_2 = \App\Helpers\BarcodeGenerator::build($asset);
+            }
+        });
+    }
+
+
     // To properly set the expected checkin as Y-m-d
     public function setExpectedCheckinAttribute($value)
     {

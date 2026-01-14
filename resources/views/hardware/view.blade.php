@@ -406,7 +406,7 @@
                                     @if ($asset->purchaseOrder)
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <strong>{{ __('Purchase Order') }}</strong>
+                                                <strong>{{ __('Purchase Name') }}</strong>
                                             </div>
                                             <div class="col-md-9">
                                                 <span class="js-copy-po-name">

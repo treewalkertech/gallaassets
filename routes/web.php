@@ -33,6 +33,11 @@ use App\Livewire\Importer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+Route::post(
+    '/labels/print-barcodes',
+    [\App\Http\Controllers\LabelPrintController::class, 'print']
+)->name('labels.print.barcodes');
+
 
 Route::group(['middleware' => 'auth'], function () {
     /*

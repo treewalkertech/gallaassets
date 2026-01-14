@@ -107,6 +107,67 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
     @if ($snipeSettings->custom_css)
         {!! $snipeSettings->show_custom_css() !!}
     @endif
+    
+ @keyframes scan {
+        0% {
+            left: -100%;
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            left: 100%;
+            opacity: 0;
+        }
+    }
+    
+    @keyframes moveBars {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: 50px 0;
+        }
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% {
+            filter: drop-shadow(0 0 4px rgba(0,255,204,0.5));
+        }
+        50% {
+            filter: drop-shadow(0 0 8px rgba(0,255,204,0.8));
+        }
+    }
+    
+    .cool-barcode-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.4),
+                    0 0 0 2px rgba(0,255,204,0.2) inset;
+        letter-spacing: 2px;
+    }
+    
+    .cool-barcode-btn:hover .neon-glow {
+        opacity: 1;
+    }
+    
+    .cool-barcode-btn:hover .printer-icon {
+        transform: translateY(-2px);
+        animation: pulseGlow 1s infinite;
+    }
+    
+    .cool-barcode-btn:active {
+        transform: translateY(1px) scale(0.98);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3),
+                    0 0 0 2px rgba(0,255,204,0.3) inset;
+    }
+    
+    .cool-barcode-btn:hover .scan-line {
+        animation-duration: 1.5s;
+    }
 </style>
 
 @foreach ($assets as $asset)
@@ -183,7 +244,130 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->label2_1d_type!=
     @endif
 
 @endforeach
+<div class="noprint" style="margin-top: 20px;">
+    <form method="POST"
+          action="{{ route('labels.print.barcodes') }}"
+          target="_blank">
+        @csrf
+        @foreach ($assets as $asset)
+            <input type="hidden" name="asset_ids[]" value="{{ $asset->id }}">
+        @endforeach
 
+        <button type="submit" class="cool-barcode-btn" 
+                style="background: linear-gradient(135deg, #0a0a0a 0%, #222 100%);
+                       border: none;
+                       border-radius: 8px;
+                       color: white;
+                       cursor: pointer;
+                       font-family: 'Segoe UI', 'SF Pro Display', -apple-system, sans-serif;
+                       font-size: 12px;
+                       font-weight: 600;
+                       padding: 15px 20px;
+                       position: relative;
+                       overflow: hidden;
+                       display: inline-flex;
+                       align-items: center;
+                       gap: 15px;
+                       text-transform: uppercase;
+                       letter-spacing: 1px;
+                       box-shadow: 0 8px 25px rgba(0,0,0,0.3),
+                                   0 0 0 2px rgba(255,255,255,0.1) inset;
+                       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            
+            <!-- Animated scanning line -->
+            <div class="scan-line" 
+                 style="position: absolute;
+                        top: 0;
+                        left: -100%;
+                        width: 100%;
+                        height: 2px;
+                        background: linear-gradient(90deg, transparent, #00ffcc, transparent);
+                        filter: drop-shadow(0 0 6px #00ffcc);
+                        animation: scan 2s linear infinite;
+                        animation-delay: 0.5s;">
+            </div>
+            
+            <!-- Pulsing barcode pattern background -->
+            <div class="barcode-bg" 
+                 style="position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        opacity: 0.15;
+                        background-image: repeating-linear-gradient(
+                            90deg,
+                            transparent,
+                            transparent 2px,
+                            #00ffcc 2px,
+                            #00ffcc 4px,
+                            transparent 4px,
+                            transparent 10px
+                        );
+                        background-size: 50px 100%;
+                        animation: moveBars 8s linear infinite;
+                        filter: blur(0.5px);">
+            </div>
+            
+            <!-- Neon glow effect -->
+            <div class="neon-glow" 
+                 style="position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        opacity: 0;
+                        border-radius: 8px;
+                        background: radial-gradient(circle at center, rgba(0,255,204,0.3) 0%, transparent 70%);
+                        transition: opacity 0.3s ease;">
+            </div>
+            
+            <!-- Printer icon with glow -->
+            <svg class="printer-icon" 
+                 style="width: 20px; 
+                        height: 20px; 
+                        filter: drop-shadow(0 0 4px rgba(0,255,204,0.5));
+                        position: relative;
+                        z-index: 2;
+                        transition: transform 0.3s ease;"
+                 xmlns="http://www.w3.org/2000/svg" 
+                 viewBox="0 0 24 24" 
+                 fill="#00ffcc">
+                <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+            </svg>
+            
+            <!-- Text with glow -->
+            <span class="btn-text" 
+                  style="position: relative;
+                         z-index: 2;
+                         text-shadow: 0 0 10px rgba(0,255,204,0.5);
+                         letter-spacing: 1.5px;">
+                GENERATE BARCODE PDF
+            </span>
+            
+            <!-- Corner accents -->
+            <div style="position: absolute;
+                        top: 8px;
+                        left: 8px;
+                        width: 12px;
+                        height: 12px;
+                        border-top: 2px solid #00ffcc;
+                        border-left: 2px solid #00ffcc;
+                        opacity: 0.7;">
+            </div>
+            <div style="position: absolute;
+                        bottom: 8px;
+                        right: 8px;
+                        width: 12px;
+                        height: 12px;
+                        border-bottom: 2px solid #00ffcc;
+                        border-right: 2px solid #00ffcc;
+                        opacity: 0.7;">
+            </div>
+            
+        </button>
+    </form>
+</div>
 
 </body>
 </html>

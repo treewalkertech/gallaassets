@@ -467,6 +467,62 @@
                                     {!! $errors->first('labels_pageheight', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
                                 </div>
                             </div>
+                            {{-- Barcode Size for PDF (Inches) --}}
+
+                            {{-- Barcode Width --}}
+                            <div class="form-group{{ $errors->has('barcode_width_in') ? ' has-error' : '' }}">
+                                <div class="col-md-3 text-right">
+                                    {{ Form::label('barcode_width_in', 'Barcode Size for PDF (Inches)', ['class'=>'control-label']) }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        {{ Form::text(
+                                            'barcode_width_in',
+                                            old('barcode_width_in', $setting->barcode_width_in),
+                                            ['class'=>'form-control', 'aria-label'=>'barcode_width_in']
+                                        ) }}
+                                        <div class="input-group-addon">w</div>
+                                    </div>
+                                    {!! $errors->first('barcode_width_in', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
+                                </div>
+                                 <div class="col-md-3">
+                                    <div class="input-group">
+                                        {{ Form::text(
+                                            'barcode_height_in',
+                                            old('barcode_height_in', $setting->barcode_height_in),
+                                            ['class'=>'form-control', 'aria-label'=>'barcode_height_in']
+                                        ) }}
+                                        <div class="input-group-addon">h</div>
+                                    </div>
+                                    {!! $errors->first('barcode_height_in', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
+                                </div>
+                            </div>
+
+                          
+                            {{-- Barcode Bar Thickness --}}
+                            {{-- <div class="form-group{{ $errors->has('barcode_bar_width_in') ? ' has-error' : '' }}">
+                                <div class="col-md-3 text-right">
+                                    {{ Form::label('barcode_bar_width_in', 'Bar Thickness', ['class'=>'control-label']) }}
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        {{ Form::text(
+                                            'barcode_bar_width_in',
+                                            old('barcode_bar_width_in', $setting->barcode_bar_width_in),
+                                            ['class'=>'form-control', 'aria-label'=>'barcode_bar_width_in']
+                                        ) }}
+                                        <div class="input-group-addon">t</div>
+                                    </div>
+                                    {!! $errors->first('barcode_bar_width_in', '<span class="alert-msg" aria-hidden="true">:message</span>') !!}
+                                </div>
+                            </div> --}}
+
+                            <p class="help-block col-md-9 col-md-offset-3">
+                                These values control the physical printed barcode size.<br>
+                                Recommended: Width 2.5–3.0 in, Height 0.5–0.8 in
+                            </p>
+
+                          
                         @endif
                         @if(!$setting->label2_enable)
                             <div class="form-group">
@@ -543,7 +599,7 @@
 
                                {{-- Template Builder --}}
                                <div class="form-group">
-                                    <label class="control-label col-md-3">Template Builder</label>
+                                    <label class="control-label col-md-3">Barcode Formatter Builder</label>
                                     <div class="col-md-7">
 
                                         <div class="row">
@@ -702,72 +758,88 @@
         });
 
     </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-        const select = document.getElementById('barcodeFieldSelect');
-        const clearBtn = document.getElementById('clearBarcodeTemplate');
-        const input = document.getElementById('barcodeTemplateInput');
-        const preview = document.getElementById('barcode-preview');
-        const orderList = document.getElementById('barcodeOrderList');
+    const select = document.getElementById('barcodeFieldSelect');
+    const clearBtn = document.getElementById('clearBarcodeTemplate');
+    const input = document.getElementById('barcodeTemplateInput');
+    const preview = document.getElementById('barcode-preview');
+    const orderList = document.getElementById('barcodeOrderList');
 
-        if (!select || !input || !preview || !orderList) return;
+    if (!select || !input || !preview || !orderList) return;
 
-        let parts = [];
+    const SERIAL = '{serial}';
+    let parts = [];
 
-        // Load existing template
-        if (input.value) {
-            parts = input.value.split('/');
-        }
+    // Load existing template
+    if (input.value) {
+        parts = input.value.split('/').filter(p => p !== SERIAL);
+    }
 
-        function previewBarcode(template) {
-            return template
-                .replaceAll('{company}', 'KWE')
-                .replaceAll('{location}', 'BOM-VADAPE')
-                .replaceAll('{logistics}', 'C&F')
-                .replaceAll('{po}', '4239')
-                .replaceAll('{department}', 'DTP')
-                .replaceAll('{asset_id}', '1')
-                .replaceAll('{serial}', 'SN001')
-                .replaceAll('{year}', new Date().getFullYear())
-                .replaceAll('{month}', String(new Date().getMonth() + 1).padStart(2, '0'));
-        }
+    function previewBarcode(template) {
+        return template
+            .replaceAll('{company}', 'KWE')
+            .replaceAll('{location}', 'BOM-VADAPE')
+            .replaceAll('{logistics}', 'C&F')
+            .replaceAll('{po}', '4239')
+            .replaceAll('{department}', 'DTP')
+            .replaceAll('{asset_id}', '1')
+            .replaceAll('{serial}', 'SN001')
+            .replaceAll('{year}', new Date().getFullYear())
+            .replaceAll('{month}', String(new Date().getMonth() + 1).padStart(2, '0'));
+    }
 
-        function updateUI() {
-            // Build template
-            input.value = parts.join('/');
-            preview.textContent = previewBarcode(input.value);
+    function updateUI() {
+        // Always append serial at end
+        const finalParts = [...parts, SERIAL];
 
-            // Build order list
-            orderList.innerHTML = '';
-            parts.forEach((p, i) => {
-                const li = document.createElement('li');
-                li.textContent = p.replace(/[{}]/g, '');
-                orderList.appendChild(li);
-            });
-        }
+        input.value = finalParts.join('/');
+        preview.textContent = previewBarcode(input.value);
 
-        // Handle multi-select
-        select.addEventListener('change', function () {
-            const selected = Array.from(this.selectedOptions).map(o => o.value);
+        // Render order list
+        orderList.innerHTML = '';
+        finalParts.forEach(p => {
+            const li = document.createElement('li');
+            li.textContent = p.replace(/[{}]/g, '');
 
-            // Keep order & avoid duplicates
-            parts = [...new Set([...parts, ...selected])];
+            if (p === SERIAL) {
+                li.style.fontWeight = 'bold';
+                li.style.color = '#d9534f';
+                li.title = 'Serial is mandatory and cannot be removed';
+            }
 
-            updateUI();
+            orderList.appendChild(li);
         });
+    }
 
-        // Clear everything
-        clearBtn.addEventListener('click', function () {
-            parts = [];
-            Array.from(select.options).forEach(o => o.selected = false);
-            updateUI();
-        });
-
-        // Initial render
+    // Handle multi-select
+    select.addEventListener('change', function () {
+        const selected = Array.from(this.selectedOptions).map(o => o.value);
+        parts = [...new Set([...parts, ...selected])];
         updateUI();
     });
-    </script>
+
+    // Clear (but keep serial)
+    clearBtn.addEventListener('click', function () {
+        parts = [];
+        Array.from(select.options).forEach(o => o.selected = false);
+        updateUI();
+    });
+
+    // Force serial before submit (security)
+    document.querySelector('form').addEventListener('submit', function () {
+        if (!input.value.endsWith(SERIAL)) {
+            input.value = input.value.replace(new RegExp(`/?${SERIAL}`, 'g'), '');
+            input.value = input.value + '/' + SERIAL;
+        }
+    });
+
+    // Initial render
+    updateUI();
+});
+</script>
+
 
 
     {{-- Can't use @script here because we're not in a livewire component so let's manually load --}}

@@ -67,6 +67,9 @@ class Setting extends Model
         'google_client_id',
         'google_client_secret',
         'labels_display_barcode',
+        'barcode_width_in',
+        'barcode_height_in',
+        'barcode_bar_width_in',
     ];
 
     protected $casts = [

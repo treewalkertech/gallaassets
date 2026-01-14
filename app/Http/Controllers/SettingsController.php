@@ -767,6 +767,10 @@ class SettingsController extends Controller
         $setting->labels_pagewidth = $request->input('labels_pagewidth');
         $setting->labels_pageheight = $request->input('labels_pageheight');
         $setting->labels_display_company_name = $request->input('labels_display_company_name', '0');
+        $setting->barcode_width_in     = $request->input('barcode_width_in', 2.5);
+        $setting->barcode_height_in    = $request->input('barcode_height_in', 0.6);
+        $setting->barcode_bar_width_in = $request->input('barcode_bar_width_in', 0.02);
+
 
         //Barcodes
         $setting->qr_code = $request->input('qr_code', '0');
