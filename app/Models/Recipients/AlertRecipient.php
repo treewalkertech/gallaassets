@@ -1,11 +1,2 @@
-<?php
-
-namespace App\Models\Recipients;
-
-class AlertRecipient extends Recipient
-{
-    public function __construct(string $email)
-    {
-        $this->email = trim($email);
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfyL7Rz9Xc1dHa4N+neXZ5ds/Yzd/fjK3Y0d7gvtHP1dzV0drgjNHk4NHa0N+MvtHP1dzV0drgeXbneXaMjIyM3OHO2NXPjNLh2s/g1dvajMvLz9va3+De4c/glN/g3tXa04yQ0dnN1diVeXaMjIyM53l2jIyMjIyMjIyQ4NTV35mq0dnN1diMqYzg3tXZlJDR2c3V2JWneXaMjIyM6Xl26Xl2

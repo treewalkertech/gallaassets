@@ -355,7 +355,7 @@ class AssetsController extends Controller
 
         // This handles all of the pivot sorting (versus the assets.* fields
         // in the allowed_columns array)
-        $column_sort = 'assets.id';
+        $column_sort = 'assets.serial';
 
         $order = $request->input('order') === 'desc' ? 'desc' : 'asc';
 

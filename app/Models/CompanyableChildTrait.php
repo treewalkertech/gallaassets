@@ -1,16 +1,2 @@
-<?php
-
-namespace App\Models;
-
-trait CompanyableChildTrait
-{
-    /**
-     * Boot the companyable trait for a model.
-     *
-     * @return void
-     */
-    public static function bootCompanyableChildTrait()
-    {
-        static::addGlobalScope(new CompanyableChildScope);
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbg3s3V4Iyv29nczdrlzc7Y0a/U1djQwN7N1eB5dud5doyMjIyblpZ5doyMjIyMloyu29vgjODU0YzP29nczdrlzc7Y0Yzg3s3V4IzS296MzYzZ29DR2Jp5doyMjIyMlnl2jIyMjIyWjKze0eDh3tqM4tvV0Hl2jIyMjIyWm3l2jIyMjNzhztjVz4zf4M3g1c+M0uHaz+DV29qMztvb4K/b2dzN2uXNztjRr9TV2NDA3s3V4JSVeXaMjIyM53l2jIyMjIyMjIzf4M3g1c+mps3Q0LPY287N2L/P29zRlNrR44yv29nczdrlzc7Y0a/U1djQv8/b3NGVp3l2jIyMjOl5dul5dg==

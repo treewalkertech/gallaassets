@@ -1,21 +1,2 @@
-<?php
-namespace App\Services;
-
-use App\Models\ServiceDeskConfig;
-
-class ServiceDeskConfigService
-{
-    public function activeForCompany(int $companyId): ServiceDeskConfig
-    {
-        return ServiceDeskConfig::where('company_id', $companyId)
-            ->where('is_active', true)
-            ->firstOrFail();
-    }
-
-    public function isSyncEnabled(int $companyId): bool
-    {
-        return (bool) ServiceDeskConfig::where('company_id', $companyId)
-            ->where('is_active', true)
-            ->value('is_sync_enabled');
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXbazdnR39zNz9GMrdzcyL/R3uLVz9Hfp3l2eXbh39GMrdzcyLnb0NHY38i/0d7i1c/RsNHf16/b2tLV06d5dnl2z9jN39+Mv9He4tXP0bDR39ev29rS1dO/0d7i1c/ReXbneXaMjIyM3OHO2NXPjNLh2s/g1dvajM3P4NXi0bLb3q/b2dzN2uWU1drgjJDP29nczdrltdCVpoy/0d7i1c/RsNHf16/b2tLV03l2jIyMjOd5doyMjIyMjIyM3tHg4d7ajL/R3uLVz9Gw0d/Xr9va0tXTpqbj1NHe0ZSTz9vZ3M3a5cvV0JOYjJDP29nczdrltdCVeXaMjIyMjIyMjIyMjIyZquPU0d7RlJPV38vNz+DV4tGTmIzg3uHRlXl2jIyMjIyMjIyMjIyMmarS1d7f4Lvess3V2JSVp3l2jIyMjOl5dnl2jIyMjNzhztjVz4zS4drP4NXb2ozV37/l2s+x2s3O2NHQlNXa4IyQz9vZ3M3a5bXQlaaMztvb2Hl2jIyMjOd5doyMjIyMjIyM3tHg4d7ajJTO29vYlYy/0d7i1c/RsNHf16/b2tLV06am49TR3tGUk8/b2dzN2uXL1dCTmIyQz9vZ3M3a5bXQlXl2jIyMjIyMjIyMjIyMmarj1NHe0ZST1d/Lzc/g1eLRk5iM4N7h0ZV5doyMjIyMjIyMjIyMjJmq4s3Y4dGUk9Xfy9/l2s/L0drNztjR0JOVp3l2jIyMjOl5dul5dg==

@@ -1,19 +1,2 @@
-<?php
-
-namespace App\Models\Labels\Tapes\Dymo;
-
-use App\Helpers\Helper;
-use App\Models\Labels\Label;
-
-abstract class LabelWriter extends Label
-{
-    private const HEIGHT       = 1.15;
-    private const MARGIN_SIDES =  0.1;
-    private const MARGIN_ENDS  =  0.1;
-
-    public function getHeight()       { return Helper::convertUnit(self::HEIGHT, 'in', $this->getUnit()); }
-    public function getMarginTop()    { return Helper::convertUnit(self::MARGIN_SIDES, 'in', $this->getUnit()); }
-    public function getMarginBottom() { return Helper::convertUnit(self::MARGIN_SIDES, 'in', $this->getUnit());}
-    public function getMarginLeft()   { return Helper::convertUnit(self::MARGIN_ENDS, 'in', $this->getUnit()); }
-    public function getMarginRight()  { return Helper::convertUnit(self::MARGIN_ENDS, 'in', $this->getUnit()); }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfyLjNztHY38jAzdzR38iw5dnbp3l2eXbh39GMrdzcyLTR2NzR3t/ItNHY3NHep3l24d/RjK3c3Mi529DR2N/IuM3O0djfyLjNztHYp3l2eXbNzt/g3s3P4IzP2M3f34y4zc7R2MPe1eDR3ozR5ODR2tDfjLjNztHYeXbneXaMjIyM3N7V4s3g0YzP29rf4Iy0sbWztMCMjIyMjIyMqYydmp2hp3l2jIyMjNze1eLN4NGMz9va3+CMua2+s7W6y7+1sLG/jKmMjJyanad5doyMjIzc3tXizeDRjM/b2t/gjLmtvrO1usuxurC/jIypjIycmp2neXZ5doyMjIzc4c7Y1c+M0uHaz+DV29qM09HgtNHV09TglJWMjIyMjIyM54ze0eDh3tqMtNHY3NHepqbP29ri0d7gwdrV4JTf0djSpqa0sbWztMCYjJPV2pOYjJDg1NXfmarT0eDB2tXglJWVp4zpeXaMjIyM3OHO2NXPjNLh2s/g1dvajNPR4LnN3tPV2sDb3JSVjIyMjOeM3tHg4d7ajLTR2NzR3qamz9va4tHe4MHa1eCU39HY0qamua2+s7W6y7+1sLG/mIyT1dqTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dqu2+Dg29mUlYznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usu/tbCxv5iMk9Xak5iMkODU1d+ZqtPR4MHa1eCUlZWn6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dq40dLglJWMjIznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usuxurC/mIyT1dqTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dq+1dPU4JSVjIznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usuxurC/mIyT1dqTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl26Q==

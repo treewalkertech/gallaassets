@@ -1,8 +1,2 @@
-<?php
-
-namespace App\Models;
-
-interface ICompanyableChild
-{
-    public function getCompanyableParents();
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbV2uDR3tLNz9GMta/b2dzN2uXNztjRr9TV2NB5dud5doyMjIzc4c7Y1c+M0uHaz+DV29qM09Hgr9vZ3M3a5c3O2NG8zd7R2uDflJWneXbpeXY=

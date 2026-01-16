@@ -1,27 +1,2 @@
-<?php
-
-namespace App\Services;
-
-class BarcodeGenerator
-{
-    public static function generate(string $template, array $data): string
-    {
-        $map = [
-            '{company}'    => $data['company'] ?? '',
-            '{location}'   => $data['location'] ?? '',
-            '{logistics}'  => $data['logistics'] ?? '',
-            '{po}'         => $data['po'] ?? '',
-            '{department}' => $data['department'] ?? '',
-            '{asset_id}'   => $data['asset_id'] ?? '',
-            '{serial}'     => $data['serial'] ?? '',
-            '{year}'       => date('Y'),
-            '{month}'      => date('m'),
-        ];
-
-        return str_replace(
-            array_keys($map),
-            array_values($map),
-            $template
-        );
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIv9He4tXP0d+neXZ5ds/Yzd/fjK7N3s/b0NGz0drR3s3g2955dud5doyMjIzc4c7Y1c+M3+DN4NXPjNLh2s/g1dvajNPR2tHezeDRlN/g3tXa04yQ4NHZ3NjN4NGYjM3e3s3ljJDQzeDNlaaM3+De1drTeXaMjIyM53l2jIyMjIyMjIyQ2c3cjKmMx3l2jIyMjIyMjIyMjIyMk+fP29nczdrl6ZOMjIyMqaqMkNDN4M3Hk8/b2dzN2uWTyYyrq4yTk5h5doyMjIyMjIyMjIyMjJPn2NvPzeDV29rpk4yMjKmqjJDQzeDNx5PY28/N4NXb2pPJjKurjJOTmHl2jIyMjIyMjIyMjIyMk+fY29PV3+DVz9/pk4yMqaqMkNDN4M3Hk9jb09Xf4NXP35PJjKurjJOTmHl2jIyMjIyMjIyMjIyMk+fc2+mTjIyMjIyMjIyMqaqMkNDN4M3Hk9zbk8mMq6uMk5OYeXaMjIyMjIyMjIyMjIyT59DR3M3e4NnR2uDpk4ypqoyQ0M3gzceT0NHczd7g2dHa4JPJjKurjJOTmHl2jIyMjIyMjIyMjIyMk+fN39/R4MvV0OmTjIyMqaqMkNDN4M3Hk83f39Hgy9XQk8mMq6uMk5OYeXaMjIyMjIyMjIyMjIyT59/R3tXN2OmTjIyMjIypqoyQ0M3gzceT39He1c3Yk8mMq6uMk5OYeXaMjIyMjIyMjIyMjIyT5+XRzd7pk4yMjIyMjIypqozQzeDRlJPFk5WYeXaMjIyMjIyMjIyMjIyT59nb2uDU6ZOMjIyMjIypqozQzeDRlJPZk5WYeXaMjIyMjIyMjMmneXZ5doyMjIyMjIyM3tHg4d7ajN/g3sve0dzYzc/RlHl2jIyMjIyMjIyMjIyMzd7ezeXL19Hl35SQ2c3clZh5doyMjIyMjIyMjIyMjM3e3s3ly+LN2OHR35SQ2c3clZh5doyMjIyMjIyMjIyMjJDg0dnc2M3g0Xl2jIyMjIyMjIyVp3l2jIyMjOl5dul5dg==

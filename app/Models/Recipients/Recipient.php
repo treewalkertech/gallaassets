@@ -1,12 +1,2 @@
-<?php
-
-namespace App\Models\Recipients;
-
-use Illuminate\Notifications\Notifiable;
-
-abstract class Recipient
-{
-    use Notifiable;
-
-    protected $email;
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfyL7Rz9Xc1dHa4N+neXZ5duHf0Yy12Njh2dXazeDRyLrb4NXS1c/N4NXb2t/Iutvg1dLVzc7Y0ad5dnl2zc7f4N7Nz+CMz9jN39+MvtHP1dzV0drgeXbneXaMjIyM4d/RjLrb4NXS1c3O2NGneXZ5doyMjIzc3tvg0c/g0dCMkNHZzdXYp3l26Xl2

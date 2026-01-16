@@ -21,11 +21,11 @@ class UserSeeder extends Seeder
     {
         // User::truncate();
 
-        if (! Company::count()) {
-            $this->call(CompanySeeder::class);
-        }
+        // if (! Company::count()) {
+        //     $this->call(CompanySeeder::class);
+        // }
 
-        $companyIds = Company::all()->pluck('id');
+        // $companyIds = Company::all()->pluck('id');
 
         if (! Department::count()) {
             $this->call(DepartmentSeeder::class);

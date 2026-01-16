@@ -1,21 +1,2 @@
-<?php
-
-namespace App\Services;
-
-use Mpdf\Mpdf;
-
-class MpdfLabelService
-{
-    public function make()
-    {
-        return new Mpdf([
-            'mode' => 'utf-8',
-            'format' => [50, 30], // label size (mm)
-            'margin_left' => 0,
-            'margin_right' => 0,
-            'margin_top' => 0,
-            'margin_bottom' => 0,
-            'default_font_size' => 9,
-        ]);
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIv9He4tXP0d+neXZ5duHf0Yy53NDSyLnc0NKneXZ5ds/Yzd/fjLnc0NK4zc7R2L/R3uLVz9F5dud5doyMjIzc4c7Y1c+M0uHaz+DV29qM2c3X0ZSVeXaMjIyM53l2jIyMjIyMjIze0eDh3tqM2tHjjLnc0NKUx3l2jIyMjIyMjIyMjIyMk9nb0NGTjKmqjJPh4NKZpJOYeXaMjIyMjIyMjIyMjIyT0tve2c3gk4ypqozHoZyYjJ+cyZiMm5uM2M3O0diM39Xm0YyU2dmVeXaMjIyMjIyMjIyMjIyT2c3e09Xay9jR0uCTjKmqjJyYeXaMjIyMjIyMjIyMjIyT2c3e09Xay97V09Tgk4ypqoycmHl2jIyMjIyMjIyMjIyMk9nN3tPV2svg29yTjKmqjJyYeXaMjIyMjIyMjIyMjIyT2c3e09Xay87b4ODb2ZOMqaqMnJh5doyMjIyMjIyMjIyMjJPQ0dLN4djgy9Lb2uDL39Xm0ZOMqaqMpZh5doyMjIyMjIyMyZWneXaMjIyM6Xl26Xl2

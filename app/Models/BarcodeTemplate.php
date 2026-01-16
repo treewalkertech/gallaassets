@@ -1,16 +1,2 @@
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-class BarcodeTemplate extends Model
-{
-    protected $fillable = [
-        'company_id',
-        'created_by',
-        'name',
-        'template',
-        'is_active',
-    ];
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbh39GMtdjY4dnV2s3g0ciwzeDNzs3f0cix2Nvd4dHa4Mi529DR2Kd5dnl2z9jN39+Mrs3ez9vQ0cDR2dzYzeDRjNHk4NHa0N+MudvQ0dh5dud5doyMjIzc3tvg0c/g0dCMkNLV2NjNztjRjKmMx3l2jIyMjIyMjIyTz9vZ3M3a5cvV0JOYeXaMjIyMjIyMjJPP3tHN4NHQy87lk5h5doyMjIyMjIyMk9rN2dGTmHl2jIyMjIyMjIyT4NHZ3NjN4NGTmHl2jIyMjIyMjIyT1d/Lzc/g1eLRk5h5doyMjIzJp3l26Xl2

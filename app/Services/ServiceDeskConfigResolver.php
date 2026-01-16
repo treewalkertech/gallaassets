@@ -1,23 +1,2 @@
-<?php
-
-namespace App\Services;
-
-use App\Models\ServiceDeskConfig;
-use Illuminate\Support\Facades\Auth;
-
-class ServiceDeskConfigResolver
-{
-    public static function get(): ServiceDeskConfig
-    {
-        $config = ServiceDeskConfig::where('company_id', Auth::user()->company_id)
-            ->where('is_active', true)
-            ->where('is_sync_enabled', true)
-            ->first();
-
-        if (! $config) {
-            throw new \Exception('ServiceDesk sync is disabled or not configured');
-        }
-
-        return $config;
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIv9He4tXP0d+neXZ5duHf0Yyt3NzIudvQ0djfyL/R3uLVz9Gw0d/Xr9va0tXTp3l24d/RjLXY2OHZ1drN4NHIv+Hc3Nve4Miyzc/N0NHfyK3h4NSneXZ5ds/Yzd/fjL/R3uLVz9Gw0d/Xr9va0tXTvtHf29ji0d55dud5doyMjIzc4c7Y1c+M3+DN4NXPjNLh2s/g1dvajNPR4JSVpoy/0d7i1c/RsNHf16/b2tLV03l2jIyMjOd5doyMjIyMjIyMkM/b2tLV04ypjL/R3uLVz9Gw0d/Xr9va0tXTpqbj1NHe0ZSTz9vZ3M3a5cvV0JOYjK3h4NSmpuHf0d6UlZmqz9vZ3M3a5cvV0JV5doyMjIyMjIyMjIyMjJmq49TR3tGUk9Xfy83P4NXi0ZOYjODe4dGVeXaMjIyMjIyMjIyMjIyZquPU0d7RlJPV38vf5drPy9Hazc7Y0dCTmIzg3uHRlXl2jIyMjIyMjIyMjIyMmarS1d7f4JSVp3l2eXaMjIyMjIyMjNXSjJSNjJDP29rS1dOVjOd5doyMjIyMjIyMjIyMjODU3tvjjNrR44zIseTP0dzg1dvalJO/0d7i1c/RsNHf14zf5drPjNXfjNDV383O2NHQjNvejNrb4IzP29rS1dPh3tHQk5WneXaMjIyMjIyMjOl5dnl2jIyMjIyMjIze0eDh3tqMkM/b2tLV06d5doyMjIzpeXbpeXY=

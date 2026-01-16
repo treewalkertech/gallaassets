@@ -916,14 +916,14 @@ dir="{{ Helper::determineLanguageDirection() }}">
                             </li>
                         @endcan
 
-                        @can('viewRequestable', \App\Models\Asset::class)
+                        {{-- @can('viewRequestable', \App\Models\Asset::class)
                             <li{!! (Request::is('account/requestable-assets') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('requestable-assets') }}">
                                     <x-icon type="requestable" class="fa-fw" />
                                     <span>{{ trans('general.requestable_items') }}</span>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan --}}
 
 
                     </ul>

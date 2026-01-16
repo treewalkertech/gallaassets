@@ -9,7 +9,7 @@ require('./bootstrap');
 /**
  * Module containing core application logic.
  * @param  {jQuery} $        Insulated jQuery object
- * @param  {JSON} settings Insulated `window.snipeit.settings` object.
+ * @param  {JSON} settings Insulated `window.treewalkerit.settings` object.
  * @return {IIFE}          Immediately invoked. Returns self.
  */
 
@@ -451,7 +451,6 @@ $(function () {
     // Allow full page URL to activate a tab's ID
     // ------------------------------------------------
     // This allows linking to a tab on page load via the address bar.
-    // So a URL such as, http://snipe-it.local/hardware/2/#my_tab will
     // cause the tab on that page with an ID of “my_tab” to be active.
     if (taburl.match('#') ) {
         $('.nav-tabs a[href="#'+taburl.split('#')[1]+'"]').tab('show');

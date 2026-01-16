@@ -1,23 +1,2 @@
-<?php
-
-namespace App\Models\Labels\Tapes\Brother;
-
-use App\Helpers\Helper;
-use App\Models\Labels\Label;
-
-/*
- * Rotated Label (print direction = landscape) for 62mm wide labels
- */
-abstract class TZe_62mm_Landscape extends Label
-{
-    private const WIDTH        = 62.00;
-    private const MARGIN_SIDES =  1.50;
-    private const MARGIN_ENDS  =  1.50;
-
-    public function getWidth()        { return Helper::convertUnit(self::WIDTH, 'mm', $this->getUnit()); }
-    public function getMarginTop()    { return Helper::convertUnit(self::MARGIN_SIDES, 'mm', $this->getUnit()); }
-    public function getMarginBottom() { return Helper::convertUnit(self::MARGIN_SIDES, 'mm', $this->getUnit());}
-    public function getMarginLeft()   { return Helper::convertUnit(self::MARGIN_ENDS, 'mm', $this->getUnit()); }
-    public function getMarginRight()  { return Helper::convertUnit(self::MARGIN_ENDS, 'mm', $this->getUnit()); }
-    public function getRotation()     { return 90; }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfyLjNztHY38jAzdzR38iu3tvg1NHep3l2eXbh39GMrdzcyLTR2NzR3t/ItNHY3NHep3l24d/RjK3c3Mi529DR2N/IuM3O0djfyLjNztHYp3l2eXablnl2jJaMvtvgzeDR0Iy4zc7R2IyU3N7V2uCM0NXe0c/g1dvajKmM2M3a0N/PzdzRlYzS296Mop7Z2Yzj1dDRjNjNztHY33l2jJabeXbNzt/g3s3P4IzP2M3f34zAxtHLop7Z2cu4zdrQ38/N3NGM0eTg0drQ34y4zc7R2Hl253l2jIyMjNze1eLN4NGMz9va3+CMw7WwwLSMjIyMjIyMjKmMop6anJyneXaMjIyM3N7V4s3g0YzP29rf4Iy5rb6ztbrLv7Wwsb+MqYyMnZqhnKd5doyMjIzc3tXizeDRjM/b2t/gjLmtvrO1usuxurC/jIypjIydmqGcp3l2eXaMjIyM3OHO2NXPjNLh2s/g1dvajNPR4MPV0ODUlJWMjIyMjIyMjOeM3tHg4d7ajLTR2NzR3qamz9va4tHe4MHa1eCU39HY0qamw7WwwLSYjJPZ2ZOYjJDg1NXfmarT0eDB2tXglJWVp4zpeXaMjIyM3OHO2NXPjNLh2s/g1dvajNPR4LnN3tPV2sDb3JSVjIyMjOeM3tHg4d7ajLTR2NzR3qamz9va4tHe4MHa1eCU39HY0qamua2+s7W6y7+1sLG/mIyT2dmTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dqu2+Dg29mUlYznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usu/tbCxv5iMk9nZk5iMkODU1d+ZqtPR4MHa1eCUlZWn6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dq40dLglJWMjIznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usuxurC/mIyT2dmTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC5zd7T1dq+1dPU4JSVjIznjN7R4OHe2oy00djc0d6mps/b2uLR3uDB2tXglN/R2NKmprmtvrO1usuxurC/mIyT2dmTmIyQ4NTV35mq09HgwdrV4JSVlaeM6Xl2jIyMjNzhztjVz4zS4drP4NXb2ozT0eC+2+DN4NXb2pSVjIyMjIznjN7R4OHe2oylnKeM6Xl26Xl2

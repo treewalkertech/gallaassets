@@ -1,15 +1,2 @@
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-
-class SamlNonce extends Model
-{
-    use HasFactory;
-
-    protected $fillable = ['nonce','not_on_or_after'];
-
-    public $timestamps = false;
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbh39GMtdjY4dnV2s3g0ciwzeDNzs3f0cix2Nvd4dHa4Miyzc/g297V0d/ItM3fss3P4Nve5ad5duHf0Yy12Njh2dXazeDRyLDN4M3Ozd/RyLHY293h0drgyLnb0NHYp3l2eXbP2M3f34y/zdnYutvaz9GM0eTg0drQ34y529DR2Hl253l2jIyMjOHf0Yy0zd+yzc/g297lp3l2eXaMjIyM3N7b4NHP4NHQjJDS1djYzc7Y0YypjMeT2tvaz9GTmJPa2+DL29rL297LzdLg0d6Tyad5dnl2jIyMjNzhztjVz4yQ4NXZ0d/gzdnc34ypjNLN2N/Rp3l26Xl2

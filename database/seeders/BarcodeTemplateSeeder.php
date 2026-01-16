@@ -16,8 +16,8 @@ class BarcodeTemplateSeeder extends Seeder
             ],
             [
                 'created_by' => 1,
-                'name'       => 'Default Asset Barcode',
-                'template'   => '{company}/{location}/{logistics}/{po}/{department}/{asset_seq}/{asset_id}',
+                'name'       => 'Barcode',
+                'template'   => '{company}/{location}/{logistics}/{po}/{department}/{asset_seq}/{asset_id}/{serial}',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

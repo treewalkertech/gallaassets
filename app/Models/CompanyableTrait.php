@@ -1,18 +1,2 @@
-<?php
-
-namespace App\Models;
-
-trait CompanyableTrait
-{
-    /**
-     * This trait is used to scope models to the current company. To use this scope on companyable models,
-     * we use the "use Companyable;" statement at the top of the mode.
-     *
-     * @see \App\Models\Company\Company::scopeCompanyables()
-     * @return void
-     */
-    public static function bootCompanyableTrait()
-    {
-        static::addGlobalScope(new CompanyableScope);
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbg3s3V4Iyv29nczdrlzc7Y0cDezdXgeXbneXaMjIyMm5aWeXaMjIyMjJaMwNTV34zg3s3V4IzV34zh39HQjODbjN/P29zRjNnb0NHY34zg24zg1NGMz+He3tHa4IzP29nczdrlmozA24zh39GM4NTV34zfz9vc0Yzb2ozP29nczdrlzc7Y0YzZ29DR2N+YeXaMjIyMjJaM49GM4d/RjODU0YyO4d/RjK/b2dzN2uXNztjRp46M3+DN4NHZ0drgjM3gjODU0Yzg29yM29KM4NTRjNnb0NGaeXaMjIyMjJZ5doyMjIyMloys39HRjMit3NzIudvQ0djfyK/b2dzN2uXIr9vZ3M3a5aam38/b3NGv29nczdrlzc7Y0d+UlXl2jIyMjIyWjKze0eDh3tqM4tvV0Hl2jIyMjIyWm3l2jIyMjNzhztjVz4zf4M3g1c+M0uHaz+DV29qMztvb4K/b2dzN2uXNztjRwN7N1eCUlXl2jIyMjOd5doyMjIyMjIyM3+DN4NXPpqbN0NCz2NvOzdi/z9vc0ZTa0eOMr9vZ3M3a5c3O2NG/z9vc0ZWneXaMjIyM6Xl26Xl2

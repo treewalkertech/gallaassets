@@ -1,15 +1,2 @@
-<?php
-
-namespace App\Models;
-
-class SCIMUser extends User
-{
-    protected $table = 'users';
-
-    protected $throwValidationExceptions = true; // we want model-level validation to fully THROW, not just return false
-
-    public function __construct(array $attributes = []) {
-        $attributes['password'] = $this->noPassword();
-        parent::__construct($attributes);
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfp3l2eXbP2M3f34y/r7W5wd/R3ozR5ODR2tDfjMHf0d55dud5doyMjIzc3tvg0c/g0dCMkODNztjRjKmMk+Hf0d7fk6d5dnl2jIyMjNze2+DRz+DR0IyQ4NTe2+PCzdjV0M3g1dvaseTP0dzg1dva34ypjODe4dGnjJubjOPRjOPN2uCM2dvQ0diZ2NHi0diM4s3Y1dDN4NXb2ozg24zS4djY5YzAtL67w5iM2tvgjNbh3+CM3tHg4d7ajNLN2N/ReXZ5doyMjIzc4c7Y1c+M0uHaz+DV29qMy8vP29rf4N7hz+CUzd7ezeWMkM3g4N7VzuHg0d+MqYzHyZWM53l2jIyMjIyMjIyQzeDg3tXO4eDR38eT3M3f3+Pb3tCTyYypjJDg1NXfmara27zN39/j297QlJWneXaMjIyMjIyMjNzN3tHa4Kamy8vP29rf4N7hz+CUkM3g4N7VzuHg0d+Vp3l2jIyMjOl5duk=

@@ -1,20 +1,2 @@
-<?php
-
-namespace App\Models\Recipients;
-
-use App\Models\Setting;
-
-class AdminRecipient extends Recipient
-{
-
-    protected $email;
-    public function __construct()
-    {
-        $settings = Setting::getSettings();
-        $this->email = trim($settings->admin_cc_email);
-    }
-    
-    public function getEmail(){
-        return $this->email;
-    }
-}
+<?php bolt_decrypt(__FILE__, PHP_BOLT_KEY);
+##!!!##eXZ5dtrN2dHf3M3P0Yyt3NzIudvQ0djfyL7Rz9Xc1dHa4N+neXZ5duHf0Yyt3NzIudvQ0djfyL/R4ODV2tOneXZ5ds/Yzd/fjK3Q2dXavtHP1dzV0drgjNHk4NHa0N+MvtHP1dzV0drgeXbneXZ5doyMjIzc3tvg0c/g0dCMkNHZzdXYp3l2jIyMjNzhztjVz4zS4drP4NXb2ozLy8/b2t/g3uHP4JSVeXaMjIyM53l2jIyMjIyMjIyQ39Hg4NXa09+MqYy/0eDg1drTpqbT0eC/0eDg1drT35SVp3l2jIyMjIyMjIyQ4NTV35mq0dnN1diMqYzg3tXZlJDf0eDg1drT35mqzdDZ1drLz8/L0dnN1diVp3l2jIyMjOl5doyMjIx5doyMjIzc4c7Y1c+M0uHaz+DV29qM09HgsdnN1diUled5doyMjIyMjIyM3tHg4d7ajJDg1NXfmarR2c3V2Kd5doyMjIzpeXbpeXY=
