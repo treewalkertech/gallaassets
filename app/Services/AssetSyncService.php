@@ -184,15 +184,24 @@ class AssetSyncService
                 'mode' => $this->config->mode,
             ]);
 
+            // $existingIds = Asset::where('external_source', 'SDP')
+            //     ->pluck('external_asset_id')
+            //     ->toArray();
+
             $existingIds = Asset::where('external_source', 'SDP')
-                ->pluck('external_asset_id')
-                ->toArray();
+                        ->pluck('external_asset_id')
+                        ->flip(); 
+
 
             $inserted = 0;
             $skipped = 0;
 
             foreach ($assets as $item) {
-                if (in_array($item['id'], $existingIds)) {
+                // if (in_array($item['id'], $existingIds)) {
+                //     $skipped++;
+                //     continue;
+                // }
+                if (isset($existingIds[$item['id']])) {
                     $skipped++;
                     continue;
                 }
@@ -230,7 +239,7 @@ class AssetSyncService
 
                 $asset = new Asset();
                 $asset->unguard();
-                $asset->timestamps = false;
+                // $asset->timestamps = false;
 
                 $asset->external_asset_id = $item['id'];
                 $asset->external_source = 'SDP';
@@ -316,7 +325,19 @@ class AssetSyncService
                     $asset->department_id = $item['department']['id'];
                 }
 
-                $asset->save();
+                try {
+                    $asset->save();
+                    $existingIds[$item['id']] = true;
+                    $inserted++;
+                } catch (\Illuminate\Database\QueryException $e) {
+                    if ($e->getCode() === '23000') {
+                        // Duplicate external_asset_id — safe skip
+                        $skipped++;
+                        continue;
+                    }
+                    throw $e;
+                }
+
 
                 // 🔹 BARCODE: generate ONLY ONCE
                 if (empty($asset->_snipeit_barcode_2)) {

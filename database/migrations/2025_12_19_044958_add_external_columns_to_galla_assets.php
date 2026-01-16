@@ -9,6 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('assets', function (Blueprint $table) {
+
+            // Columns (add only if not exists in fresh table)
             $table->unsignedBigInteger('external_asset_id')
                   ->nullable()
                   ->after('id');
@@ -17,25 +19,20 @@ return new class extends Migration
                   ->nullable()
                   ->after('external_asset_id');
 
-            // Composite index
-            $table->index(
-                ['external_asset_id', 'external_source'],
-                'idx_external_asset'
-            );
-             
+            // ✅ UNIQUE on external_asset_id ONLY
+            $table->unique('external_asset_id', 'uniq_external_asset_id');
+
             $table->string('rfid')
                   ->nullable()
                   ->after('asset_tag');
-
         });
     }
 
     public function down(): void
     {
         Schema::table('assets', function (Blueprint $table) {
-            $table->dropIndex('idx_external_asset');
-            $table->dropColumn(['external_asset_id', 'external_source']);
-            $table->dropColumn('rfid');
+            $table->dropUnique('uniq_external_asset_id');
+            $table->dropColumn(['external_asset_id', 'external_source', 'rfid']);
         });
     }
 };
