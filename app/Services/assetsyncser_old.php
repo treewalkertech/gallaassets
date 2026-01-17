@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class AssetSyncService
 {
     private ServiceDeskConfig $config;
+    private int $startIndex = 0;
     private string $baseApiUrl;
     private array $httpOptions;
     private array $headers;
@@ -73,6 +74,9 @@ class AssetSyncService
                     'sdpcsrfcookie=' . $sessionData['csrf_token'];
             }
         }
+
+        $this->startIndex = (int) ($this->config->last_asset_sync_index ?? 0);
+
     }
 
     /**
@@ -346,63 +350,64 @@ class AssetSyncService
     /**
      * NEW: Fetch assets with limit option
      */
-    private function fetchAssetsWithLimit(): array
-    {
-        $allAssets = [];
-        $start = 0;
-        $limit = 100; // SDP API limit per request
-        $hasMore = true;
-        $fetchedCount = 0;
+   private function fetchAssetsWithLimit(): array
+{
+    $allAssets = [];
+    $start = $this->startIndex;
+    $limit = 100;
+    $hasMore = true;
+    $fetchedCount = 0;
 
-        while ($hasMore && ($this->totalAssetsToFetch === 0 || $fetchedCount < $this->totalAssetsToFetch)) {
-            $currentLimit = min($limit, 
-                $this->totalAssetsToFetch > 0 ? ($this->totalAssetsToFetch - $fetchedCount) : $limit
-            );
+    while ($hasMore && ($this->totalAssetsToFetch === 0 || $fetchedCount < $this->totalAssetsToFetch)) {
 
-            $response = $this->sdpGet('/assets', [
-                'input_data' => json_encode([
-                    'list_info' => [
-                        'start_index' => $start,
-                        'row_count' => $currentLimit,
-                    ]
-                ])
-            ]);
+        $currentLimit = min(
+            $limit,
+            $this->totalAssetsToFetch > 0
+                ? ($this->totalAssetsToFetch - $fetchedCount)
+                : $limit
+        );
 
-            if (!$response->successful()) {
-                Log::error('SDP Asset fetch failed', [
-                    'status' => $response->status(),
-                    'start' => $start,
-                    'limit' => $currentLimit,
-                ]);
-                break;
-            }
+        $response = $this->sdpGet('/assets', [
+            'input_data' => json_encode([
+                'list_info' => [
+                    'start_index' => $start,
+                    'row_count' => $currentLimit,
+                ]
+            ])
+        ]);
 
-            $json = $response->json();
-            $assets = $json['assets'] ?? [];
-            $allAssets = array_merge($allAssets, $assets);
-            $fetchedCount += count($assets);
+        if (!$response->successful()) break;
 
-            $listInfo = $json['list_info'] ?? [];
-            $hasMore = $listInfo['has_more_rows'] ?? false;
-            
-            // Check if we've reached our limit
-            if ($this->totalAssetsToFetch > 0 && $fetchedCount >= $this->totalAssetsToFetch) {
-                $hasMore = false;
-                // Trim excess if any
-                if ($fetchedCount > $this->totalAssetsToFetch) {
-                    $excess = $fetchedCount - $this->totalAssetsToFetch;
-                    $allAssets = array_slice($allAssets, 0, -$excess);
-                }
-            }
-            
-            $start += $currentLimit;
-            
-            // Small delay to avoid rate limiting
-            usleep(100000); // 100ms
-        }
+        $json = $response->json();
+        $assets = $json['assets'] ?? [];
 
-        return $allAssets;
+        if (empty($assets)) break;
+
+        $allAssets = array_merge($allAssets, $assets);
+
+        $fetchedCount += count($assets);
+        $start += count($assets);
+
+        $hasMore = $json['list_info']['has_more_rows'] ?? false;
+
+        usleep(100000);
     }
+
+    // 🔹 SAVE LAST SYNC INDEX
+    $this->updateLastSyncIndex($start);
+
+    return $allAssets;
+}
+
+private function updateLastSyncIndex(int $index): void
+{
+    ServiceDeskConfig::where('id', $this->config->id)
+        ->update([
+            'last_asset_sync_index' => $index,
+            'updated_at' => now(),
+        ]);
+}
+
 
     /**
      * NEW: Bulk sync vendors and users
