@@ -179,22 +179,22 @@ public function initForConfig(int $configId, int $limit = 0, int $chunkSize = 10
     // 🔹 STEP 2: SYNC PURCHASE ORDERS
     $purchaseOrdersMap = [];
     
-    try {
-        Log::info('Step 2: Syncing purchase orders');
-        $purchaseOrders = $this->fetchPurchaseOrders();
-        $purchaseOrdersMap = $this->bulkSyncVendorsAndUsers($purchaseOrders);
+    // try {
+    //     Log::info('Step 2: Syncing purchase orders');
+    //     $purchaseOrders = $this->fetchPurchaseOrders();
+    //     $purchaseOrdersMap = $this->bulkSyncVendorsAndUsers($purchaseOrders);
         
-        Log::info('Purchase orders synced', [
-            'count' => count($purchaseOrders),
-            'map_count' => count($purchaseOrdersMap)
-        ]);
+    //     Log::info('Purchase orders synced', [
+    //         'count' => count($purchaseOrders),
+    //         'map_count' => count($purchaseOrdersMap)
+    //     ]);
         
-    } catch (\Throwable $e) {
-        Log::error('Purchase order sync failed', [
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ]);
-    }
+    // } catch (\Throwable $e) {
+    //     Log::error('Purchase order sync failed', [
+    //         'error' => $e->getMessage(),
+    //         'trace' => $e->getTraceAsString()
+    //     ]);
+    // }
 
     // 🔹 STEP 3: SYNC ASSETS
     Log::info('Step 3: Fetching and syncing assets');
@@ -220,7 +220,7 @@ public function initForConfig(int $configId, int $limit = 0, int $chunkSize = 10
             ->toArray();
 
         // 🔹 Pre-load purchase orders for faster lookup
-        $purchaseOrdersMap = $this->getPurchaseOrdersMap();
+        // $purchaseOrdersMap = $this->getPurchaseOrdersMap();
 
         // 🔹 PROCESS ASSETS IN SMALL BATCHES WITH INDIVIDUAL SAVE
         $batchSize = 50; // Small batch for incremental save
@@ -277,11 +277,11 @@ public function initForConfig(int $configId, int $limit = 0, int $chunkSize = 10
                         if (!empty($item['user'])) {
                             $this->syncUser($item['user']);
                         }
-                        if (!empty($purchaseOrder)) {
-                            if (!empty($purchaseOrder->requested_by)) {
-                                $this->syncUser(['id' => $purchaseOrder->requested_by]);
-                            }
-                        }
+                        // if (!empty($purchaseOrder)) {
+                        //     if (!empty($purchaseOrder->requested_by)) {
+                        //         $this->syncUser(['id' => $purchaseOrder->requested_by]);
+                        //     }
+                        // }
                         
                         // Prepare asset data
                         $assetData = $this->prepareAssetData($item, $purchaseOrdersMap);
@@ -308,6 +308,8 @@ public function initForConfig(int $configId, int $limit = 0, int $chunkSize = 10
                         // 🔹 IMPORTANT: IMMEDIATELY SAVE PROGRESS INDEX
                         $this->lastProcessedIndex = $this->startIndex + $currentIndex;
                         $this->updateLastSyncIndex($this->lastProcessedIndex);
+                        // 🔹 STEP 4: Sync Purchase Orders AFTER assets (SAFE)
+                        $this->syncPurchaseOrdersAfterAssets();
 
                         // 🔹 COMMIT THIS ASSET
                         DB::commit();
@@ -411,10 +413,10 @@ public function initForConfig(int $configId, int $limit = 0, int $chunkSize = 10
  */
 public function processSingleChunk(int $startIndex, int $chunkSize, int $configId): array
 {
-    $purchaseOrders = $this->fetchPurchaseOrders();
-    foreach ($purchaseOrders as $po) {
-        $this->syncPurchaseOrder($po);
-    }
+    // $purchaseOrders = $this->fetchPurchaseOrders();
+    // foreach ($purchaseOrders as $po) {
+    //     $this->syncPurchaseOrder($po);
+    // }
 
     // Set config
     $this->config = ServiceDeskConfig::findOrFail($configId);
@@ -1623,73 +1625,101 @@ private function debugProductData(array $product): void
     return $modelId;
 }
 
-private function fetchPurchaseOrders(): array
+public function syncPurchaseOrdersAfterAssets(): void
 {
-    $all = [];
-    $start = 0;
-    $limit = 100;
+    $poNumbers = DB::table('assets')
+        ->where('company_id', $this->config->company_id)
+        ->whereNotNull('order_number')
+        ->pluck('order_number')
+        ->unique()
+        ->values()
+        ->toArray();
 
-    Log::info('Fetching purchase orders from SDP API');
+    Log::info('Post asset PO sync started', [
+        'po_count' => count($poNumbers)
+    ]);
 
-    while (true) {
+    foreach (array_chunk($poNumbers, 30) as $chunk) {
         try {
             $response = $this->sdpGet('/purchase_orders', [
                 'input_data' => json_encode([
                     'list_info' => [
-                        'start_index' => $start,
-                        'row_count' => $limit,
+                        'search_fields' => [
+                            'id' => $chunk
+                        ]
                     ]
                 ])
             ]);
 
             if (!$response->successful()) {
-                Log::error('Purchase order API failed', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
+                Log::warning('PO API blocked, stopping', [
+                    'status' => $response->status()
                 ]);
                 break;
             }
 
-            $json = $response->json();
-            $chunk = $json['purchase_orders'] ?? [];
-            
-            Log::debug('Fetched purchase orders chunk', [
-                'start_index' => $start,
-                'chunk_size' => count($chunk),
-                'sample' => count($chunk) > 0 ? $chunk[0] : 'empty'
-            ]);
-
-            if (empty($chunk)) {
-                Log::info('No more purchase orders to fetch');
-                break;
+            foreach ($response->json('purchase_orders', []) as $po) {
+                $this->syncPurchaseOrder($po);
             }
 
-            $all = array_merge($all, $chunk);
-            $start += count($chunk);
-            
-            // Check if more rows available
-            $hasMore = $json['list_info']['has_more_rows'] ?? false;
-            if (!$hasMore) {
-                Log::info('No more purchase order rows available');
-                break;
-            }
-            
+            sleep(1); // RATE LIMIT SAFE
+
         } catch (\Throwable $e) {
-            Log::error('Exception fetching purchase orders', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+            Log::error('Post asset PO sync failed', [
+                'error' => $e->getMessage()
             ]);
             break;
         }
     }
-    
-    Log::info('Total purchase orders fetched', [
-        'count' => count($all),
-        'po_ids' => array_column($all, 'id')
-    ]);
+}
+
+
+private function fetchPurchaseOrders(): array
+{
+    $all = [];
+    $start = 0;
+    $limit = 50;
+    $maxLoops = 20;
+
+    for ($i = 0; $i < $maxLoops; $i++) {
+
+        $response = $this->sdpGet('/purchase_orders', [
+            'input_data' => json_encode([
+                'list_info' => [
+                    'start_index' => $start,
+                    'row_count' => $limit,
+                ]
+            ])
+        ]);
+
+        if (!$response->successful()) {
+            Log::warning('PO API stopped', [
+                'status' => $response->status(),
+                'body' => $response->body()
+            ]);
+            break;
+        }
+
+        if (
+            $response->status() == 400 &&
+            str_contains($response->body(), 'maximum access limit')
+        ) {
+            Log::error('SDP rate limit hit, stopping PO fetch');
+            break;
+        }
+
+        $chunk = $response->json('purchase_orders', []);
+        if (empty($chunk)) break;
+
+        $all = array_merge($all, $chunk);
+        $start += count($chunk);
+
+        usleep(500000); // 500ms delay
+    }
 
     return $all;
 }
+
 
 
     //     private function fetchPurchaseOrders(): array
