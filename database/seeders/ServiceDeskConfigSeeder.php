@@ -17,9 +17,10 @@ class ServiceDeskConfigSeeder extends Seeder
             [
                 'created_by'     => 1,
                 'portal_id'      => null,
-                'base_url'       => 'https://localhost:8080/',
+                'base_url'       => 'https://localhost:80/',
                 'api_version'    => 'v3',
-                'technician_key' => '626A029D-1506-44E6-89C3-4353BB8574A3',
+                'technician_key' => '9592637D-7C13-41F5-ABE2-CC71E4C85919',
+                // 'technician_key' => '626A029D-1506-44E6-89C3-4353BB8574A3',
                 'verify_ssl'     => 0,
                 'timeout'        => 60,
                 'is_active'      => 1,

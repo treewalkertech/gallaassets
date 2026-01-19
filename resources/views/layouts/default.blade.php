@@ -1333,7 +1333,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
             // Force repaint before fetch
             setTimeout(() => {
-                fetch('{{ route('sync.assets') }}', {
+                fetch('{{ route('sync.start') }}', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,

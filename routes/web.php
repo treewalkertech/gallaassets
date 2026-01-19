@@ -217,8 +217,36 @@ Route::get('/test-sdp', function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser']], function () {
     Route::get('/assets', [Asyncassetcontroller::class, 'index']);
-    Route::post('/assets/sync', [Asyncassetcontroller::class, 'sync'])->name('sync.assets');
-    Route::post('/assets/push-barcodes',[Asyncassetcontroller::class, 'pushAllBarcodesToSdp'])->name('assets.push-barcodes');
+    // Async Asset Sync Routes
+Route::prefix('assets/sync')->group(function () {
+    // Start new async sync
+    Route::post('/start', [AsyncAssetController::class, 'startAsyncSync'])->name('sync.start');
+    
+    // Get sync status
+    Route::get('/status/{id}', [AsyncAssetController::class, 'getSyncStatus'])->name('sync.status');
+    
+    // List all sync states
+    Route::get('/list', [AsyncAssetController::class, 'listSyncStates'])->name('sync.list');
+    
+    // Control sync
+    Route::post('/pause/{id}', [AsyncAssetController::class, 'pauseSync'])->name('sync.pause');
+    Route::post('/resume/{id}', [AsyncAssetController::class, 'resumeSync'])->name('sync.resume');
+    Route::post('/cancel/{id}', [AsyncAssetController::class, 'cancelSync'])->name('sync.cancel');
+    Route::post('/retry/{id}', [AsyncAssetController::class, 'retrySync'])->name('sync.retry');
+    
+    // Dashboard
+    Route::get('/dashboard', [AsyncAssetController::class, 'syncDashboard'])->name('sync.dashboard');
+    
+    // For backward compatibility - redirect to async
+    Route::post('', function() {
+        return response()->json([
+            'status' => 'deprecated',
+            'message' => 'Use /assets/sync/start instead for async processing',
+            'new_endpoint' => url('/assets/sync/start'),
+        ], 301);
+    });
+});
+  Route::post('/assets/push-barcodes',[Asyncassetcontroller::class, 'pushAllBarcodesToSdp'])->name('assets.push-barcodes');
     Route::get('settings', [SettingsController::class, 'getSettings'])->name('settings.general.index');
     Route::post('settings', [SettingsController::class, 'postSettings'])->name('settings.general.save');
 
