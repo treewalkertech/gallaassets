@@ -24,6 +24,7 @@ return [
     'asset_model'			=> 'Model',
     'asset'					=> 'Asset',
     'asset_report'          => 'Asset Report',
+    '_snipeit_barcode_2'    => 'Barcode',
     'asset_tag'				=> 'Asset Tag',
     'asset_tags'            => 'Asset Tags',
     'assets_available'		=> 'Assets available',

@@ -429,7 +429,10 @@ class ReportsController extends Controller
      */
     public function postCustom(CustomAssetReportRequest $request) : StreamedResponse
     {
-        ini_set('max_execution_time', env('REPORT_TIME_LIMIT', 12000)); //12000 seconds = 200 minutes
+        // ini_set('max_execution_time', env('REPORT_TIME_LIMIT', 12000)); //12000 seconds = 200 minutes
+        ini_set('max_execution_time', 0);
+        ini_set('memory_limit', '1024M');
+        set_time_limit(0);
         $this->authorize('reports.view');
 
 
@@ -463,6 +466,10 @@ class ReportsController extends Controller
 
             if ($request->filled('asset_tag')) {
                 $header[] = trans('admin/hardware/table.asset_tag');
+            }
+
+            if ($request->filled('_snipeit_barcode_2')) {
+                $header[] = 'Barcode';
             }
 
             if ($request->filled('model')) {
@@ -643,6 +650,8 @@ class ReportsController extends Controller
             $executionTime = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
             Log::debug('Added headers: '.$executionTime);
 
+            \DB::connection()->disableQueryLog();
+
             $assets = Asset::select('assets.*')->with(
                 'location', 'assetstatus', 'company', 'defaultLoc', 'assignedTo',
                 'model.category', 'model.manufacturer', 'supplier');
@@ -748,7 +757,7 @@ class ReportsController extends Controller
             }
 
             Log::debug($assets->toSql());
-            $assets->orderBy('assets.id', 'ASC')->chunk(20, function ($assets) use ($handle, $customfields, $request) {
+            $assets->orderBy('assets.id', 'ASC')->chunk(1000, function ($assets) use ($handle, $customfields, $request) {
             
                 $executionTime = microtime(true) - $_SERVER['REQUEST_TIME_FLOAT'];
                 Log::debug('Walking results: '.$executionTime);
@@ -774,6 +783,10 @@ class ReportsController extends Controller
 
                     if ($request->filled('asset_tag')) {
                         $row[] = ($asset->asset_tag) ? $asset->asset_tag : '';
+                    }
+
+                    if ($request->filled('_snipeit_barcode_2')) {
+                        $row[] = ($asset->_snipeit_barcode_2) ? $asset->_snipeit_barcode_2 : '';
                     }
 
                     if ($request->filled('model')) {

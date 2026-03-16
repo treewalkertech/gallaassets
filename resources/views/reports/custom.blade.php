@@ -127,6 +127,11 @@
                 </label>
 
                 <label class="form-control">
+                    {{ Form::checkbox('_snipeit_barcode_2', '1', $template->checkmarkValue('_snipeit_barcode_2')) }}
+                    {{ trans('general._snipeit_barcode_2') }}
+                </label>
+
+                <label class="form-control">
                     {{ Form::checkbox('asset_name', '1', $template->checkmarkValue('asset_name')) }}
                     {{ trans('admin/hardware/form.name') }}
                 </label>
