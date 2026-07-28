@@ -759,14 +759,14 @@
                                                                             Asset RFID Scan Events
                                                                         </a>
                                                                     </li> --}}
-
-                                                                    <li>
-                                                                        <a
-                                                                            href="{{ route('asset-rfid-scan-events.index') }}">
-                                                                            Asset RFID Scan Events
-                                                                        </a>
-                                                                    </li>
-
+                                                                    {{-- @can('admin')
+                                                                        <li>
+                                                                            <a
+                                                                                href="{{ route('asset-rfid-scan-events.index') }}">
+                                                                                Asset RFID Scan Events
+                                                                            </a>
+                                                                        </li>
+                                                                    @endcan --}}
 
                 </ul>
                 </li>
