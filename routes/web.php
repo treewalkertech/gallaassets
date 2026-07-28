@@ -64,6 +64,15 @@ Route::group(['middleware' => 'auth'], function () {
     )->where('labelName', '.*')->name('labels.show');
 
     /*
+     * Asset RFID Scan Events
+     */
+    Route::get(
+        'assets/asset-rfid-scan-events',
+        [AssetRfidScanEventsController::class, 'index']
+    )->name('asset-rfid-scan-events.index');
+
+
+    /*
      * Locations
      */
     Route::group(['prefix' => 'locations', 'middleware' => ['auth']], function () {
@@ -144,14 +153,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('departments', DepartmentsController::class, [
         'parameters' => ['department' => 'department_id'],
     ]);
-
-    /*
-     * Asset RFID Scan Events
-     */
-    Route::get(
-        'assets/asset-rfid-scan-events',
-        [AssetRfidScanEventsController::class, 'index']
-    )->name('asset-rfid-scan-events.index');
 });
 
 /*
