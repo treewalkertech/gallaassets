@@ -37,7 +37,8 @@
     {{-- stylesheets --}}
     <link rel="stylesheet" href="{{ url(mix('css/dist/all.css')) }}">
     @if ($snipeSettings && $snipeSettings->allow_user_skin == 1 && Auth::check() && Auth::user()->present()->skin != '')
-        <link rel="stylesheet" href="{{ url(mix('css/dist/skins/skin-' . Auth::user()->present()->skin . '.min.css')) }}">
+        <link rel="stylesheet"
+            href="{{ url(mix('css/dist/skins/skin-' . Auth::user()->present()->skin . '.min.css')) }}">
     @else
         <link rel="stylesheet"
             href="{{ url(mix('css/dist/skins/skin-' . ($snipeSettings->skin != '' ? $snipeSettings->skin : 'blue') . '.css')) }}">
@@ -596,8 +597,7 @@
                     </li>
                 @endcan
                 @can('index', \App\Models\Asset::class)
-                    <li
-                        class="treeview{{ Request::is('statuslabels/*') || Request::is('hardware*') ? ' active' : '' }}">
+                    <li class="treeview{{ Request::is('statuslabels/*') || Request::is('hardware*') ? ' active' : '' }}">
                         <a href="#">
                             <x-icon type="assets" class="fa-fw" />
                             <span>{{ trans('general.assets') }}</span>
@@ -747,14 +747,15 @@
                                                                         </li>
                                                                     @endcan
                                                                     {{-- // assets/asset-rfid-scan-events display --}}
-                                                                        {{-- <a
+                                                                    {{-- <a
                                                                             href="{{ route('asset-rfid-scan-events.index') }}">
                                                                             Asset RFID Scan Events
                                                                         </a>
                                                                     </li> --}}
                                                                     @can('admin')
                                                                         <li>
-                                                                            <a href="{{ url('hardware/assets/asset-rfid-scan-events') }}">
+                                                                            <a
+                                                                                href="{{ route('asset-rfid-scan-events.index') }}">
                                                                                 Asset RFID Scan Events
                                                                             </a>
                                                                         </li>

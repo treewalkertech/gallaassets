@@ -18,6 +18,8 @@ use App\Http\Controllers\AssetRfidScanEventsController;
 |
 */
 
+
+
 Route::group(
     [
         'prefix' => 'hardware',
@@ -33,8 +35,9 @@ Route::group(
         /*
      * Asset RFID Scan Events
      */
+
         Route::get(
-            'assets/asset-rfid-scan-events',
+            'asset-rfid-scan-events',
             [AssetRfidScanEventsController::class, 'index']
         )->name('asset-rfid-scan-events.index');
 
