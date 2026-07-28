@@ -32,7 +32,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Livewire\Importer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\AssetRfidScanEventsController;
 
 Route::post(
     '/labels/print-barcodes',
@@ -63,15 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
         [LabelsController::class, 'show']
     )->where('labelName', '.*')->name('labels.show');
 
-    /*
-     * Asset RFID Scan Events
-     */
-    Route::get(
-        'assets/asset-rfid-scan-events',
-        [AssetRfidScanEventsController::class, 'index']
-    )->name('asset-rfid-scan-events.index');
-
-
+   
     /*
      * Locations
      */

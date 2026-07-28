@@ -7,6 +7,7 @@ use App\Http\Controllers\Assets\AssetCheckoutController;
 use App\Http\Controllers\Assets\AssetCheckinController;
 use App\Http\Controllers\Assets\AssetFilesController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AssetRfidScanEventsController;
 
 /*
 |--------------------------------------------------------------------------
