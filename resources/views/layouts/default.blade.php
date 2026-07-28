@@ -594,6 +594,7 @@
                             <x-icon type="dashboard" class="fa-fw" />
                             <span>{{ trans('general.dashboard') }}</span>
                         </a>
+                        
                     </li>
                 @endcan
                 @can('view', \App\Models\Asset::class)
