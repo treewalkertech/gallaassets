@@ -596,6 +596,13 @@
                         </a>
                     </li>
                 @endcan
+                @can('view', \App\Models\Asset::class)
+                    <li>
+                        <a href="{{ route('asset-rfid-scan-events.index') }}">
+                            Asset RFID Scan Events
+                        </a>
+                    </li>
+                @endcan
                 @can('index', \App\Models\Asset::class)
                     <li class="treeview{{ Request::is('statuslabels/*') || Request::is('hardware*') ? ' active' : '' }}">
                         <a href="#">

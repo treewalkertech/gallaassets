@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-
+use App\Models\Asset;
 /**
  * Display the latest fixed-reader RFID status for every unique mapped tag.
  *
@@ -23,8 +23,10 @@ class AssetRfidScanEventsController extends Controller
   /**
    * Display unique mapped RFID scan records with filters and summaries.
    */
-  public function index(Request $request)
+  public function index(Request $request) : View
   {
+    $this->authorize('view', Asset::class);
+
     $request->validate([
       'date_from' => [
         'nullable',

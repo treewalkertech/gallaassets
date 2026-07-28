@@ -22,10 +22,7 @@ use App\Http\Controllers\AssetRfidScanEventsController;
      * Asset RFID Scan Events
      */
 
-Route::get(
-    'asset-rfid-scan-events',
-    [AssetRfidScanEventsController::class, 'index']
-)->name('asset-rfid-scan-events.index');
+
 
 Route::group(
     [
@@ -225,3 +222,12 @@ Route::get(
     'ht/{any?}',
     [AssetsController::class, 'getAssetByTag']
 )->where('any', '.*')->name('ht/assetTag');
+
+
+
+Route::get(
+    'assets/asset-rfid-scan-events',
+    [AssetRfidScanEventsController::class, 'index']
+)
+->middleware('auth')
+->name('asset-rfid-scan-events.index');
