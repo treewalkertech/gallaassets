@@ -747,15 +747,14 @@
                                                                         </li>
                                                                     @endcan
                                                                     {{-- // assets/asset-rfid-scan-events display --}}
-                                                                    {{-- <li>
-                                                                        <a
+                                                                        {{-- <a
                                                                             href="{{ route('asset-rfid-scan-events.index') }}">
                                                                             Asset RFID Scan Events
                                                                         </a>
                                                                     </li> --}}
-                                                                    @can('checkin', \App\Models\Asset::class)
+                                                                    @can('admin')
                                                                         <li>
-                                                                            <a href="{{ route('asset-rfid-scan-events.index') }}">
+                                                                            <a href="{{ url('hardware/assets/asset-rfid-scan-events') }}">
                                                                                 Asset RFID Scan Events
                                                                             </a>
                                                                         </li>
