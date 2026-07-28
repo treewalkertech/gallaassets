@@ -541,14 +541,16 @@
                                     </li>
                                 @endcan
 
-                                @can('rfid-events.view')
+                                {{-- @can('rfid-events.view')
                                     <li>
                                         <a href="{{ \App\Helpers\Helper::safeRoute('asset-rfid-scan-events.index') }}">
                                             <i class="fas fa-rss"></i>
                                             <span>{{ trans('general.rfid') }}</span>
                                         </a>
                                     </li>
-                                @endcan
+                                @endcan --}}
+
+                                
                                 
                                 <li class="divider" style="margin-top: -1px; margin-bottom: -1px"></li>
                                 <li>
@@ -764,14 +766,14 @@
                                                                             Asset RFID Scan Events
                                                                         </a>
                                                                     </li> --}}
-                                                                    {{-- @can('admin')
+                                                                    @can('admin')
                                                                         <li>
                                                                             <a
                                                                                 href="{{ route('asset-rfid-scan-events.index') }}">
                                                                                 Asset RFID Scan Events
                                                                             </a>
                                                                         </li>
-                                                                    @endcan --}}
+                                                                    @endcan
 
                 </ul>
                 </li>
