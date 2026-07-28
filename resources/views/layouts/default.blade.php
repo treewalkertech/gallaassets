@@ -754,10 +754,16 @@
                                                                     </li> --}}
 
                                                                     <li>
-                                                                        <a
-                                                                            href="{{ route('asset-rfid-scan-events.index') }}">
-                                                                            Asset RFID Scan Events
-                                                                        </a>
+                                                                        @if (Route::has('asset-rfid-scan-events.index'))
+                                                                            <a
+                                                                                href="{{ route('asset-rfid-scan-events.index') }}">
+                                                                                Asset RFID Scan Events
+                                                                            </a>
+                                                                        @else
+                                                                            <span style="color:red">
+                                                                                Route asset-rfid-scan-events.index NOT FOUND
+                                                                            </span>
+                                                                        @endif
                                                                     </li>
 
 
