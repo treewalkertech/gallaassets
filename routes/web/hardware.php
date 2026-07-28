@@ -18,7 +18,14 @@ use App\Http\Controllers\AssetRfidScanEventsController;
 |
 */
 
+/*
+     * Asset RFID Scan Events
+     */
 
+Route::get(
+    'asset-rfid-scan-events',
+    [AssetRfidScanEventsController::class, 'index']
+)->name('asset-rfid-scan-events.index');
 
 Route::group(
     [
@@ -32,14 +39,7 @@ Route::group(
             'bulkaudit',
             [AssetsController::class, 'quickScan']
         )->name('assets.bulkaudit');
-        /*
-     * Asset RFID Scan Events
-     */
 
-        Route::get(
-            'asset-rfid-scan-events',
-            [AssetRfidScanEventsController::class, 'index']
-        )->name('asset-rfid-scan-events.index');
 
         Route::get(
             'quickscancheckin',
