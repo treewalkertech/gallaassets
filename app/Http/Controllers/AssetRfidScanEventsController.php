@@ -23,7 +23,7 @@ class AssetRfidScanEventsController extends Controller
   /**
    * Display unique mapped RFID scan records with filters and summaries.
    */
-  public function index(Request $request): View
+  public function index(Request $request)
   {
     $request->validate([
       'date_from' => [
