@@ -32,6 +32,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Livewire\Importer;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AssetRfidScanEventsController;
 
 Route::post(
     '/labels/print-barcodes',
@@ -53,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('categories', CategoriesController::class, [
         'parameters' => ['category' => 'category_id'],
     ]);
-  
+
     /*
     * Labels
     */
@@ -83,7 +84,8 @@ Route::group(['middleware' => 'auth'], function () {
         )->name('locations.restore');
 
 
-        Route::get('{locationId}/clone',
+        Route::get(
+            '{locationId}/clone',
             [LocationsController::class, 'getClone']
         )->name('clone/location');
 
@@ -96,7 +98,6 @@ Route::group(['middleware' => 'auth'], function () {
             '{locationId}/printallassigned',
             [LocationsController::class, 'print_all_assigned']
         )->name('locations.print_all_assigned');
-
     });
 
     Route::resource('locations', LocationsController::class, [
@@ -109,7 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
     */
 
     Route::group(['prefix' => 'manufacturers', 'middleware' => ['auth']], function () {
-        Route::post('{manufacturers_id}/restore', [ManufacturersController::class, 'restore'] )->name('restore/manufacturer');
+        Route::post('{manufacturers_id}/restore', [ManufacturersController::class, 'restore'])->name('restore/manufacturer');
     });
 
     Route::resource('manufacturers', ManufacturersController::class, [
@@ -127,15 +128,15 @@ Route::group(['middleware' => 'auth'], function () {
     * Depreciations
      */
     Route::resource('depreciations', DepreciationsController::class, [
-         'parameters' => ['depreciation' => 'depreciation_id'],
-     ]);
+        'parameters' => ['depreciation' => 'depreciation_id'],
+    ]);
 
     /*
     * Status Labels
      */
     Route::resource('statuslabels', StatuslabelsController::class, [
-          'parameters' => ['statuslabel' => 'statuslabel_id'],
-      ]);
+        'parameters' => ['statuslabel' => 'statuslabel_id'],
+    ]);
 
     /*
     * Departments
@@ -143,6 +144,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('departments', DepartmentsController::class, [
         'parameters' => ['department' => 'department_id'],
     ]);
+
+    /*
+     * Asset RFID Scan Events
+     */
+    Route::get(
+        'assets/asset-rfid-scan-events',
+        [AssetRfidScanEventsController::class, 'index']
+    )->name('asset-rfid-scan-events.index');
 });
 
 /*
@@ -156,7 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
 */
 
 Route::group(['middleware' => 'auth', 'prefix' => 'modals'], function () {
-    Route::get('{type}/{itemId?}', [ModalController::class, 'show'] )->name('modal.show');
+    Route::get('{type}/{itemId?}', [ModalController::class, 'show'])->name('modal.show');
 });
 
 /*
@@ -189,23 +198,23 @@ Route::group(['middleware' => 'auth'], function () {
 */
 Route::get('/test-sdp', function () {
 
-   $response = Http::withOptions([
+    $response = Http::withOptions([
         'verify' => false,        // allow self-signed cert
         'timeout' => 60,
         'curl' => [
             CURLOPT_SSLVERSION => CURL_SSLVERSION_TLSv1_2,
         ],
     ])
-    ->withHeaders([
-        'TECHNICIAN_KEY' => config('services.sdp.key'),
-        'Accept' => 'application/json',
-    ])
-    ->withCookies([
-        'SDPSESSIONID'   => '607966AEF40D646D04AE525184F5D12D',
-        '_zcsr_tmp'      => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
-        'sdpcsrfcookie'  => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
-    ], 'localhost')
-    ->get('https://localhost:8080/api/v3/assets');
+        ->withHeaders([
+            'TECHNICIAN_KEY' => config('services.sdp.key'),
+            'Accept' => 'application/json',
+        ])
+        ->withCookies([
+            'SDPSESSIONID'   => '607966AEF40D646D04AE525184F5D12D',
+            '_zcsr_tmp'      => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
+            'sdpcsrfcookie'  => '0cf2d8c2-e0d3-440a-8be7-0a21eb153538',
+        ], 'localhost')
+        ->get('https://localhost:8080/api/v3/assets');
 
 
     return response()->json([
@@ -218,7 +227,7 @@ Route::get('/test-sdp', function () {
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser']], function () {
     Route::get('/assets', [Asyncassetcontroller::class, 'index']);
     Route::post('/assets/sync', [Asyncassetcontroller::class, 'sync'])->name('sync.assets');
-    Route::post('/assets/push-barcodes',[Asyncassetcontroller::class, 'pushAllBarcodesToSdp'])->name('assets.push-barcodes');
+    Route::post('/assets/push-barcodes', [Asyncassetcontroller::class, 'pushAllBarcodesToSdp'])->name('assets.push-barcodes');
     Route::get('settings', [SettingsController::class, 'getSettings'])->name('settings.general.index');
     Route::post('settings', [SettingsController::class, 'postSettings'])->name('settings.general.save');
 
@@ -237,7 +246,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser
     Route::post('notifications', [SettingsController::class, 'postAlerts'])->name('settings.alerts.save');
 
     Route::get('slack', [SettingsController::class, 'getSlack'])->name('settings.slack.index');
-    Route::get('/servicedesk', [ServiceDeskSettingsController::class,'index'])->name('settings.servicedesk.index');
+    Route::get('/servicedesk', [ServiceDeskSettingsController::class, 'index'])->name('settings.servicedesk.index');
     Route::post('slack', [SettingsController::class, 'postSlack'])->name('settings.slack.save');
 
     Route::get('asset_tags', [SettingsController::class, 'getAssetTags'])->name('settings.asset_tags.index');
@@ -263,21 +272,28 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser
 
     // Backups
     Route::group(['prefix' => 'backups', 'middleware' => 'auth'], function () {
-        Route::get('download/{filename}',
-            [SettingsController::class, 'downloadFile'])->name('settings.backups.download');
+        Route::get(
+            'download/{filename}',
+            [SettingsController::class, 'downloadFile']
+        )->name('settings.backups.download');
 
-        Route::delete('delete/{filename}',
-            [SettingsController::class, 'deleteFile'])->name('settings.backups.destroy');
+        Route::delete(
+            'delete/{filename}',
+            [SettingsController::class, 'deleteFile']
+        )->name('settings.backups.destroy');
 
-        Route::post('/', 
+        Route::post(
+            '/',
             [SettingsController::class, 'postBackups']
         )->name('settings.backups.create');
 
-        Route::post('/restore/{filename}', 
+        Route::post(
+            '/restore/{filename}',
             [SettingsController::class, 'postRestore']
         )->name('settings.backups.restore');
 
-        Route::post('/upload', 
+        Route::post(
+            '/upload',
             [SettingsController::class, 'postUploadBackup']
         )->name('settings.backups.upload');
 
@@ -306,7 +322,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'authorize:superuser
 |
 */
 
-Route::get('/import',
+Route::get(
+    '/import',
     Importer::class
 )->middleware('auth')->name('imports.index');
 
@@ -378,11 +395,11 @@ Route::group(['prefix' => 'account', 'middleware' => ['auth']], function () {
             'emailAssetList'
         ]
     )->name('profile.email_assets');
-
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('reports/audit', 
+    Route::get(
+        'reports/audit',
         [ReportsController::class, 'audit']
     )->name('reports.audit');
 
@@ -558,7 +575,7 @@ Route::group(['middleware' => 'web'], function () {
     )->name('password.email')->middleware('throttle:forgotten_password');
 
 
-     // Socialite Google login
+    // Socialite Google login
     Route::get('google', 'App\Http\Controllers\GoogleAuthController@redirectToGoogle')->name('google.redirect');
     Route::get('google/callback', 'App\Http\Controllers\GoogleAuthController@handleGoogleCallback')->name('google.callback');
 
@@ -568,7 +585,8 @@ Route::group(['middleware' => 'web'], function () {
         [
             'as' => 'home',
             'middleware' => ['auth'],
-            'uses' => 'DashboardController@getIndex' ]
+            'uses' => 'DashboardController@getIndex'
+        ]
     );
 
     // need to keep GET /logout for SAML SLO
