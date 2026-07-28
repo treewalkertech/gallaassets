@@ -215,7 +215,7 @@
 
                 <div class="box-body">
                     @php
-                        $formAction = Helper::safeRoute('asset-rfid-scan-events.index');
+                        $formAction = \App\Helpers\Helper::safeRoute('asset-rfid-scan-events.index');
                     @endphp
 
                     <form method="GET" action="{{ $formAction }}">

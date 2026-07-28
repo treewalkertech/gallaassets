@@ -543,7 +543,7 @@
 
                                 @can('rfid-events.view')
                                     <li>
-                                        <a href="{{ Helper::safeRoute('asset-rfid-scan-events.index') }}">
+                                        <a href="{{ \App\Helpers\Helper::safeRoute('asset-rfid-scan-events.index') }}">
                                             <i class="fas fa-rss"></i>
                                             <span>{{ trans('general.rfid') }}</span>
                                         </a>
