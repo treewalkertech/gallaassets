@@ -540,6 +540,16 @@
                                         </a>
                                     </li>
                                 @endcan
+
+                                 @can('rfid-events.view')
+                                    <li>
+                                        <a href="{{ route('rfid-scan-events.index') }}">
+                                             <x-icon type="api-key" class="fa-fw" />
+                                            <span>{{ trans('general.rfid') }}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                
                                 <li class="divider" style="margin-top: -1px; margin-bottom: -1px"></li>
                                 <li>
 
@@ -594,16 +604,10 @@
                             <x-icon type="dashboard" class="fa-fw" />
                             <span>{{ trans('general.dashboard') }}</span>
                         </a>
-                        
+
                     </li>
                 @endcan
-                @can('view', \App\Models\Asset::class)
-                    <li>
-                        <a href="{{ route('asset-rfid-scan-events.index') }}">
-                            Asset RFID Scan Events
-                        </a>
-                    </li>
-                @endcan
+               
                 @can('index', \App\Models\Asset::class)
                     <li class="treeview{{ Request::is('statuslabels/*') || Request::is('hardware*') ? ' active' : '' }}">
                         <a href="#">

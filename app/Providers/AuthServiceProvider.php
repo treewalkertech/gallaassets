@@ -234,6 +234,9 @@ class AuthServiceProvider extends ServiceProvider
                 || ($user->hasAccess('reports.view'));
         });
 
+        Gate::define('rfid-events.view', function ($user) {
+            return true;
+        });
 
         // This determines whether the user can edit their profile based on the setting in Admin > General
         Gate::define('self.profile', function ($user) {

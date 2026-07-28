@@ -339,6 +339,7 @@ Route::group(['prefix' => 'account', 'middleware' => ['auth']], function () {
     Route::post('password', [ProfileController::class, 'passwordSave']);
 
     Route::get('api', [ProfileController::class, 'api'])->name('user.api');
+    Route::get('rfidindex', [ProfileController::class, 'rfidindex'])->name('rfid-scan-events.index');
 
     // View Assets
     Route::get('view-assets', [ViewAssetsController::class, 'getIndex'])->name('view-assets');
