@@ -541,10 +541,10 @@
                                     </li>
                                 @endcan
 
-                                 @can('rfid-events.view')
+                                @can('rfid-events.view')
                                     <li>
-                                        <a href="{{ route('rfid-scan-events.index') }}">
-                                             <x-icon type="api-key" class="fa-fw" />
+                                        <a href="{{ Helper::safeRoute('asset-rfid-scan-events.index') }}">
+                                            <i class="fas fa-rss"></i>
                                             <span>{{ trans('general.rfid') }}</span>
                                         </a>
                                     </li>

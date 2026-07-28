@@ -7,8 +7,21 @@
 @stop
 
 {{-- Header actions --}}
-@section('header_right')
+{{-- @section('header_right')
     <a href="{{ route('asset-rfid-scan-events.index') }}" class="btn btn-default pull-right">
+        <i class="fas fa-sync-alt"></i>
+        Refresh
+    </a>
+@stop --}}
+
+
+@section('header_right')
+    @php
+        $rfidRoute = Route::has('asset-rfid-scan-events.index') 
+            ? route('asset-rfid-scan-events.index') 
+            : '#';
+    @endphp
+    <a href="{{ $rfidRoute }}" class="btn btn-default pull-right">
         <i class="fas fa-sync-alt"></i>
         Refresh
     </a>
@@ -201,8 +214,11 @@
                 </div>
 
                 <div class="box-body">
+                    @php
+                        $formAction = Helper::safeRoute('asset-rfid-scan-events.index');
+                    @endphp
 
-                    <form method="GET" action="{{ route('asset-rfid-scan-events.index') }}">
+                    <form method="GET" action="{{ $formAction }}">
 
                         <div class="row">
 
@@ -512,10 +528,16 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let userIsFiltering = false;
+            
+            @php
+                $rfidRoute = Route::has('asset-rfid-scan-events.index') 
+                    ? route('asset-rfid-scan-events.index') 
+                    : 'window.location.href';
+            @endphp
+            
+            let rfidIndexUrl = "{{ $rfidRoute }}";
 
-            const filterForm = document.querySelector(
-                'form[action="{{ route('asset-rfid-scan-events.index') }}"]'
-            );
+            const filterForm = document.querySelector('form[action="' + rfidIndexUrl + '"]');
 
             if (filterForm) {
                 filterForm.addEventListener('input', function() {
@@ -529,7 +551,11 @@
 
             setInterval(function() {
                 if (!userIsFiltering) {
-                    window.location.reload();
+                    if (rfidIndexUrl === '#') {
+                        window.location.reload();
+                    } else {
+                        window.location.href = rfidIndexUrl;
+                    }
                 }
             }, 10000);
         });
