@@ -35,6 +35,10 @@ class AssetRfidController extends Controller
                 'errors'  => $validator->errors(),
             ], 422);
         }
+        Log::info('Asset RFID update request received', [
+            'asset_tag' => $request->asset_tag,
+            'rfid'      => $request->rfid,
+        ]);
 
         // ✅ Normalize RFID (avoid case / space duplicates)
         $rfid = strtoupper(trim($request->rfid));

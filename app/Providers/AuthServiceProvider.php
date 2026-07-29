@@ -120,7 +120,9 @@ class AuthServiceProvider extends ServiceProvider
                 return true;
             }
         });
-
+        Gate::define('viewLogViewer', function ($user) {
+            return $user->hasAccess('admin');
+        });
         Gate::define('accessories.files', function ($user) {
             if ($user->hasAccess('accessories.files')) {
                 return true;
@@ -154,7 +156,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('assets.view.encrypted_custom_fields', function ($user) {
-            if($user->hasAccess('assets.view.encrypted_custom_fields')){
+            if ($user->hasAccess('assets.view.encrypted_custom_fields')) {
                 return true;
             }
         });
@@ -216,19 +218,19 @@ class AuthServiceProvider extends ServiceProvider
         // to the logged in API user, but creating assets, licenses, etc won't work 
         // if the user can't view and interact with the select lists.
         Gate::define('view.selectlists', function ($user) {
-            return $user->can('update', Asset::class) 
-                || $user->can('create', Asset::class)    
+            return $user->can('update', Asset::class)
+                || $user->can('create', Asset::class)
                 || $user->can('checkout', Asset::class)
                 || $user->can('checkin', Asset::class)
-                || $user->can('audit', Asset::class)       
-                || $user->can('update', License::class)   
-                || $user->can('create', License::class)   
+                || $user->can('audit', Asset::class)
+                || $user->can('update', License::class)
+                || $user->can('create', License::class)
                 || $user->can('update', Component::class)
-                || $user->can('create', Component::class)   
-                || $user->can('update', Consumable::class)   
-                || $user->can('create', Consumable::class)   
+                || $user->can('create', Component::class)
+                || $user->can('update', Consumable::class)
+                || $user->can('create', Consumable::class)
                 || $user->can('update', Accessory::class)
-                || $user->can('create', Accessory::class)   
+                || $user->can('create', Accessory::class)
                 || $user->can('update', User::class)
                 || $user->can('create', User::class)
                 || ($user->hasAccess('reports.view'));
@@ -242,6 +244,5 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('self.profile', function ($user) {
             return $user->canEditProfile();
         });
-
     }
 }
