@@ -808,4 +808,45 @@ class AssetRfidScanEventsController extends Controller
       ], 500);
     }
   }
+  public function status(Request $request): JsonResponse
+  {
+    $this->authorize('view', Asset::class);
+
+    $request->validate([
+      'asset_name' => ['nullable', 'string', 'max:191'],
+      'rfid_epc' => ['nullable', 'string', 'max:191'],
+      'serial' => ['nullable', 'string', 'max:191'],
+      'location_id' => ['nullable', 'integer'],
+      'current_status' => ['nullable', 'string', 'in:IN,OUT,AUTO_OUT'],
+      'per_page' => ['nullable', 'integer', 'in:10,25,50,100'],
+    ]);
+
+    $baseQuery = AssetRFIDscanEvents::query()
+      ->whereNotNull('asset_id')
+      ->where('scan_result', 'MAPPED');
+
+    $filteredQuery = $this->applyFilters($baseQuery, $request);
+
+    $scanEvents = $filteredQuery
+      ->orderByDesc('scanned_at')
+      ->orderByDesc('id')
+      ->paginate(
+        $request->integer('per_page', 50),
+        ['*'],
+        'page'
+      )
+      ->withQueryString();
+
+    $locations = Location::query()
+      ->orderBy('name')
+      ->pluck('name', 'id');
+
+    return response()->json([
+      'success' => true,
+      'html' => view(
+        'asset_rfid_events._table',
+        compact('scanEvents', 'locations')
+      )->render(),
+    ]);
+  }
 }

@@ -241,3 +241,7 @@ Route::post(
     'asset-rfid-scan-events/clear',
     [AssetRFIDscanEventsController::class, 'clearEvents']
 )->name('asset-rfid-scan-events.clear');
+Route::get(
+    'asset-rfid-scan-events/status',
+    [AssetRFIDscanEventsController::class, 'ajaxStatus']
+)->name('asset-rfid-scan-events.status');

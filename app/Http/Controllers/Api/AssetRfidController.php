@@ -367,14 +367,9 @@ class AssetRfidController extends Controller
     public function recordFixedReaderRfidEvent(Request $request): JsonResponse
     {
         /*
-     * ---------------------------------------------------------
+     * ============================================================
      * DEFAULT WORKING HOURS
-     * ---------------------------------------------------------
-     *
-     * Temporary fixed value.
-     *
-     * Later replace this with the value from application
-     * Settings.
+     * ============================================================
      */
         $defaultWorkingHours = 8;
 
@@ -386,15 +381,9 @@ class AssetRfidController extends Controller
         ]);
 
         /*
-     * ---------------------------------------------------------
+     * ============================================================
      * VALIDATION
-     * ---------------------------------------------------------
-     *
-     * Working hours are intentionally NOT accepted from the
-     * Android application.
-     *
-     * The API currently always uses the fixed default value
-     * defined above.
+     * ============================================================
      */
         $validator = Validator::make($request->all(), [
 
@@ -408,11 +397,6 @@ class AssetRfidController extends Controller
                 'nullable',
                 'string',
                 'max:100',
-            ],
-
-            'location_id' => [
-                'nullable',
-                'integer',
             ],
 
             'remarks' => [
@@ -481,51 +465,28 @@ class AssetRfidController extends Controller
         $validated = $validator->validated();
 
         /*
-     * ---------------------------------------------------------
-     * WORKING HOURS
-     * ---------------------------------------------------------
-     *
-     * For now, always use 8 hours.
-     *
-     * Later:
-     *
-     * $workingHours = Setting::get(...);
+     * ============================================================
+     * CONFIGURATION
+     * ============================================================
      */
         $workingHours = $defaultWorkingHours;
 
-        $readerCode = trim(
-            $validated['reader_code']
-        );
+        $readerCode = trim($validated['reader_code']);
 
         $gateNo = !empty($validated['gate_no'])
             ? trim($validated['gate_no'])
             : null;
 
-        $requestLocationId =
-            $validated['location_id'] ?? null;
-
-        $defaultRemarks =
-            $validated['remarks'] ?? null;
+        $defaultRemarks = $validated['remarks'] ?? null;
 
         $reads = $validated['reads'];
-
-        Log::info('Asset fixed-reader RFID event request validated', [
-            'reader_code' => $readerCode,
-            'working_hours' => $workingHours,
-            'scanned_epcs' => array_map(
-                fn($read) => strtoupper(
-                    trim($read['epc'] ?? '')
-                ),
-                $reads
-            ),
-        ]);
 
         $results = [];
 
         /*
-     * ---------------------------------------------------------
+     * ============================================================
      * SUMMARY
-     * ---------------------------------------------------------
+     * ============================================================
      */
         $summary = [
             'received' => count($reads),
@@ -548,18 +509,9 @@ class AssetRfidController extends Controller
         ];
 
         /*
-     * ---------------------------------------------------------
-     * COLLAPSE DUPLICATE EPCs INSIDE REQUEST
-     * ---------------------------------------------------------
-     *
-     * Example:
-     *
-     * EPC1
-     * EPC1
-     * EPC1
-     * EPC2
-     *
-     * Only latest EPC1 + EPC2 are processed.
+     * ============================================================
+     * COLLAPSE DUPLICATE EPCs
+     * ============================================================
      */
         $latestReadsByEpc = [];
 
@@ -590,30 +542,25 @@ class AssetRfidController extends Controller
                 ? Carbon::parse($read['read_time'])
                 : now();
 
-            $normalizedRead = $read;
-
-            $normalizedRead['epc'] = $epc;
+            $read['epc'] = $epc;
 
             if (!isset($latestReadsByEpc[$epc])) {
 
                 $latestReadsByEpc[$epc] = [
-                    'read' => $normalizedRead,
+                    'read' => $read,
                     'scanned_at' => $scannedAt,
                 ];
 
                 continue;
             }
 
-            /*
-         * Keep only the latest scan for the same EPC.
-         */
             if (
                 $scannedAt->greaterThan(
                     $latestReadsByEpc[$epc]['scanned_at']
                 )
             ) {
                 $latestReadsByEpc[$epc] = [
-                    'read' => $normalizedRead,
+                    'read' => $read,
                     'scanned_at' => $scannedAt,
                 ];
             }
@@ -621,21 +568,18 @@ class AssetRfidController extends Controller
             $summary['duplicates_collapsed']++;
         }
 
-        $summary['unique_received'] =
-            count($latestReadsByEpc);
+        $summary['unique_received'] = count($latestReadsByEpc);
 
         /*
-     * ---------------------------------------------------------
+     * ============================================================
      * DATABASE TRANSACTION
-     * ---------------------------------------------------------
+     * ============================================================
      */
         DB::beginTransaction();
 
         try {
 
-            foreach (
-                $latestReadsByEpc as $epc => $preparedRead
-            ) {
+            foreach ($latestReadsByEpc as $epc => $preparedRead) {
 
                 $read = $preparedRead['read'];
 
@@ -643,11 +587,24 @@ class AssetRfidController extends Controller
                 $scannedAt = $preparedRead['scanned_at'];
 
                 /*
-             * -------------------------------------------------
-             * FIND ASSET
-             * -------------------------------------------------
+             * ====================================================
+             * STEP 1
+             * FIND ASSET FROM PERMANENT RFID MAPPING
+             * ====================================================
+             *
+             * IMPORTANT:
+             *
+             * DO NOT use asset_rfid_scan_events to find the asset.
+             *
+             * asset_rfid_scan_events can be completely empty after
+             * "Clear Events".
+             *
+             * The permanent mapping is:
+             *
+             * assets.rfid -> asset
              */
                 $asset = Asset::query()
+                    ->whereNotNull('rfid')
                     ->whereRaw(
                         'UPPER(TRIM(rfid)) = ?',
                         [$epc]
@@ -655,11 +612,21 @@ class AssetRfidController extends Controller
                     ->first();
 
                 /*
-             * Unknown RFID must NOT be stored.
+             * ====================================================
+             * RFID NOT MAPPED
+             * ====================================================
              */
                 if (!$asset) {
 
                     $summary['unknown']++;
+
+                    Log::warning(
+                        'RFID tag is not mapped to any asset',
+                        [
+                            'rfid_epc' => $epc,
+                            'reader_code' => $readerCode,
+                        ]
+                    );
 
                     $results[] = [
                         'epc' => $epc,
@@ -672,39 +639,38 @@ class AssetRfidController extends Controller
                         'direction' => 'UNKNOWN',
                         'status' => null,
                         'action' => 'NOT_SAVED',
-                        'message' =>
-                        'RFID tag is not mapped to any asset.',
+                        'message' => 'RFID tag is not mapped to any asset.',
                     ];
 
                     continue;
                 }
 
+                /*
+             * ====================================================
+             * RFID IS MAPPED
+             * ====================================================
+             */
                 $summary['mapped']++;
 
-                /*
-             * -------------------------------------------------
-             * READER DATA
-             * -------------------------------------------------
-             */
                 $sourceEventId =
                     !empty($read['source_event_id'])
                     ? trim($read['source_event_id'])
                     : null;
 
-                $locationId =
-                    $requestLocationId
-                    ?? $asset->location_id;
+                $locationId = $asset->location_id;
 
                 $readRemarks =
-                    $read['remarks']
-                    ?? $defaultRemarks;
+                    $read['remarks'] ?? $defaultRemarks;
 
                 /*
-             * -------------------------------------------------
-             * FIND EXISTING RFID RECORD
-             * -------------------------------------------------
+             * ====================================================
+             * STEP 2
+             * FIND CURRENT EVENT
+             * ====================================================
              *
-             * One row per RFID EPC.
+             * This table is only session/current-state data.
+             *
+             * It is NOT the permanent RFID mapping.
              */
                 $event = AssetRFIDscanEvents::query()
                     ->whereRaw(
@@ -716,74 +682,103 @@ class AssetRfidController extends Controller
                     ->first();
 
                 /*
-             * -------------------------------------------------
-             * CREATE NEW RFID RECORD
-             * -------------------------------------------------
+             * ====================================================
+             * STEP 3
+             * NO EVENT = FRESH START
+             * ====================================================
+             *
+             * This is the important part for:
+             *
+             * Clear Events
+             *      ↓
+             * table empty
+             *      ↓
+             * scan RFID
+             *      ↓
+             * new IN
              */
                 if (!$event) {
 
                     $event = new AssetRFIDscanEvents();
 
-                    $event->rfid_epc =
-                        $epc;
+                    $event->rfid_epc = $epc;
+
+                    $event->asset_id = $asset->id;
+                    $event->asset_name = $asset->name;
+                    $event->asset_tag = $asset->asset_tag;
+                    $event->serial = $asset->serial;
+                    $event->company_id = $asset->company_id;
 
                     /*
-                 * First scan = IN.
+                 * Fresh RFID scan starts IN.
                  */
-                    $event->in_at =
-                        $scannedAt;
+                    $event->in_at = $scannedAt;
 
-                    $event->out_at =
-                        null;
+                    $event->out_at = null;
 
-                    /*
-                 * 8 hours from current scan.
-                 */
                     $event->expected_out_at =
                         $scannedAt->copy()->addHours(
                             $workingHours
                         );
 
-                    $event->working_hours =
-                        $workingHours;
+                    $event->working_hours = $workingHours;
 
-                    $event->status =
-                        'IN';
+                    $event->status = 'IN';
 
-                    $event->direction =
-                        'IN';
+                    $event->direction = 'IN';
 
-                    $event->out_type =
-                        null;
+                    $event->out_type = null;
+
+                    $event->last_seen_at = $scannedAt;
+
+                    $event->scanned_at = $scannedAt;
+
+                    $event->reader_code = $readerCode;
+
+                    $event->location_id = $locationId;
+
+                    $event->antenna_no =
+                        $read['antenna_no'] ?? null;
+
+                    $event->rssi =
+                        $read['rssi'] ?? null;
+
+                    $event->source_event_id =
+                        $sourceEventId;
+
+                    $event->scan_result = 'MAPPED';
+
+                    $event->read_count = 1;
+
+                    $event->remarks = $readRemarks;
+
+                    $event->save();
 
                     $summary['created']++;
                     $summary['in_created']++;
 
-                    $action =
-                        'IN';
+                    $action = 'IN';
 
                     $message =
-                        'RFID asset marked IN successfully.';
-                } else {
+                        'RFID asset was found in the asset mapping and marked IN successfully.';
+                }
+
+                /*
+             * ====================================================
+             * EXISTING EVENT
+             * ====================================================
+             */ else {
+
+                    $currentStatus = strtoupper(
+                        trim(
+                            (string) $event->status
+                        )
+                    );
 
                     /*
-                 * -------------------------------------------------
-                 * EXISTING RECORD
-                 * -------------------------------------------------
-                 */
-
-                    $currentStatus =
-                        strtoupper(
-                            trim(
-                                (string) $event->status
-                            )
-                        );
-
-                    /*
-                 * -------------------------------------------------
-                 * CASE 1:
+                 * =================================================
                  * CURRENTLY IN
-                 * -------------------------------------------------
+                 * =================================================
                  */
                     if (
                         $currentStatus === 'IN'
@@ -791,13 +786,7 @@ class AssetRfidController extends Controller
                     ) {
 
                         /*
-                     * Determine expected OUT time.
-                     *
-                     * Existing records already having
-                     * expected_out_at keep that time.
-                     *
-                     * If it is missing, calculate it using
-                     * the current default working hours = 8.
+                     * Determine expected OUT.
                      */
                         $expectedOutAt =
                             $event->expected_out_at;
@@ -819,9 +808,7 @@ class AssetRfidController extends Controller
                         }
 
                         /*
-                     * -------------------------------------------------
-                     * STILL WITHIN WORKING HOURS
-                     * -------------------------------------------------
+                     * Still inside working hours.
                      */
                         if (
                             $expectedOutAt
@@ -832,20 +819,23 @@ class AssetRfidController extends Controller
                             )
                         ) {
 
-                            /*
-                         * DO NOT change IN.
-                         *
-                         * DO NOT create OUT.
-                         */
-                            $event->status =
-                                'IN';
-
-                            $event->direction =
-                                'IN';
+                            $event->status = 'IN';
+                            $event->direction = 'IN';
 
                             /*
-                         * Reader information.
+                         * Keep original IN time.
                          */
+                            $event->in_at =
+                                Carbon::parse(
+                                    $event->in_at
+                                );
+
+                            $event->last_seen_at =
+                                $scannedAt;
+
+                            $event->scanned_at =
+                                $scannedAt;
+
                             $event->reader_code =
                                 $readerCode;
 
@@ -864,32 +854,6 @@ class AssetRfidController extends Controller
                                 $sourceEventId
                                 ?? $event->source_event_id;
 
-                            /*
-                         * Keep original IN time.
-                         */
-                            $event->in_at =
-                                Carbon::parse(
-                                    $event->in_at
-                                );
-
-                            /*
-                         * Keep expected OUT.
-                         */
-                            $event->expected_out_at =
-                                $expectedOutAt;
-
-                            /*
-                         * Latest scan.
-                         */
-                            $event->scanned_at =
-                                $scannedAt;
-
-                            /*
-                         * Asset was detected again.
-                         */
-                            $event->last_seen_at =
-                                $scannedAt;
-
                             $event->remarks =
                                 $readRemarks;
 
@@ -898,42 +862,25 @@ class AssetRfidController extends Controller
                             $summary['updated']++;
                             $summary['in_existing']++;
 
-                            $action =
-                                'STILL_IN';
+                            $action = 'STILL_IN';
 
                             $message =
                                 'RFID asset is already IN. Repeated scan kept the asset IN.';
-                        } else {
+                        }
 
-                            /*
-                         * -------------------------------------------------
-                         * WORKING HOURS EXPIRED
-                         * -------------------------------------------------
-                         *
-                         * If the scheduler has not yet marked this
-                         * record OUT and a new scan arrives after
-                         * expected_out_at:
-                         *
-                         * OLD SESSION:
-                         *     OUT = expected_out_at
-                         *     OUT TYPE = AUTO
-                         *
-                         * NEW SESSION:
-                         *     IN = current scan
-                         */
+                        /*
+                     * =================================================
+                     * WORKING HOURS EXPIRED
+                     * =================================================
+                     */ else {
+
                             $automaticOutAt =
                                 $expectedOutAt
-                                ? Carbon::parse(
-                                    $expectedOutAt
-                                )
+                                ? Carbon::parse($expectedOutAt)
                                 : $scannedAt;
 
                             /*
                          * Close previous session.
-                         *
-                         * IMPORTANT:
-                         * Do not use current scan time as the old
-                         * session's OUT time.
                          */
                             $event->out_at =
                                 $automaticOutAt;
@@ -942,14 +889,11 @@ class AssetRfidController extends Controller
                                 'AUTO';
 
                             /*
-                         * Start NEW IN session.
+                         * Start new IN session.
                          */
                             $event->in_at =
                                 $scannedAt;
 
-                            /*
-                         * New session uses fixed 8 hours.
-                         */
                             $event->working_hours =
                                 $workingHours;
 
@@ -958,11 +902,9 @@ class AssetRfidController extends Controller
                                     $workingHours
                                 );
 
-                            $event->status =
-                                'IN';
+                            $event->status = 'IN';
 
-                            $event->direction =
-                                'IN';
+                            $event->direction = 'IN';
 
                             $event->last_seen_at =
                                 $scannedAt;
@@ -1001,26 +943,22 @@ class AssetRfidController extends Controller
                                 'AUTO_OUT_THEN_IN';
 
                             $message =
-                                'Previous working period expired. RFID asset was automatically OUT and the current scan started a new IN session.';
+                                'Previous working period expired. Asset was automatically OUT and the new scan started a new IN session.';
                         }
-                    } else {
+                    }
+
+                    /*
+                 * =================================================
+                 * CURRENTLY OUT
+                 * =================================================
+                 */ else {
 
                         /*
-                     * -------------------------------------------------
-                     * CASE 2:
-                     * CURRENTLY OUT
-                     * -------------------------------------------------
-                     *
-                     * This scan starts a NEW IN session.
+                     * New scan starts a new IN session.
                      */
                         $event->in_at =
                             $scannedAt;
 
-                        /*
-                     * Keep the previous out_at.
-                     *
-                     * It represents the latest OUT time.
-                     */
                         $event->working_hours =
                             $workingHours;
 
@@ -1035,10 +973,6 @@ class AssetRfidController extends Controller
                         $event->direction =
                             'IN';
 
-                        /*
-                     * New IN session means current out_type
-                     * is no longer relevant.
-                     */
                         $event->out_type =
                             null;
 
@@ -1083,9 +1017,9 @@ class AssetRfidController extends Controller
                 }
 
                 /*
-             * -------------------------------------------------
+             * ====================================================
              * REFRESH ASSET SNAPSHOT
-             * -------------------------------------------------
+             * ====================================================
              */
                 $event->asset_id =
                     $asset->id;
@@ -1105,37 +1039,26 @@ class AssetRfidController extends Controller
                 $event->scan_result =
                     'MAPPED';
 
-                /*
-             * Ensure reader information exists.
-             */
-                if (!$event->reader_code) {
-                    $event->reader_code =
-                        $readerCode;
-                }
+                $event->reader_code =
+                    $event->reader_code ?: $readerCode;
 
-                if (!$event->location_id) {
-                    $event->location_id =
-                        $locationId;
-                }
+                $event->location_id =
+                    $event->location_id ?: $locationId;
 
-                /*
-             * Update read count.
-             */
                 $event->read_count =
                     max(
                         1,
                         (int) (
-                            $event->read_count
-                            ?? 1
-                        )
+                            $event->read_count ?? 0
+                        ) + 1
                     );
 
                 $event->save();
 
                 /*
-             * -------------------------------------------------
-             * RESPONSE ITEM
-             * -------------------------------------------------
+             * ====================================================
+             * RESULT
+             * ====================================================
              */
                 $results[] = [
 
@@ -1221,9 +1144,9 @@ class AssetRfidController extends Controller
             DB::commit();
 
             /*
-         * ---------------------------------------------------------
+         * ============================================================
          * FINAL MESSAGE
-         * ---------------------------------------------------------
+         * ============================================================
          */
             if (
                 $summary['mapped'] === 0
@@ -1237,7 +1160,7 @@ class AssetRfidController extends Controller
             ) {
 
                 $message =
-                    'RFID events processed. Expired sessions were automatically OUT and new scans were marked IN.';
+                    'Expired sessions were automatically OUT and new scans were marked IN.';
             } elseif (
                 $summary['in_created'] > 0
             ) {
@@ -1278,14 +1201,6 @@ class AssetRfidController extends Controller
                 'gate_no' =>
                 $gateNo,
 
-                'location_id' =>
-                $requestLocationId,
-
-                /*
-             * Currently always 8.
-             *
-             * Later this will come from Settings.
-             */
                 'working_hours' =>
                 $workingHours,
 

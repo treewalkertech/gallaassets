@@ -11,7 +11,6 @@ HEADER ACTIONS
 ============================================================= --}}
 @section('header_right')
 
-
     <div class="btn-group pull-right">
 
         {{-- Refresh --}}
@@ -21,7 +20,6 @@ HEADER ACTIONS
             Refresh
 
         </a>
-
 
         {{-- Clear RFID Events --}}
         <button type="button" class="btn btn-danger" id="clearRfidEvents">
@@ -33,17 +31,18 @@ HEADER ACTIONS
 
     </div>
 
-
 @stop
+
 
 {{-- =============================================================
 PAGE CONTENT
 ============================================================= --}}
 @section('content')
 
-    {{-- =========================================================
+
+    {{-- =============================================================
 WORKING HOURS
-========================================================== --}}
+============================================================= --}}
 
     <div class="row">
 
@@ -63,11 +62,9 @@ WORKING HOURS
 
                 </div>
 
-
                 <div class="box-body">
 
                     <div class="row">
-
 
                         {{-- Working Hours --}}
                         <div class="col-md-3 col-sm-6">
@@ -77,7 +74,6 @@ WORKING HOURS
                                 <label for="working_hours">
                                     Working Hours
                                 </label>
-
 
                                 <select name="working_hours" id="working_hours" class="form-control" disabled>
 
@@ -103,10 +99,7 @@ WORKING HOURS
 
                             <div class="form-group">
 
-                                <label>
-                                    &nbsp;
-                                </label>
-
+                                <label>&nbsp;</label>
 
                                 <div>
 
@@ -118,8 +111,7 @@ WORKING HOURS
 
                                     </button>
 
-
-                                    <span class="text-muted" style="margin-left: 10px;">
+                                    <span class="text-muted" style="margin-left:10px;">
 
                                         Default:
 
@@ -138,7 +130,7 @@ WORKING HOURS
                     </div>
 
 
-                    <div class="alert alert-info" style="margin-bottom: 0;">
+                    <div class="alert alert-info" style="margin-bottom:0;">
 
                         <i class="fas fa-info-circle"></i>
 
@@ -163,12 +155,11 @@ WORKING HOURS
 
 
 
-    {{-- =========================================================
+    {{-- =============================================================
 SUMMARY
-========================================================== --}}
+============================================================= --}}
 
     <div class="row">
-
 
         {{-- Total RFID Tags --}}
         <div class="col-md-3 col-sm-6 col-xs-12">
@@ -187,7 +178,6 @@ SUMMARY
 
                 </div>
 
-
                 <div class="icon">
 
                     <i class="fas fa-tags"></i>
@@ -197,7 +187,6 @@ SUMMARY
             </div>
 
         </div>
-
 
 
         {{-- Unique Assets --}}
@@ -217,7 +206,6 @@ SUMMARY
 
                 </div>
 
-
                 <div class="icon">
 
                     <i class="fas fa-laptop"></i>
@@ -227,7 +215,6 @@ SUMMARY
             </div>
 
         </div>
-
 
 
         {{-- Currently IN --}}
@@ -247,7 +234,6 @@ SUMMARY
 
                 </div>
 
-
                 <div class="icon">
 
                     <i class="fas fa-sign-in-alt"></i>
@@ -257,7 +243,6 @@ SUMMARY
             </div>
 
         </div>
-
 
 
         {{-- Scanned Today --}}
@@ -277,7 +262,6 @@ SUMMARY
 
                 </div>
 
-
                 <div class="icon">
 
                     <i class="fas fa-calendar-check"></i>
@@ -292,9 +276,9 @@ SUMMARY
 
 
 
-    {{-- =========================================================
+    {{-- =============================================================
 LATEST RFID SCAN
-========================================================== --}}
+============================================================= --}}
 
     <div class="row">
 
@@ -314,13 +298,11 @@ LATEST RFID SCAN
 
                 </div>
 
-
                 <div class="box-body">
 
                     @if ($latestScan)
 
                         <div class="row">
-
 
                             {{-- Last Scanned --}}
                             <div class="col-md-2 col-sm-6">
@@ -338,7 +320,6 @@ LATEST RFID SCAN
                             </div>
 
 
-
                             {{-- Asset --}}
                             <div class="col-md-2 col-sm-6">
 
@@ -354,17 +335,14 @@ LATEST RFID SCAN
                                         <br>
 
                                         <small>
-
                                             Asset ID:
                                             {{ $latestScan->asset_id }}
-
                                         </small>
                                     @endif
 
                                 </p>
 
                             </div>
-
 
 
                             {{-- Asset Tag --}}
@@ -381,7 +359,6 @@ LATEST RFID SCAN
                             </div>
 
 
-
                             {{-- RFID EPC --}}
                             <div class="col-md-2 col-sm-6">
 
@@ -391,14 +368,17 @@ LATEST RFID SCAN
 
                                 <p>
 
-                                    <code>
-                                        {{ $latestScan->rfid_epc ?: '-' }}
-                                    </code>
+                                    @if ($latestScan->rfid_epc)
+                                        <code>
+                                            {{ $latestScan->rfid_epc }}
+                                        </code>
+                                    @else
+                                        -
+                                    @endif
 
                                 </p>
 
                             </div>
-
 
 
                             {{-- Reader --}}
@@ -415,21 +395,42 @@ LATEST RFID SCAN
                             </div>
 
 
-
-                            {{-- Scan Result --}}
+                            {{-- Status --}}
                             <div class="col-md-2 col-sm-6">
 
                                 <strong>
-                                    Scan Result
+                                    Status
                                 </strong>
 
                                 <p>
 
-                                    <span class="label label-success">
+                                    @php
+                                        $latestStatus = strtoupper(trim($latestScan->status ?? 'OUT'));
+                                    @endphp
 
-                                        {{ $latestScan->scan_result ?: 'MAPPED' }}
 
-                                    </span>
+                                    @if ($latestStatus === 'IN')
+                                        <span class="label label-success">
+
+                                            <i class="fas fa-sign-in-alt"></i>
+                                            IN
+
+                                        </span>
+                                    @elseif ($latestStatus === 'AUTO_OUT')
+                                        <span class="label label-warning">
+
+                                            <i class="fas fa-clock"></i>
+                                            AUTO OUT
+
+                                        </span>
+                                    @else
+                                        <span class="label label-primary">
+
+                                            <i class="fas fa-sign-out-alt"></i>
+                                            {{ $latestStatus ?: 'OUT' }}
+
+                                        </span>
+                                    @endif
 
                                 </p>
 
@@ -441,7 +442,7 @@ LATEST RFID SCAN
 
                             <i class="fas fa-info-circle"></i>
 
-                            No mapped RFID tags are available yet.
+                            No RFID scans are available yet.
 
                         </div>
 
@@ -457,9 +458,9 @@ LATEST RFID SCAN
 
 
 
-    {{-- =========================================================
+    {{-- =============================================================
 FILTERS
-========================================================== --}}
+============================================================= --}}
 
     <div class="row">
 
@@ -486,7 +487,6 @@ FILTERS
 
                         <div class="row">
 
-
                             {{-- Asset Name --}}
                             <div class="col-md-3 col-sm-6">
 
@@ -502,7 +502,6 @@ FILTERS
                                 </div>
 
                             </div>
-
 
 
                             {{-- RFID EPC --}}
@@ -522,7 +521,6 @@ FILTERS
                             </div>
 
 
-
                             {{-- Serial Number --}}
                             <div class="col-md-3 col-sm-6">
 
@@ -540,7 +538,6 @@ FILTERS
                             </div>
 
 
-
                             {{-- Location --}}
                             <div class="col-md-3 col-sm-6">
 
@@ -555,7 +552,6 @@ FILTERS
                                         <option value="">
                                             All Locations
                                         </option>
-
 
                                         @foreach ($locations as $locationId => $locationName)
                                             <option value="{{ $locationId }}"
@@ -578,44 +574,31 @@ FILTERS
 
                         <div class="row">
 
-
                             {{-- Current Status --}}
                             <div class="col-md-3 col-sm-6">
 
                                 <div class="form-group">
 
-                                    <label for="current_status">
-                                        Current Status
+                                    <label for="status">
+                                        Status
                                     </label>
 
-
-                                    <select name="current_status" id="current_status" class="form-control">
+                                    <select name="status" id="status" class="form-control">
 
                                         <option value="">
                                             All Status
                                         </option>
 
-
-                                        <option value="IN" {{ request('current_status') === 'IN' ? 'selected' : '' }}>
-
+                                        <option value="IN" {{ request('status') === 'IN' ? 'selected' : '' }}>
                                             IN
-
                                         </option>
 
-
-                                        <option value="OUT"
-                                            {{ request('current_status') === 'OUT' ? 'selected' : '' }}>
-
+                                        <option value="OUT" {{ request('status') === 'OUT' ? 'selected' : '' }}>
                                             OUT
-
                                         </option>
 
-
-                                        <option value="AUTO_OUT"
-                                            {{ request('current_status') === 'AUTO_OUT' ? 'selected' : '' }}>
-
+                                        <option value="AUTO_OUT" {{ request('status') === 'AUTO_OUT' ? 'selected' : '' }}>
                                             AUTO OUT
-
                                         </option>
 
                                     </select>
@@ -624,6 +607,39 @@ FILTERS
 
                             </div>
 
+
+                            {{-- OUT Type --}}
+                            <div class="col-md-3 col-sm-6">
+
+                                <div class="form-group">
+
+                                    <label for="out_type">
+                                        OUT Type
+                                    </label>
+
+                                    <select name="out_type" id="out_type" class="form-control">
+
+                                        <option value="">
+                                            All OUT Types
+                                        </option>
+
+                                        <option value="AUTO" {{ request('out_type') === 'AUTO' ? 'selected' : '' }}>
+                                            AUTO
+                                        </option>
+
+                                        <option value="MANUAL" {{ request('out_type') === 'MANUAL' ? 'selected' : '' }}>
+                                            MANUAL
+                                        </option>
+
+                                        <option value="SCAN" {{ request('out_type') === 'SCAN' ? 'selected' : '' }}>
+                                            SCAN
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
 
 
                             {{-- Rows Per Page --}}
@@ -634,7 +650,6 @@ FILTERS
                                     <label for="per_page">
                                         Rows Per Page
                                     </label>
-
 
                                     <select name="per_page" id="per_page" class="form-control">
 
@@ -654,16 +669,14 @@ FILTERS
                             </div>
 
 
-
                             {{-- Filter Actions --}}
-                            <div class="col-md-7 col-sm-12">
+                            <div class="col-md-4 col-sm-12">
 
                                 <div class="form-group">
 
                                     <label>
                                         &nbsp;
                                     </label>
-
 
                                     <div>
 
@@ -704,11 +717,11 @@ FILTERS
 
 
 
-    {{-- =========================================================
+    {{-- =============================================================
 CURRENT RFID TAG STATUS
-========================================================== --}}
+============================================================= --}}
 
-    <div class="row">
+    <div class="row" id="rfidStatusContent">
 
         <div class="col-md-12">
 
@@ -731,7 +744,7 @@ CURRENT RFID TAG STATUS
 
                             {{ number_format($scanEvents->total()) }}
 
-                            tags
+                            {{ $scanEvents->total() == 1 ? 'tag' : 'tags' }}
 
                         </span>
 
@@ -748,53 +761,21 @@ CURRENT RFID TAG STATUS
 
                             <tr>
 
-                                <th>
-                                    Asset Name
-                                </th>
+                                <th>Asset Name</th>
+                                <th>Asset Tag</th>
+                                <th>RFID EPC</th>
+                                <th>Serial Number</th>
+                                <th>Location</th>
 
-                                <th>
-                                    Asset Tag
-                                </th>
+                                <th>IN Time</th>
+                                <th>OUT Time</th>
+                                <th>Expected OUT</th>
+                                <th>Working Hours</th>
 
-                                <th>
-                                    RFID EPC
-                                </th>
+                                <th>Status</th>
+                                <th>OUT Type</th>
 
-                                <th>
-                                    Serial Number
-                                </th>
-
-                                <th>
-                                    Location
-                                </th>
-
-                                <th>
-                                    Last IN
-                                </th>
-
-                                <th>
-                                    Last OUT
-                                </th>
-
-                                <th>
-                                    Expected OUT
-                                </th>
-
-                                <th>
-                                    Working Duration
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                                <th>
-                                    OUT Type
-                                </th>
-
-                                <th>
-                                    Last Scanned
-                                </th>
+                                <th>Last Scanned</th>
 
                             </tr>
 
@@ -804,16 +785,35 @@ CURRENT RFID TAG STATUS
                         <tbody>
 
                             @forelse ($scanEvents as $scanEvent)
+                                @php
+
+                                    /*
+                                     * IMPORTANT:
+                                     *
+                                     * Actual database column:
+                                     * status
+                                     */
+                                    $status = strtoupper(trim($scanEvent->status ?? 'OUT'));
+
+                                    /*
+                                     * Actual database column:
+                                     * out_type
+                                     */
+                                    $outType = strtoupper(trim($scanEvent->out_type ?? ''));
+
+                                @endphp
+
+
                                 <tr>
 
-
-                                    {{-- Asset Name --}}
+                                    {{-- =================================================
+                                ASSET NAME
+                                ================================================== --}}
                                     <td>
 
                                         <strong>
                                             {{ $scanEvent->asset_name ?: '-' }}
                                         </strong>
-
 
                                         @if ($scanEvent->asset_id)
                                             <br>
@@ -829,7 +829,6 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
-
                                     {{-- Asset Tag --}}
                                     <td>
 
@@ -838,16 +837,18 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
-
                                     {{-- RFID EPC --}}
                                     <td>
 
-                                        <code>
-                                            {{ $scanEvent->rfid_epc ?: '-' }}
-                                        </code>
+                                        @if ($scanEvent->rfid_epc)
+                                            <code>
+                                                {{ $scanEvent->rfid_epc }}
+                                            </code>
+                                        @else
+                                            -
+                                        @endif
 
                                     </td>
-
 
 
                                     {{-- Serial --}}
@@ -858,27 +859,30 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
-
                                     {{-- Location --}}
                                     <td>
 
-                                        {{ $scanEvent->location_id
-                                            ? $locations->get($scanEvent->location_id, 'Location ID: ' . $scanEvent->location_id)
-                                            : '-' }}
+                                        @if ($scanEvent->location_id)
+                                            {{ $locations->get($scanEvent->location_id, 'Location ID: ' . $scanEvent->location_id) }}
+                                        @else
+                                            -
+                                        @endif
 
                                     </td>
 
 
+                                    {{-- =================================================
+                                IN TIME
+                                Actual column: in_at
+                                ================================================== --}}
+                                    <td style="white-space:nowrap;">
 
-                                    {{-- Last IN --}}
-                                    <td style="white-space: nowrap;">
-
-                                        @if ($scanEvent->last_in_at)
+                                        @if ($scanEvent->in_at)
                                             <span class="text-success">
 
                                                 <i class="fas fa-sign-in-alt"></i>
 
-                                                {{ $scanEvent->last_in_at->format('d-m-Y h:i:s A') }}
+                                                {{ $scanEvent->in_at->format('d-m-Y h:i:s A') }}
 
                                             </span>
                                         @else
@@ -888,16 +892,18 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
+                                    {{-- =================================================
+                                OUT TIME
+                                Actual column: out_at
+                                ================================================== --}}
+                                    <td style="white-space:nowrap;">
 
-                                    {{-- Last OUT --}}
-                                    <td style="white-space: nowrap;">
-
-                                        @if ($scanEvent->last_out_at)
+                                        @if ($scanEvent->out_at)
                                             <span class="text-primary">
 
                                                 <i class="fas fa-sign-out-alt"></i>
 
-                                                {{ $scanEvent->last_out_at->format('d-m-Y h:i:s A') }}
+                                                {{ $scanEvent->out_at->format('d-m-Y h:i:s A') }}
 
                                             </span>
                                         @else
@@ -907,12 +913,20 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
+                                    {{-- =================================================
+                                EXPECTED OUT
+                                Actual column: expected_out_at
+                                ================================================== --}}
+                                    <td style="white-space:nowrap;">
 
-                                    {{-- Expected OUT --}}
-                                    <td style="white-space: nowrap;">
+                                        @if ($status === 'IN' && $scanEvent->expected_out_at)
+                                            <span class="text-warning">
 
-                                        @if (($scanEvent->current_status ?? null) === 'IN' && $scanEvent->expected_out_at)
-                                            {{ $scanEvent->expected_out_at->format('d-m-Y h:i:s A') }}
+                                                <i class="fas fa-clock"></i>
+
+                                                {{ $scanEvent->expected_out_at->format('d-m-Y h:i:s A') }}
+
+                                            </span>
                                         @else
                                             -
                                         @endif
@@ -920,65 +934,33 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
-
-                                    {{-- Working Duration --}}
-                                    <td style="white-space: nowrap;">
-
-                                        @if (($scanEvent->current_status ?? null) === 'IN' && $scanEvent->last_in_at)
-                                            @php
-
-                                                $start = $scanEvent->last_in_at;
-
-                                                $end = now();
-
-                                                $totalMinutes = max(0, $start->diffInMinutes($end));
-
-                                                $hours = intdiv($totalMinutes, 60);
-
-                                                $minutes = $totalMinutes % 60;
-
-                                            @endphp
-
-
-                                            {{ $hours }}h {{ $minutes }}m
-                                        @elseif (($scanEvent->current_status ?? null) === 'OUT' && $scanEvent->last_in_at && $scanEvent->last_out_at)
-                                            @php
-
-                                                $totalMinutes = max(
-                                                    0,
-                                                    $scanEvent->last_in_at->diffInMinutes($scanEvent->last_out_at),
-                                                );
-
-                                                $hours = intdiv($totalMinutes, 60);
-
-                                                $minutes = $totalMinutes % 60;
-
-                                            @endphp
-
-
-                                            {{ $hours }}h {{ $minutes }}m
-                                        @else
-                                            -
-                                        @endif
-
-                                    </td>
-
-
-
-                                    {{-- Current Status --}}
+                                    {{-- =================================================
+                                WORKING HOURS
+                                Actual column: working_hours
+                                ================================================== --}}
                                     <td>
 
-                                        @php
+                                        @if ($scanEvent->working_hours)
+                                            {{ $scanEvent->working_hours }}
 
-                                            $status = strtoupper($scanEvent->current_status ?? 'OUT');
+                                            {{ (int) $scanEvent->working_hours === 1 ? 'Hour' : 'Hours' }}
+                                        @else
+                                            -
+                                        @endif
 
-                                        @endphp
+                                    </td>
 
+
+                                    {{-- =================================================
+                                STATUS
+                                Actual column: status
+                                ================================================== --}}
+                                    <td>
 
                                         @if ($status === 'IN')
                                             <span class="label label-success">
 
-                                                <i class="fas fa-circle"></i>
+                                                <i class="fas fa-sign-in-alt"></i>
 
                                                 IN
 
@@ -991,7 +973,7 @@ CURRENT RFID TAG STATUS
                                                 AUTO OUT
 
                                             </span>
-                                        @else
+                                        @elseif ($status === 'OUT')
                                             <span class="label label-primary">
 
                                                 <i class="fas fa-sign-out-alt"></i>
@@ -999,24 +981,27 @@ CURRENT RFID TAG STATUS
                                                 OUT
 
                                             </span>
+                                        @else
+                                            <span class="label label-default">
+
+                                                {{ $status ?: 'UNKNOWN' }}
+
+                                            </span>
                                         @endif
 
                                     </td>
 
 
-
-                                    {{-- OUT Type --}}
+                                    {{-- =================================================
+                                OUT TYPE
+                                Actual column: out_type
+                                ================================================== --}}
                                     <td>
-
-                                        @php
-
-                                            $outType = strtoupper($scanEvent->out_type ?? '');
-
-                                        @endphp
-
 
                                         @if ($outType === 'AUTO')
                                             <span class="label label-warning">
+
+                                                <i class="fas fa-clock"></i>
 
                                                 AUTO OUT
 
@@ -1024,11 +1009,15 @@ CURRENT RFID TAG STATUS
                                         @elseif ($outType === 'MANUAL')
                                             <span class="label label-danger">
 
+                                                <i class="fas fa-hand-paper"></i>
+
                                                 MANUAL OUT
 
                                             </span>
                                         @elseif ($outType === 'SCAN')
                                             <span class="label label-primary">
+
+                                                <i class="fas fa-sign-out-alt"></i>
 
                                                 SCAN OUT
 
@@ -1040,11 +1029,14 @@ CURRENT RFID TAG STATUS
                                     </td>
 
 
-
                                     {{-- Last Scanned --}}
-                                    <td style="white-space: nowrap;">
+                                    <td style="white-space:nowrap;">
 
-                                        {{ $scanEvent->scanned_at ? $scanEvent->scanned_at->format('d-m-Y h:i:s A') : '-' }}
+                                        @if ($scanEvent->scanned_at)
+                                            {{ $scanEvent->scanned_at->format('d-m-Y h:i:s A') }}
+                                        @else
+                                            -
+                                        @endif
 
                                     </td>
 
@@ -1055,11 +1047,18 @@ CURRENT RFID TAG STATUS
 
                                 <tr>
 
-                                    <td colspan="12" class="text-center text-muted">
+                                    <td colspan="12" class="text-center text-muted" style="padding:30px;">
 
                                         <i class="fas fa-info-circle"></i>
 
-                                        No mapped RFID tags found.
+                                        No RFID events found.
+
+                                        <br>
+
+                                        <small>
+                                            Scan a mapped RFID tag to create a
+                                            new IN session.
+                                        </small>
 
                                     </td>
 
@@ -1073,7 +1072,6 @@ CURRENT RFID TAG STATUS
                 </div>
 
 
-
                 {{-- Pagination --}}
                 @if ($scanEvents->hasPages())
                     <div class="box-footer clearfix">
@@ -1081,21 +1079,14 @@ CURRENT RFID TAG STATUS
                         <div class="pull-left">
 
                             Showing
-
                             {{ $scanEvents->firstItem() }}
-
                             to
-
                             {{ $scanEvents->lastItem() }}
-
                             of
-
                             {{ $scanEvents->total() }}
-
                             tags
 
                         </div>
-
 
                         <div class="pull-right">
 
@@ -1115,6 +1106,8 @@ CURRENT RFID TAG STATUS
 
 @stop
 
+
+
 {{-- =============================================================
 JAVASCRIPT
 ============================================================= --}}
@@ -1124,67 +1117,237 @@ JAVASCRIPT
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
-
             /*
-             * =========================================================
+             * =============================================================
              * STATE
-             * =========================================================
+             * =============================================================
              */
 
             let userIsFiltering = false;
 
             let isClearingEvents = false;
 
+            let isRefreshing = false;
+
+            let refreshTimer = null;
+
+            const REFRESH_INTERVAL = 10000;
 
 
             /*
-             * =========================================================
-             * FILTER FORM
-             * =========================================================
-             *
-             * Stop automatic refresh when the user is interacting
-             * with the filter form.
+             * =============================================================
+             * ELEMENTS
+             * =============================================================
              */
 
             const filterForm = document.querySelector(
                 'form[action="{{ route('asset-rfid-scan-events.index') }}"]'
             );
 
+            const clearEventsButton =
+                document.getElementById('clearRfidEvents');
+
+            const rfidStatusContent =
+                document.getElementById('rfidStatusContent');
+
+
+            /*
+             * =============================================================
+             * FILTER FORM
+             * =============================================================
+             */
 
             if (filterForm) {
 
-                filterForm.addEventListener(
-                    'input',
-                    function() {
+                filterForm.addEventListener('input', function() {
 
-                        userIsFiltering = true;
+                    userIsFiltering = true;
 
-                    }
-                );
+                });
 
+                filterForm.addEventListener('change', function() {
 
-                filterForm.addEventListener(
-                    'change',
-                    function() {
+                    userIsFiltering = true;
 
-                        userIsFiltering = true;
+                });
 
-                    }
-                );
+                filterForm.addEventListener('submit', function() {
+
+                    userIsFiltering = true;
+
+                });
 
             }
 
 
-
             /*
-             * =========================================================
-             * CLEAR RFID EVENTS
-             * =========================================================
+             * =============================================================
+             * CSRF TOKEN
+             * =============================================================
              */
 
-            const clearEventsButton =
-                document.getElementById('clearRfidEvents');
+            function getCsrfToken() {
 
+                const csrfTokenElement =
+                    document.querySelector(
+                        'meta[name="csrf-token"]'
+                    );
+
+                if (!csrfTokenElement) {
+
+                    return '';
+
+                }
+
+                return csrfTokenElement.getAttribute('content') || '';
+
+            }
+
+
+            /*
+             * =============================================================
+             * REFRESH RFID STATUS
+             * =============================================================
+             */
+
+            function refreshRfidStatus() {
+
+                if (userIsFiltering) {
+                    return;
+                }
+
+                if (isClearingEvents) {
+                    return;
+                }
+
+                if (isRefreshing) {
+                    return;
+                }
+
+                if (!rfidStatusContent) {
+                    return;
+                }
+
+                isRefreshing = true;
+
+
+                const url = new URL(
+                    "{{ route('asset-rfid-scan-events.status') }}",
+                    window.location.origin
+                );
+
+
+                /*
+                 * Copy filters.
+                 */
+
+                if (filterForm) {
+
+                    const formData =
+                        new FormData(filterForm);
+
+                    formData.forEach(function(value, key) {
+
+                        if (
+                            value !== null &&
+                            value !== ''
+                        ) {
+
+                            url.searchParams.set(
+                                key,
+                                value
+                            );
+
+                        }
+
+                    });
+
+                }
+
+
+                fetch(
+                        url.toString(), {
+                            method: 'GET',
+
+                            headers: {
+
+                                'Accept': 'application/json',
+
+                                'X-Requested-With': 'XMLHttpRequest'
+
+                            },
+
+                            cache: 'no-store'
+
+                        }
+                    )
+
+                    .then(function(response) {
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                'RFID status request failed. HTTP ' +
+                                response.status
+                            );
+
+                        }
+
+                        return response.json();
+
+                    })
+
+                    .then(function(data) {
+
+                        if (
+                            !data ||
+                            !data.success
+                        ) {
+
+                            throw new Error(
+                                data.message ||
+                                'Unable to refresh RFID status.'
+                            );
+
+                        }
+
+
+                        /*
+                         * Replace only RFID status area.
+                         */
+
+                        if (data.html) {
+
+                            rfidStatusContent.innerHTML =
+                                data.html;
+
+                        }
+
+                    })
+
+                    .catch(function(error) {
+
+                        console.error(
+                            'RFID status AJAX error:',
+                            error
+                        );
+
+                    })
+
+                    .finally(function() {
+
+                        isRefreshing = false;
+
+                    });
+
+            }
+
+
+            /*
+             * =============================================================
+             * CLEAR RFID EVENTS
+             * =============================================================
+             */
 
             if (clearEventsButton) {
 
@@ -1192,55 +1355,41 @@ JAVASCRIPT
                     'click',
                     function() {
 
-
-                        /*
-                         * Prevent double click.
-                         */
-
                         if (isClearingEvents) {
-
                             return;
-
                         }
 
 
-                        /*
-                         * Confirmation.
-                         */
-
                         const confirmed = confirm(
                             'Are you sure you want to clear all RFID events?\n\n' +
-                            'This will remove all current RFID event records.'
+                            'This will permanently delete ALL RFID event records.'
                         );
 
 
                         if (!confirmed) {
-
                             return;
+                        }
+
+
+                        isClearingEvents = true;
+
+
+                        /*
+                         * Stop polling.
+                         */
+
+                        if (refreshTimer) {
+
+                            clearTimeout(refreshTimer);
+
+                            refreshTimer = null;
 
                         }
 
 
-                        /*
-                         * Set state.
-                         */
-
-                        isClearingEvents = true;
-
-                        userIsFiltering = true;
-
-
-                        /*
-                         * Save original button text.
-                         */
-
                         const originalButtonHtml =
                             clearEventsButton.innerHTML;
 
-
-                        /*
-                         * Disable button.
-                         */
 
                         clearEventsButton.disabled = true;
 
@@ -1248,28 +1397,6 @@ JAVASCRIPT
                         clearEventsButton.innerHTML =
                             '<i class="fas fa-spinner fa-spin"></i> Clearing...';
 
-
-
-                        /*
-                         * Get Laravel CSRF token.
-                         */
-
-                        const csrfTokenElement =
-                            document.querySelector(
-                                'meta[name="csrf-token"]'
-                            );
-
-
-                        const csrfToken =
-                            csrfTokenElement ?
-                            csrfTokenElement.getAttribute('content') :
-                            '';
-
-
-
-                        /*
-                         * Make Laravel request.
-                         */
 
                         fetch(
                                 "{{ route('asset-rfid-scan-events.clear') }}", {
@@ -1281,7 +1408,7 @@ JAVASCRIPT
 
                                         'Accept': 'application/json',
 
-                                        'X-CSRF-TOKEN': csrfToken,
+                                        'X-CSRF-TOKEN': getCsrfToken(),
 
                                         'X-Requested-With': 'XMLHttpRequest'
 
@@ -1292,18 +1419,10 @@ JAVASCRIPT
                                 }
                             )
 
-
-                            /*
-                             * =================================================
-                             * PROCESS RESPONSE
-                             * =================================================
-                             */
-
                             .then(function(response) {
 
-                                return response.json()
-
-                                    .then(function(data) {
+                                return response.json().then(
+                                    function(data) {
 
                                         return {
 
@@ -1313,17 +1432,12 @@ JAVASCRIPT
 
                                         };
 
-                                    });
+                                    }
+                                );
 
                             })
 
-
                             .then(function(result) {
-
-
-                                /*
-                                 * Laravel returned an error.
-                                 */
 
                                 if (
                                     !result.ok ||
@@ -1338,40 +1452,22 @@ JAVASCRIPT
                                 }
 
 
-                                /*
-                                 * Success message.
-                                 */
-
                                 alert(
                                     result.data.message ||
-                                    'RFID events cleared successfully.'
+                                    'All RFID events cleared successfully.'
                                 );
 
 
                                 /*
-                                 * Reload the page.
+                                 * Reload complete page.
                                  *
-                                 * This updates:
-                                 *
-                                 * - Total RFID Tags
-                                 * - Unique Assets
-                                 * - Currently IN
-                                 * - Scanned Today
-                                 * - Latest RFID Scan
-                                 * - Current RFID Tag Status
-                                 * - Pagination
+                                 * This is intentional because the clear operation
+                                 * affects summary, latest scan and status table.
                                  */
 
                                 window.location.reload();
 
                             })
-
-
-                            /*
-                             * =================================================
-                             * ERROR
-                             * =================================================
-                             */
 
                             .catch(function(error) {
 
@@ -1387,20 +1483,15 @@ JAVASCRIPT
                                 );
 
 
-                                /*
-                                 * Restore button.
-                                 */
-
                                 clearEventsButton.disabled = false;
-
 
                                 clearEventsButton.innerHTML =
                                     originalButtonHtml;
 
-
                                 isClearingEvents = false;
 
-                                userIsFiltering = false;
+
+                                scheduleNextRefresh();
 
                             });
 
@@ -1410,19 +1501,12 @@ JAVASCRIPT
             }
 
 
-
             /*
-             * =========================================================
+             * =============================================================
              * WORKING HOURS
-             * =========================================================
+             * =============================================================
              *
              * Currently disabled.
-             *
-             * Backend currently uses:
-             *
-             * $workingHours = 8;
-             *
-             * Later this can be connected to the settings table.
              */
 
             const saveWorkingHoursButton =
@@ -1435,15 +1519,12 @@ JAVASCRIPT
                     'click',
                     function() {
 
-
                         const workingHoursElement =
                             document.getElementById('working_hours');
 
 
                         if (!workingHoursElement) {
-
                             return;
-
                         }
 
 
@@ -1456,11 +1537,85 @@ JAVASCRIPT
                             selectedWorkingHours
                         );
 
-
                     }
                 );
 
             }
+
+
+            /*
+             * =============================================================
+             * AJAX POLLING
+             * =============================================================
+             */
+
+            function scheduleNextRefresh() {
+
+                if (refreshTimer) {
+
+                    clearTimeout(refreshTimer);
+
+                }
+
+
+                refreshTimer = setTimeout(
+                    function() {
+
+                        refreshRfidStatus();
+
+                        scheduleNextRefresh();
+
+                    },
+                    REFRESH_INTERVAL
+                );
+
+            }
+
+
+            /*
+             * Start polling.
+             */
+
+            scheduleNextRefresh();
+
+
+            /*
+             * =============================================================
+             * PAGE VISIBILITY
+             * =============================================================
+             */
+
+            document.addEventListener(
+                'visibilitychange',
+                function() {
+
+                    if (
+                        document.visibilityState === 'hidden'
+                    ) {
+
+                        if (refreshTimer) {
+
+                            clearTimeout(refreshTimer);
+
+                            refreshTimer = null;
+
+                        }
+
+                    } else {
+
+                        if (!userIsFiltering) {
+
+                            refreshRfidStatus();
+
+                        }
+
+                        scheduleNextRefresh();
+
+                    }
+
+                }
+            );
+
         });
     </script>
 
