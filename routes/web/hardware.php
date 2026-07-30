@@ -229,5 +229,15 @@ Route::get(
     'assets/asset-rfid-scan-events',
     [AssetRfidScanEventsController::class, 'index']
 )
-->middleware('auth')
-->name('asset-rfid-scan-events.index');
+    ->middleware('auth')
+    ->name('asset-rfid-scan-events.index');
+
+Route::post(
+    'asset-rfid-scan-events/working-hours',
+    [AssetRfidScanEventsController::class, 'saveWorkingHours']
+)->name('asset-rfid-scan-events.working-hours');
+
+Route::post(
+    'asset-rfid-scan-events/clear',
+    [AssetRFIDscanEventsController::class, 'clearEvents']
+)->name('asset-rfid-scan-events.clear');
