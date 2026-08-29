@@ -39,10 +39,15 @@ class PurchaseOrdersController extends Controller
 
     public function edit($id)
     {
-        $po = PurchaseOrder::findOrFail($id);
-        $this->authorize('update', $po);
+        $item = PurchaseOrder::findOrFail($id);
+        $this->authorize('update', $item);
 
-        return view('purchase_orders/edit', compact('po'));
+        // Note: the shared edit.blade.php view (used for both create and edit)
+        // expects the model in an `$item` variable, matching create() above and
+        // the convention used by every other module's edit form (suppliers,
+        // licenses, etc). Previously this passed `$po`, which the view never
+        // received, since edit.blade.php never referenced that name.
+        return view('purchase_orders/edit', compact('item'));
     }
 
     public function update(Request $request, $id)

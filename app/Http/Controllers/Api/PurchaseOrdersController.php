@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Transformers\PurchaseOrdersTransformer;
 use App\Models\PurchaseOrder;
@@ -13,7 +14,7 @@ class PurchaseOrdersController extends Controller
     {
         $this->authorize('view', PurchaseOrder::class);
 
-        $pos = PurchaseOrder::with('vendor','requestedBy','owner');
+        $pos = PurchaseOrder::with('vendor', 'requestedBy', 'owner');
 
         // Filters (same pattern as licenses)
         if ($request->filled('status')) {
@@ -21,7 +22,7 @@ class PurchaseOrdersController extends Controller
         }
 
         if ($request->filled('vendor_id')) {
-            $pos->where('vendor_id', $request->vendor_id);
+            $pos->where('supplier_id', $request->vendor_id);
         }
 
         if ($request->filled('custom_po_id')) {
@@ -48,6 +49,7 @@ class PurchaseOrdersController extends Controller
 
         $po = new PurchaseOrder();
         $po->fill($request->all());
+        $po->created_by = auth()->id();
 
         if ($po->save()) {
             return response()->json(
@@ -62,10 +64,10 @@ class PurchaseOrdersController extends Controller
 
     public function show($id): JsonResponse | array
     {
-        $this->authorize('view', PurchaseOrder::class);
-
-        $po = PurchaseOrder::with('vendor','requestedBy','owner','assets')
+        $po = PurchaseOrder::with('vendor', 'requestedBy', 'owner', 'assets')
             ->findOrFail($id);
+
+        $this->authorize('view', $po);
 
         return (new PurchaseOrdersTransformer)
             ->transformPurchaseOrder($po);
@@ -73,16 +75,20 @@ class PurchaseOrdersController extends Controller
 
     public function update(Request $request, $id): JsonResponse | array
     {
-        $this->authorize('update', PurchaseOrder::class);
-
         $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('update', $po);
+
         $po->fill($request->all());
 
         if ($po->save()) {
-            return Helper::formatStandardApiResponse('success', $po, 'PO updated');
+            return response()->json(
+                Helper::formatStandardApiResponse('success', $po, 'PO updated')
+            );
         }
 
-        return Helper::formatStandardApiResponse('error', null, $po->getErrors());
+        return response()->json(
+            Helper::formatStandardApiResponse('error', null, $po->getErrors())
+        );
     }
 
     public function destroy($id): JsonResponse

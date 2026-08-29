@@ -25,6 +25,7 @@ use App\Http\Controllers\ReportTemplatesController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatuslabelsController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\PurchaseOrders\PurchaseOrdersController;
 use App\Http\Controllers\ViewAssetsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -122,6 +123,13 @@ Route::group(['middleware' => 'auth'], function () {
     */
     Route::resource('suppliers', SuppliersController::class, [
         'parameters' => ['supplier' => 'supplier_id'],
+    ]);
+
+    /*
+    * Purchase Orders
+    */
+    Route::resource('purchase-orders', PurchaseOrdersController::class, [
+        'parameters' => ['purchase_order' => 'purchase_order_id'],
     ]);
 
     /*

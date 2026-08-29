@@ -511,6 +511,33 @@ return [
         ],
     ],
 
+    'Purchase Orders' => [
+        [
+            'permission' => 'purchase-orders.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+    ],
+
 
     'Manufacturers' => [
         [

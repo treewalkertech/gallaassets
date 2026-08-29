@@ -1,135 +1,85 @@
 @extends('layouts/edit-form', [
-    'createText' => trans('admin/licenses/form.create'),
-    'updateText' => trans('admin/licenses/form.update'),
+    'createText' => trans('admin/purchase_orders/table.create'),
+    'updateText' => trans('admin/purchase_orders/table.update'),
+    'helpTitle' => trans('admin/purchase_orders/table.about_purchase_orders_title'),
+    'helpText' => trans('admin/purchase_orders/table.about_purchase_orders_text'),
     'topSubmit' => true,
-    'formAction' => ($item->id) ? route('licenses.update', ['license' => $item->id]) : route('licenses.store'),
-     'index_route' => 'licenses.index',
-    'options' => [
-                'index' => trans('admin/hardware/form.redirect_to_all', ['type' => 'licenses']),
-                'item' => trans('admin/hardware/form.redirect_to_type', ['type' => trans('general.license')]),
-               ]
+    'formAction' => (isset($item->id)) ? route('purchase-orders.update', ['purchase_order' => $item->id]) : route('purchase-orders.store'),
 ])
 
 {{-- Page content --}}
 @section('inputFields')
-@include ('partials.forms.edit.name', ['translated_name' => trans('admin/licenses/form.name')])
-@include ('partials.forms.edit.category-select', ['translated_name' => trans('admin/categories/general.category_name'), 'fieldname' => 'category_id', 'required' => 'true', 'category_type' => 'license'])
 
-
-
-<!-- Seats -->
-<div class="form-group {{ $errors->has('seats') ? ' has-error' : '' }}">
-    <label for="seats" class="col-md-3 control-label">{{ trans('admin/licenses/form.seats') }}</label>
-    <div class="col-md-7 col-sm-12">
-        <div class="col-md-12" style="padding-left:0px">
-            <input class="form-control" type="text" name="seats" id="seats" value="{{ old('seats', $item->seats) }}" minlength="1" required style="width: 97px;">
-        </div>
-    </div>
-    {!! $errors->first('seats', '<div class="col-md-8 col-md-offset-3"><span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span></div>') !!}
-</div>
-@include ('partials.forms.edit.minimum_quantity')
-
-<!-- Serial-->
-@can('viewKeys', $item)
-    <div class="form-group {{ $errors->has('serial') ? ' has-error' : '' }}">
-        <label for="serial" class="col-md-3 control-label">{{ trans('admin/licenses/form.license_key') }}</label>
-        <div class="col-md-7">
-            <textarea class="form-control" type="text" name="serial" id="serial"{{  (Helper::checkIfRequired($item, 'serial')) ? ' required' : '' }}>{{ old('serial', $item->serial) }}</textarea>
-            {!! $errors->first('serial', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-        </div>
-    </div>
-@endcan
-
-@include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
-@include ('partials.forms.edit.manufacturer-select', ['translated_name' => trans('general.manufacturer'), 'fieldname' => 'manufacturer_id',])
-
-<!-- Licensed to name -->
-<div class="form-group {{ $errors->has('license_name') ? ' has-error' : '' }}">
-    <label for="license_name" class="col-md-3 control-label">{{ trans('admin/licenses/form.to_name') }}</label>
+<!-- PO Number -->
+<div class="form-group {{ $errors->has('custom_po_id') ? ' has-error' : '' }}">
+    {{ Form::label('custom_po_id', trans('admin/purchase_orders/table.po_number'), array('class' => 'col-md-3 control-label')) }}
     <div class="col-md-7">
-        <input class="form-control" type="text" name="license_name" id="license_name" value="{{ old('license_name', $item->license_name) }}" />
-        {!! $errors->first('license_name', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+        {{ Form::text('custom_po_id', old('custom_po_id', $item->custom_po_id), array('class' => 'form-control', 'placeholder' => 'Leave blank to auto-generate')) }}
+        {!! $errors->first('custom_po_id', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>
 
-<!-- Licensed to email -->
-<div class="form-group {{ $errors->has('license_email') ? ' has-error' : '' }}">
-    <label for="license_email" class="col-md-3 control-label">{{ trans('admin/licenses/form.to_email') }}</label>
+<!-- PO Name -->
+<div class="form-group {{ $errors->has('po_name') ? ' has-error' : '' }}">
+    {{ Form::label('po_name', trans('admin/purchase_orders/table.po_name'), array('class' => 'col-md-3 control-label')) }}
     <div class="col-md-7">
-        <input class="form-control" type="email" name="license_email" id="license_email" value="{{ old('license_email', $item->license_email) }}" />
-        {!! $errors->first('license_email', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+        {{ Form::text('po_name', old('po_name', $item->po_name), array('class' => 'form-control', 'required' => 'required')) }}
+        {!! $errors->first('po_name', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>
 
-<!-- Reassignable -->
-<div class="form-group {{ $errors->has('reassignable') ? ' has-error' : '' }}">
-    <div class="col-md-3 control-label">
-        <strong>{{ trans('admin/licenses/form.reassignable') }}</strong>
-    </div>
+@include ('partials.forms.edit.supplier-select', ['translated_name' => trans('admin/purchase_orders/table.supplier'), 'fieldname' => 'supplier_id'])
+
+@include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/purchase_orders/table.requested_by'), 'fieldname' => 'requested_by'])
+
+@include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/purchase_orders/table.owner'), 'fieldname' => 'owner_id'])
+
+<!-- Status -->
+<div class="form-group {{ $errors->has('status_name') ? ' has-error' : '' }}">
+    {{ Form::label('status_name', trans('admin/purchase_orders/table.status'), array('class' => 'col-md-3 control-label')) }}
     <div class="col-md-7">
-        <label class="form-control">
-        {{ Form::Checkbox('reassignable', '1', old('reassignable', $item->id ? $item->reassignable : '1'),array('aria-label'=>'reassignable')) }}
-        {{ trans('general.yes') }}
-        </label>
+        {{ Form::select('status_name', [
+            'draft' => 'Draft',
+            'pending_approval' => 'Pending Approval',
+            'approved' => 'Approved',
+            'partially_received' => 'Partially Received',
+            'received' => 'Received',
+            'closed' => 'Closed',
+            'cancelled' => 'Cancelled',
+            'rejected' => 'Rejected',
+        ], old('status_name', $item->status_name ?: 'draft'), array('class' => 'form-control')) }}
+        {!! $errors->first('status_name', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>
 
+<!-- Total Price -->
+<div class="form-group {{ $errors->has('total_price') ? ' has-error' : '' }}">
+    {{ Form::label('total_price', trans('admin/purchase_orders/table.total_price'), array('class' => 'col-md-3 control-label')) }}
+    <div class="col-md-7">
+        {{ Form::text('total_price', old('total_price', $item->total_price), array('class' => 'form-control')) }}
+        {!! $errors->first('total_price', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+    </div>
+</div>
 
-@include ('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'supplier_id'])
-@include ('partials.forms.edit.order_number')
-@include ('partials.forms.edit.purchase_cost')
-@include ('partials.forms.edit.purchase_date')
+<!-- Currency Code -->
+<div class="form-group {{ $errors->has('currency_code') ? ' has-error' : '' }}">
+    {{ Form::label('currency_code', trans('admin/purchase_orders/table.currency_code'), array('class' => 'col-md-3 control-label')) }}
+    <div class="col-md-7">
+        {{ Form::text('currency_code', old('currency_code', $item->currency_code), array('class' => 'form-control', 'maxlength' => 10, 'placeholder' => 'e.g. INR, USD')) }}
+        {!! $errors->first('currency_code', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+    </div>
+</div>
 
-<!-- Expiration Date -->
-<div class="form-group {{ $errors->has('expiration_date') ? ' has-error' : '' }}">
-    <label for="expiration_date" class="col-md-3 control-label">{{ trans('admin/licenses/form.expiration') }}</label>
-
-    <div class="input-group col-md-4">
-        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd"  data-autoclose="true" data-date-clear-btn="true">
-            <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="expiration_date" id="expiration_date" value="{{ old('expiration_date', ($item->expiration_date) ? $item->expiration_date->format('Y-m-d') : '') }}" maxlength="10">
+<!-- Required Date -->
+<div class="form-group {{ $errors->has('required_date') ? ' has-error' : '' }}">
+   <label for="required_date" class="col-md-3 control-label">{{ trans('admin/purchase_orders/table.required_date') }}</label>
+   <div class="input-group col-md-4">
+        <div class="input-group date" data-provide="datepicker" data-date-clear-btn="true" data-date-format="yyyy-mm-dd" data-autoclose="true">
+            <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="required_date" id="required_date" readonly value="{{ old('required_date', ($item->required_date) ? $item->required_date->format('Y-m-d') : '') }}" style="background-color:inherit">
             <span class="input-group-addon"><x-icon type="calendar" /></span>
-        </div>
-        {!! $errors->first('expiration_date', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-    </div>
-
+       </div>
+       {!! $errors->first('required_date', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+   </div>
 </div>
-
-<!-- Termination Date -->
-<div class="form-group {{ $errors->has('termination_date') ? ' has-error' : '' }}">
-    <label for="termination_date" class="col-md-3 control-label">{{ trans('admin/licenses/form.termination_date') }}</label>
-
-    <div class="input-group col-md-4">
-        <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-autoclose="true" data-date-clear-btn="true">
-            <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="termination_date" id="termination_date" value="{{ old('termination_date', ($item->termination_date) ? $item->termination_date->format('Y-m-d') : '') }}" maxlength="10">
-            <span class="input-group-addon"><x-icon type="calendar" /></span>
-        </div>
-        {!! $errors->first('termination_date', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-    </div>
-</div>
-
-{{-- @TODO How does this differ from Order #? --}}
-<!-- Purchase Order -->
-<div class="form-group {{ $errors->has('purchase_order') ? ' has-error' : '' }}">
-    <label for="purchase_order" class="col-md-3 control-label">{{ trans('admin/licenses/form.purchase_order') }}</label>
-    <div class="col-md-3">
-        <input class="form-control" type="text" name="purchase_order" id="purchase_order" value="{{ old('purchase_order', $item->purchase_order) }}" maxlength="191" />
-        {!! $errors->first('purchase_order', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-    </div>
-</div>
-
-@include ('partials.forms.edit.depreciation')
-
-<!-- Maintained -->
-<div class="form-group {{ $errors->has('maintained') ? ' has-error' : '' }}">
-    <div class="col-md-3 control-label"><strong>{{ trans('admin/licenses/form.maintained') }}</strong></div>
-    <div class="col-md-7">
-        <label class="form-control">
-        {{ Form::Checkbox('maintained', '1', old('maintained', $item->maintained),array('aria-label'=>'maintained')) }}
-        {{ trans('general.yes') }}
-        </label>
-    </div>
-</div>
-
-@include ('partials.forms.edit.notes')
 
 @stop
