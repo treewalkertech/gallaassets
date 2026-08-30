@@ -28,6 +28,8 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\PurchaseOrders\PurchaseOrdersController;
 use App\Http\Controllers\PurchaseOrders\PurchaseOrderLinesController;
 use App\Http\Controllers\Items\ItemsController;
+use App\Http\Controllers\Grn\GrnController;
+use App\Http\Controllers\Grn\GrnLinesController;
 use App\Http\Controllers\ViewAssetsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -148,6 +150,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('items', ItemsController::class, [
         'parameters' => ['item' => 'item_id'],
     ]);
+
+    /*
+    * GRN (Goods Receipt Note)
+    */
+    Route::get('grn', [GrnController::class, 'index'])->name('grn.index');
+    Route::get('purchase-orders/{purchase_order_id}/grn/create', [GrnController::class, 'create'])
+        ->name('purchase-orders.grn.create');
+    Route::post('purchase-orders/{purchase_order_id}/grn', [GrnController::class, 'store'])
+        ->name('purchase-orders.grn.store');
+    Route::get('grn/{grn_id}', [GrnController::class, 'show'])->name('grn.show');
+    Route::post('grn/{grn_id}/post', [GrnController::class, 'post'])->name('grn.post');
+    Route::post('grn/{grn_id}/cancel', [GrnController::class, 'cancel'])->name('grn.cancel');
+    Route::post('grn/{grn_id}/lines', [GrnLinesController::class, 'store'])->name('grn.lines.store');
+    Route::delete('grn/{grn_id}/lines/{line_id}', [GrnLinesController::class, 'destroy'])->name('grn.lines.destroy');
 
     /*
     * Depreciations

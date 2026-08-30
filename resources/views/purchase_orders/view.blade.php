@@ -21,6 +21,13 @@
         @endif
     @endcan
 
+    @can('create', \App\Models\Grn::class)
+        @if ($po->canReceiveGrn())
+            <a href="{{ route('purchase-orders.grn.create', $po->id) }}" class="btn btn-success" style="margin-right: 10px;">
+                {{ trans('admin/grn/table.receive_goods') }}</a>
+        @endif
+    @endcan
+
     @can('update', $po)
         <a href="{{ route('purchase-orders.edit', $po->id) }}" class="btn btn-default pull-right">
             {{ trans('admin/purchase_orders/table.update') }}</a>
@@ -42,6 +49,14 @@
                 <span class="hidden-xs hidden-sm">
                     {{ trans('admin/purchase_orders/table.line_items') }}
                     {!! ($po->lines->count() > 0 ) ? '<badge class="badge badge-secondary">'.number_format($po->lines->count()).'</badge>' : '' !!}
+                </span>
+            </a>
+          </li>
+          <li>
+            <a href="#grns" data-toggle="tab">
+                <span class="hidden-xs hidden-sm">
+                    {{ trans('admin/grn/table.goods_receipts') }}
+                    {!! ($po->grns->count() > 0 ) ? '<badge class="badge badge-secondary">'.number_format($po->grns->count()).'</badge>' : '' !!}
                 </span>
             </a>
           </li>
@@ -151,6 +166,33 @@
             @else
               <p class="text-muted">{{ trans('admin/purchase_orders/table.lines_locked_help') }}</p>
             @endif
+          </div><!-- /.tab-pane -->
+
+          <div class="tab-pane" id="grns">
+            <h2 class="box-title">{{ trans('admin/grn/table.goods_receipts') }}</h2>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>{{ trans('admin/grn/table.grn_number') }}</th>
+                  <th>{{ trans('admin/grn/table.status') }}</th>
+                  <th>{{ trans('admin/grn/table.received_by') }}</th>
+                  <th>{{ trans('admin/grn/table.received_date') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @forelse ($po->grns as $poGrn)
+                  <tr>
+                    <td><a href="{{ route('grn.show', $poGrn->id) }}">{{ $poGrn->grn_number ?: '#'.$poGrn->id }}</a></td>
+                    <td>{{ $poGrn->statusLabel() }}</td>
+                    <td>{{ $poGrn->receivedBy?->present()->fullName ?: '—' }}</td>
+                    <td>{{ optional($poGrn->received_date)->format('Y-m-d') ?: '—' }}</td>
+                  </tr>
+                @empty
+                  <tr><td colspan="4">{{ trans('admin/grn/table.no_grns_yet') }}</td></tr>
+                @endforelse
+              </tbody>
+            </table>
           </div><!-- /.tab-pane -->
 
           <div class="tab-pane" id="assets">

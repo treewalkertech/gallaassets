@@ -153,6 +153,21 @@ class PurchaseOrder extends SnipeModel
         return $this->hasMany(PurchaseOrderLine::class);
     }
 
+    public function grns()
+    {
+        return $this->hasMany(Grn::class);
+    }
+
+    /**
+     * Whether this PO can have a new GRN (Goods Receipt Note) raised
+     * against it right now -- only once it's been approved, and only while
+     * it isn't already fully received/closed/cancelled.
+     */
+    public function canReceiveGrn(): bool
+    {
+        return in_array($this->status, [self::STATUS_APPROVED, self::STATUS_PARTIALLY_RECEIVED], true);
+    }
+
     /**
      * Whether this specific PO's line items may still be added, edited, or
      * removed. Once it's out of draft (submitted for approval or beyond),

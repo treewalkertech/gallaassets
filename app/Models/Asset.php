@@ -126,6 +126,7 @@ class Asset extends Depreciable
         'assigned_location' => ['nullable', 'exists:locations,id,deleted_at,NULL'],
         'assigned_asset'    => ['nullable', 'exists:assets,id,deleted_at,NULL'],
         'purchase_order_id' => ['nullable', 'integer', 'exists:purchase_orders,id'],
+        'grn_id'            => ['nullable', 'integer', 'exists:grn,id'],
     ];
 
 
@@ -167,6 +168,7 @@ class Asset extends Depreciable
         'purchase_order_id',
         'last_checkout',
         'rfid',
+        'grn_id',
     ];
 
     use Searchable;
@@ -1963,6 +1965,14 @@ class Asset extends Depreciable
         return $this->belongsTo(
             \App\Models\PurchaseOrder::class,
             'purchase_order_id'
+        );
+    }
+
+    public function grn()
+    {
+        return $this->belongsTo(
+            \App\Models\Grn::class,
+            'grn_id'
         );
     }
 }

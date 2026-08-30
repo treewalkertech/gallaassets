@@ -571,6 +571,39 @@ return [
         ],
     ],
 
+    'GRN' => [
+        [
+            'permission' => 'grn.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.post',
+            'label'      => 'Post ',
+            'note'       => 'Allows a user to post a Goods Receipt Note, which creates the actual Assets/consumable quantity/license seats it covers. Separate from Edit since posting is irreversible.',
+            'display'    => true,
+        ],
+    ],
+
 
     'Manufacturers' => [
         [

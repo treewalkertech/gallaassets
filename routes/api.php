@@ -844,6 +844,40 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], functi
         ]
     ); // end items API routes
 
+    /**
+     * GRN (Goods Receipt Note) API routes
+     */
+    Route::resource(
+        'grn',
+        Api\GrnController::class,
+        [
+            'names' => [
+                'index'   => 'api.grn.index',
+                'show'    => 'api.grn.show',
+                'store'   => 'api.grn.store',
+            ],
+            'except' => ['create', 'edit', 'update', 'destroy'],
+            'parameters' => ['grn' => 'grn_id'],
+        ]
+    );
+
+    Route::post('grn/{grn_id}/post', [Api\GrnController::class, 'post'])->name('api.grn.post');
+    Route::post('grn/{grn_id}/cancel', [Api\GrnController::class, 'cancel'])->name('api.grn.cancel');
+
+    Route::resource(
+        'grn.lines',
+        Api\GrnLinesController::class,
+        [
+            'names' => [
+                'index'   => 'api.grn.lines.index',
+                'store'   => 'api.grn.lines.store',
+                'update'  => 'api.grn.lines.update',
+                'destroy' => 'api.grn.lines.destroy',
+            ],
+            'except' => ['create', 'edit', 'show'],
+            'parameters' => ['lines' => 'line_id'],
+        ]
+    );
 
 
     /**

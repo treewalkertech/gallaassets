@@ -13,6 +13,7 @@ use App\Models\CustomField;
 use App\Models\CustomFieldset;
 use App\Models\Department;
 use App\Models\Depreciation;
+use App\Models\Grn;
 use App\Models\Item;
 use App\Models\License;
 use App\Models\Location;
@@ -33,6 +34,7 @@ use App\Policies\CustomFieldPolicy;
 use App\Policies\CustomFieldsetPolicy;
 use App\Policies\DepartmentPolicy;
 use App\Policies\DepreciationPolicy;
+use App\Policies\GrnPolicy;
 use App\Policies\ItemPolicy;
 use App\Policies\LicensePolicy;
 use App\Policies\LocationPolicy;
@@ -68,6 +70,7 @@ class AuthServiceProvider extends ServiceProvider
         Department::class => DepartmentPolicy::class,
         Depreciation::class => DepreciationPolicy::class,
         Item::class => ItemPolicy::class,
+        Grn::class => GrnPolicy::class,
         License::class => LicensePolicy::class,
         Location::class => LocationPolicy::class,
         PredefinedKit::class => PredefinedKitPolicy::class,
