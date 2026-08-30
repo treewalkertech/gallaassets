@@ -511,6 +511,33 @@ return [
         ],
     ],
 
+    'Items' => [
+        [
+            'permission' => 'items.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+    ],
+
     'Purchase Orders' => [
         [
             'permission' => 'purchase-orders.view',

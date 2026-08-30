@@ -1,0 +1,25 @@
+<?php
+
+return array(
+    'about_items_title' => 'About the Item Master',
+    'about_items_text'  => 'Items are the catalog you raise Purchase Orders against. A Fixed Asset item maps to an Asset Model (one item, many individually-tracked assets); a Consumable item maps to a Consumable (bulk quantity); a License item maps to a License (seats).',
+    'create'            => 'Create Item',
+    'update'            => 'Update Item',
+    'view'              => 'View Item',
+    'items'             => 'Items',
+    'id'                => 'ID',
+    'item_code'         => 'Item Code',
+    'name'              => 'Item Name',
+    'description'       => 'Description',
+    'item_type'         => 'Item Type',
+    'category'          => 'Category',
+    'manufacturer'      => 'Manufacturer',
+    'uom'               => 'Unit of Measure',
+    'asset_model'       => 'Asset Model',
+    'consumable'        => 'Consumable',
+    'license'           => 'License',
+    'default_unit_cost' => 'Default Unit Cost',
+    'reorder_level'     => 'Reorder Level',
+    'is_active'         => 'Active',
+    'notes'             => 'Notes',
+);

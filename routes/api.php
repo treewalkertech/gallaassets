@@ -795,6 +795,35 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], functi
         ]
     );
 
+    /**
+     * Items (Item Master) API routes
+     */
+    Route::group(['prefix' => 'items'], function () {
+        Route::get(
+            'selectlist',
+            [
+                Api\ItemsController::class,
+                'selectlist'
+            ]
+        )->name('api.items.selectlist');
+    });
+
+    Route::resource(
+        'items',
+        Api\ItemsController::class,
+        [
+            'names' => [
+                'index'   => 'api.items.index',
+                'show'    => 'api.items.show',
+                'update'  => 'api.items.update',
+                'store'   => 'api.items.store',
+                'destroy' => 'api.items.destroy',
+            ],
+            'except' => ['create', 'edit'],
+            'parameters' => ['item' => 'item_id'],
+        ]
+    ); // end items API routes
+
 
 
     /**
