@@ -26,6 +26,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StatuslabelsController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\PurchaseOrders\PurchaseOrdersController;
+use App\Http\Controllers\PurchaseOrders\PurchaseOrderLinesController;
 use App\Http\Controllers\Items\ItemsController;
 use App\Http\Controllers\ViewAssetsController;
 use App\Http\Controllers\Auth\LoginController;
@@ -132,6 +133,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('purchase-orders', PurchaseOrdersController::class, [
         'parameters' => ['purchase_order' => 'purchase_order_id'],
     ]);
+    Route::post('purchase-orders/{purchase_order_id}/approve', [PurchaseOrdersController::class, 'approve'])
+        ->name('purchase-orders.approve');
+    Route::post('purchase-orders/{purchase_order_id}/reject', [PurchaseOrdersController::class, 'reject'])
+        ->name('purchase-orders.reject');
+    Route::post('purchase-orders/{purchase_order_id}/lines', [PurchaseOrderLinesController::class, 'store'])
+        ->name('purchase-orders.lines.store');
+    Route::delete('purchase-orders/{purchase_order_id}/lines/{line_id}', [PurchaseOrderLinesController::class, 'destroy'])
+        ->name('purchase-orders.lines.destroy');
 
     /*
     * Items (Item Master)

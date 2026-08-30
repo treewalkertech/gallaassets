@@ -8,6 +8,19 @@
 @stop
 
 @section('header_right')
+    @can('approve', $po)
+        @if ($po->status === \App\Models\PurchaseOrder::STATUS_PENDING_APPROVAL)
+            <form method="POST" action="{{ route('purchase-orders.approve', $po->id) }}" style="display:inline-block; margin-right: 10px;">
+                @csrf
+                <button type="submit" class="btn btn-success">{{ trans('admin/purchase_orders/table.approve') }}</button>
+            </form>
+            <form method="POST" action="{{ route('purchase-orders.reject', $po->id) }}" style="display:inline-block; margin-right: 10px;">
+                @csrf
+                <button type="submit" class="btn btn-danger" onclick="return confirm('{{ trans('admin/purchase_orders/table.reject_confirm') }}')">{{ trans('admin/purchase_orders/table.reject') }}</button>
+            </form>
+        @endif
+    @endcan
+
     @can('update', $po)
         <a href="{{ route('purchase-orders.edit', $po->id) }}" class="btn btn-default pull-right">
             {{ trans('admin/purchase_orders/table.update') }}</a>
@@ -25,6 +38,14 @@
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs hidden-print">
           <li class="active">
+            <a href="#lines" data-toggle="tab">
+                <span class="hidden-xs hidden-sm">
+                    {{ trans('admin/purchase_orders/table.line_items') }}
+                    {!! ($po->lines->count() > 0 ) ? '<badge class="badge badge-secondary">'.number_format($po->lines->count()).'</badge>' : '' !!}
+                </span>
+            </a>
+          </li>
+          <li>
             <a href="#assets" data-toggle="tab">
                 <span class="hidden-lg hidden-md">
                     <x-icon type="assets" class="fa-2x" />
@@ -38,7 +59,101 @@
         </ul>
 
         <div class="tab-content">
-          <div class="tab-pane active" id="assets">
+          <div class="tab-pane active" id="lines">
+            <h2 class="box-title">{{ trans('admin/purchase_orders/table.line_items') }}</h2>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>{{ trans('admin/purchase_orders/table.item') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.description') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.qty_ordered') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.qty_received') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.unit_cost') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.discount_amount') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.tax_amount') }}</th>
+                  <th>{{ trans('admin/purchase_orders/table.line_total') }}</th>
+                  @if ($po->linesAreEditable())
+                    <th>{{ trans('table.actions') }}</th>
+                  @endif
+                </tr>
+              </thead>
+              <tbody>
+                @forelse ($po->lines as $line)
+                  <tr>
+                    <td>{{ $line->item?->name ?: '—' }}</td>
+                    <td>{{ $line->description }}</td>
+                    <td>{{ $line->qty_ordered }}</td>
+                    <td>{{ $line->qty_received }}</td>
+                    <td>{{ number_format((float) $line->unit_cost, 2) }}</td>
+                    <td>{{ number_format((float) $line->discount_amount, 2) }}</td>
+                    <td>{{ number_format((float) $line->tax_amount, 2) }}</td>
+                    <td>{{ number_format((float) $line->line_total, 2) }}</td>
+                    @if ($po->linesAreEditable())
+                      <td>
+                        <form method="POST" action="{{ route('purchase-orders.lines.destroy', ['purchase_order_id' => $po->id, 'line_id' => $line->id]) }}" style="display:inline">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('{{ trans('general.delete_confirm', ['item' => trans('admin/purchase_orders/table.line_items')]) }}')"><x-icon type="delete" /></button>
+                        </form>
+                      </td>
+                    @endif
+                  </tr>
+                @empty
+                  <tr><td colspan="9">{{ trans('admin/purchase_orders/table.no_line_items') }}</td></tr>
+                @endforelse
+              </tbody>
+            </table>
+
+            @if ($po->linesAreEditable())
+              @can('update', $po)
+                <hr>
+                <h4>{{ trans('admin/purchase_orders/table.add_line_item') }}</h4>
+                <form method="POST" action="{{ route('purchase-orders.lines.store', ['purchase_order_id' => $po->id]) }}" class="form-horizontal">
+                  @csrf
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.item') }}</label>
+                    <div class="col-md-4">
+                      <select class="js-data-ajax" data-endpoint="items" data-placeholder="{{ trans('general.select') }}" name="item_id" style="width: 100%" required>
+                        <option value="" role="option">{{ trans('general.select') }}</option>
+                      </select>
+                    </div>
+                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.qty_ordered') }}</label>
+                    <div class="col-md-1">
+                      <input type="number" name="qty_ordered" class="form-control" min="1" value="1" required>
+                    </div>
+                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.unit_cost') }}</label>
+                    <div class="col-md-2">
+                      <input type="number" step="0.01" name="unit_cost" class="form-control" min="0" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.description') }}</label>
+                    <div class="col-md-4">
+                      <input type="text" name="description" class="form-control">
+                    </div>
+                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.discount_amount') }}</label>
+                    <div class="col-md-1">
+                      <input type="number" step="0.01" name="discount_amount" class="form-control" min="0">
+                    </div>
+                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.tax_amount') }}</label>
+                    <div class="col-md-2">
+                      <input type="number" step="0.01" name="tax_amount" class="form-control" min="0">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                      <button type="submit" class="btn btn-primary">{{ trans('admin/purchase_orders/table.add_line_item') }}</button>
+                    </div>
+                  </div>
+                </form>
+              @endcan
+            @else
+              <p class="text-muted">{{ trans('admin/purchase_orders/table.lines_locked_help') }}</p>
+            @endif
+          </div><!-- /.tab-pane -->
+
+          <div class="tab-pane" id="assets">
             <h2 class="box-title">{{ trans('admin/purchase_orders/table.assets') }}</h2>
 
             <p class="text-muted">
@@ -78,7 +193,18 @@
     <div class="col-md-3">
       <ul class="list-unstyled" style="line-height: 25px; padding-bottom: 20px; padding-top: 20px;">
         <li><strong>{{ trans('admin/purchase_orders/table.po_number') }}:</strong> {{ $po->custom_po_id ?: '—' }}</li>
-        <li><strong>{{ trans('admin/purchase_orders/table.status') }}:</strong> {{ $po->status_name ?: '—' }}</li>
+        <li><strong>{{ trans('admin/purchase_orders/table.status') }}:</strong> {{ $po->statusLabel() }}</li>
+        <li>
+            <strong>{{ trans('admin/purchase_orders/table.approver') }}:</strong>
+            @if ($po->approver)
+                <a href="{{ route('users.show', $po->approver->id) }}">{{ $po->approver->present()->fullName }}</a>
+            @else
+                —
+            @endif
+            @if ($po->approved_at)
+                <br><span class="text-muted">{{ trans('admin/purchase_orders/table.'.($po->approval_status === 'rejected' ? 'rejected_on' : 'approved_on')) }} {{ $po->approved_at->format('Y-m-d') }}</span>
+            @endif
+        </li>
         <li>
             <strong>{{ trans('admin/purchase_orders/table.supplier') }}:</strong>
             @if ($po->vendor)

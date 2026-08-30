@@ -97,12 +97,13 @@ class ItemsController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $item = Item::findOrFail($id);
+        $item = Item::withCount('purchaseOrderLines')->findOrFail($id);
         $this->authorize('delete', $item);
 
-        // Once purchase_order_lines exists (Phase 3), block deletion of an
-        // item that's already been ordered, the same way Suppliers blocks
-        // deletion while assets/licenses still reference it.
+        if ($item->purchase_order_lines_count > 0) {
+            return response()->json(Helper::formatStandardApiResponse('error', null, 'This item is referenced on '.$item->purchase_order_lines_count.' purchase order line(s) and cannot be deleted.'));
+        }
+
         $item->delete();
 
         return response()->json(Helper::formatStandardApiResponse('success', null, 'Item deleted successfully.'));

@@ -45,7 +45,7 @@
             <th data-sortable="true" data-searchable="true" data-field="po_name">{{ trans('admin/purchase_orders/table.po_name') }}</th>
             <th data-sortable="true" data-searchable="true" data-field="vendor">{{ trans('admin/purchase_orders/table.supplier') }}</th>
             <th data-sortable="true" data-searchable="true" data-field="requested_by">{{ trans('admin/purchase_orders/table.requested_by') }}</th>
-            <th data-sortable="true" data-field="status">{{ trans('admin/purchase_orders/table.status') }}</th>
+            <th data-sortable="true" data-field="status_label">{{ trans('admin/purchase_orders/table.status') }}</th>
             <th data-sortable="true" data-field="total_price">{{ trans('admin/purchase_orders/table.total_price') }}</th>
             <th data-sortable="true" data-field="created_date">{{ trans('admin/purchase_orders/table.created_date') }}</th>
             <th data-switchable="false" data-formatter="purchaseOrdersActionsFormatter" data-searchable="false" data-sortable="false" data-field="actions">{{ trans('table.actions') }}</th>

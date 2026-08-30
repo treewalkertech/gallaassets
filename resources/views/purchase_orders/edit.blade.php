@@ -34,29 +34,35 @@
 
 @include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/purchase_orders/table.owner'), 'fieldname' => 'owner_id'])
 
+@include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/purchase_orders/table.approver'), 'fieldname' => 'approver_id'])
+
+@if (!isset($item->id) || $item->linesAreEditable())
 <!-- Status -->
-<div class="form-group {{ $errors->has('status_name') ? ' has-error' : '' }}">
-    {{ Form::label('status_name', trans('admin/purchase_orders/table.status'), array('class' => 'col-md-3 control-label')) }}
+<div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}">
+    {{ Form::label('status', trans('admin/purchase_orders/table.status'), array('class' => 'col-md-3 control-label')) }}
     <div class="col-md-7">
-        {{ Form::select('status_name', [
-            'draft' => 'Draft',
-            'pending_approval' => 'Pending Approval',
-            'approved' => 'Approved',
-            'partially_received' => 'Partially Received',
-            'received' => 'Received',
-            'closed' => 'Closed',
-            'cancelled' => 'Cancelled',
-            'rejected' => 'Rejected',
-        ], old('status_name', $item->status_name ?: 'draft'), array('class' => 'form-control')) }}
-        {!! $errors->first('status_name', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+        {{ Form::select('status', \App\Models\PurchaseOrder::CREATOR_SELECTABLE_STATUSES, old('status', $item->status ?: \App\Models\PurchaseOrder::STATUS_DRAFT), array('class' => 'form-control')) }}
+        <p class="help-block">{{ trans('admin/purchase_orders/table.status_help') }}</p>
+        {!! $errors->first('status', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>
+@else
+<!-- Status (read-only once past Draft) -->
+<div class="form-group">
+    {{ Form::label('status_display', trans('admin/purchase_orders/table.status'), array('class' => 'col-md-3 control-label')) }}
+    <div class="col-md-7">
+        <p class="form-control-static">{{ $item->statusLabel() }}</p>
+        <p class="help-block">{{ trans('admin/purchase_orders/table.status_locked_help') }}</p>
+    </div>
+</div>
+@endif
 
 <!-- Total Price -->
 <div class="form-group {{ $errors->has('total_price') ? ' has-error' : '' }}">
     {{ Form::label('total_price', trans('admin/purchase_orders/table.total_price'), array('class' => 'col-md-3 control-label')) }}
     <div class="col-md-7">
-        {{ Form::text('total_price', old('total_price', $item->total_price), array('class' => 'form-control')) }}
+        {{ Form::text('total_price', old('total_price', $item->total_price), array('class' => 'form-control', 'readonly' => isset($item->id) && $item->lines()->exists())) }}
+        <p class="help-block">{{ trans('admin/purchase_orders/table.total_price_help') }}</p>
         {!! $errors->first('total_price', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
     </div>
 </div>

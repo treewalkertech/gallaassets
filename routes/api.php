@@ -795,6 +795,26 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], functi
         ]
     );
 
+    Route::post('purchase-orders/{purchase_order_id}/approve', [Api\PurchaseOrdersController::class, 'approve'])
+        ->name('api.purchase-orders.approve');
+    Route::post('purchase-orders/{purchase_order_id}/reject', [Api\PurchaseOrdersController::class, 'reject'])
+        ->name('api.purchase-orders.reject');
+
+    Route::resource(
+        'purchase-orders.lines',
+        Api\PurchaseOrderLinesController::class,
+        [
+            'names' => [
+                'index'   => 'api.purchase-orders.lines.index',
+                'store'   => 'api.purchase-orders.lines.store',
+                'update'  => 'api.purchase-orders.lines.update',
+                'destroy' => 'api.purchase-orders.lines.destroy',
+            ],
+            'except' => ['create', 'edit', 'show'],
+            'parameters' => ['lines' => 'line_id'],
+        ]
+    );
+
     /**
      * Items (Item Master) API routes
      */

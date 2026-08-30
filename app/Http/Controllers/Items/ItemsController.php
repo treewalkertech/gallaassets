@@ -70,11 +70,15 @@ class ItemsController extends Controller
 
     public function destroy($itemId): RedirectResponse
     {
-        if (is_null($item = Item::find($itemId))) {
+        if (is_null($item = Item::withCount('purchaseOrderLines')->find($itemId))) {
             return redirect()->route('items.index')->with('error', 'Item does not exist.');
         }
 
         $this->authorize('delete', $item);
+
+        if ($item->purchase_order_lines_count > 0) {
+            return redirect()->route('items.index')->with('error', 'This item is referenced on '.$item->purchase_order_lines_count.' purchase order line(s) and cannot be deleted.');
+        }
 
         $item->delete();
 

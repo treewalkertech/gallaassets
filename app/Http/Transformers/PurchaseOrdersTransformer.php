@@ -25,10 +25,15 @@ class PurchaseOrdersTransformer
             'custom_po_id' => $po->custom_po_id,
             'po_name' => $po->po_name,
             'total_price' => $po->total_price,
-            'status' => $po->status_name,
+            'status' => $po->status,
+            'status_label' => $po->statusLabel(),
             'vendor' => $po->vendor?->name,
             'requested_by' => $po->requestedBy?->first_name,
+            'approver' => $po->approver?->present()->fullName ?? null,
+            'approval_status' => $po->approval_status,
+            'approved_at' => $po->approved_at,
             'created_date' => $po->created_date,
+            'lines_count' => $po->relationLoaded('lines') ? $po->lines->count() : null,
         ];
     }
 }

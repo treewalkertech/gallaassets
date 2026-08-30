@@ -14,11 +14,11 @@ class PurchaseOrdersController extends Controller
     {
         $this->authorize('view', PurchaseOrder::class);
 
-        $pos = PurchaseOrder::with('vendor', 'requestedBy', 'owner');
+        $pos = PurchaseOrder::with('vendor', 'requestedBy', 'owner', 'approver');
 
         // Filters (same pattern as licenses)
         if ($request->filled('status')) {
-            $pos->where('status_name', $request->status);
+            $pos->where('status', $request->status);
         }
 
         if ($request->filled('vendor_id')) {
@@ -50,6 +50,14 @@ class PurchaseOrdersController extends Controller
         $po = new PurchaseOrder();
         $po->fill($request->all());
         $po->created_by = auth()->id();
+        $po->company_id = $po->company_id ?: auth()->user()->company_id;
+
+        if (empty($po->custom_po_id)) {
+            $po->custom_po_id = PurchaseOrder::generatePoNumber();
+        }
+        if (empty($po->status)) {
+            $po->status = PurchaseOrder::STATUS_DRAFT;
+        }
 
         if ($po->save()) {
             return response()->json(
@@ -64,7 +72,7 @@ class PurchaseOrdersController extends Controller
 
     public function show($id): JsonResponse | array
     {
-        $po = PurchaseOrder::with('vendor', 'requestedBy', 'owner', 'assets')
+        $po = PurchaseOrder::with('vendor', 'requestedBy', 'owner', 'approver', 'assets', 'lines.item')
             ->findOrFail($id);
 
         $this->authorize('view', $po);
@@ -77,6 +85,12 @@ class PurchaseOrdersController extends Controller
     {
         $po = PurchaseOrder::findOrFail($id);
         $this->authorize('update', $po);
+
+        if (!$po->linesAreEditable() && $request->filled('status') && $request->input('status') !== $po->status) {
+            return response()->json(
+                Helper::formatStandardApiResponse('error', null, 'This PO is no longer in Draft, so its status can only be changed via approve/reject.')
+            );
+        }
 
         $po->fill($request->all());
 
@@ -100,6 +114,50 @@ class PurchaseOrdersController extends Controller
 
         return response()->json(
             Helper::formatStandardApiResponse('success', null, 'PO deleted')
+        );
+    }
+
+    public function approve($id): JsonResponse
+    {
+        $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('approve', $po);
+
+        if ($po->status !== PurchaseOrder::STATUS_PENDING_APPROVAL) {
+            return response()->json(
+                Helper::formatStandardApiResponse('error', null, 'Only a PO that is Pending Approval can be approved.')
+            );
+        }
+
+        $po->status = PurchaseOrder::STATUS_APPROVED;
+        $po->approval_status = 'approved';
+        $po->approved_at = now();
+        $po->approver_id = $po->approver_id ?: auth()->id();
+        $po->save();
+
+        return response()->json(
+            Helper::formatStandardApiResponse('success', $po, 'PO approved')
+        );
+    }
+
+    public function reject($id): JsonResponse
+    {
+        $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('reject', $po);
+
+        if ($po->status !== PurchaseOrder::STATUS_PENDING_APPROVAL) {
+            return response()->json(
+                Helper::formatStandardApiResponse('error', null, 'Only a PO that is Pending Approval can be rejected.')
+            );
+        }
+
+        $po->status = PurchaseOrder::STATUS_REJECTED;
+        $po->approval_status = 'rejected';
+        $po->approved_at = now();
+        $po->approver_id = $po->approver_id ?: auth()->id();
+        $po->save();
+
+        return response()->json(
+            Helper::formatStandardApiResponse('success', $po, 'PO rejected')
         );
     }
 }

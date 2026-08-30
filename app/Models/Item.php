@@ -113,7 +113,10 @@ class Item extends SnipeModel
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    // Phase 3 adds: public function purchaseOrderLines() { return $this->hasMany(PurchaseOrderLine::class); }
+    public function purchaseOrderLines()
+    {
+        return $this->hasMany(PurchaseOrderLine::class);
+    }
 
     /**
      * The type-specific record this item fulfils into, whichever of

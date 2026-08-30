@@ -563,6 +563,12 @@ return [
             'note'       => '',
             'display'    => true,
         ],
+        [
+            'permission' => 'purchase-orders.approve',
+            'label'      => 'Approve/Reject ',
+            'note'       => 'Allows a user to approve or reject Purchase Orders assigned to them as approver.',
+            'display'    => true,
+        ],
     ],
 
 
