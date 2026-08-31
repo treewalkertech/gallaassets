@@ -66,7 +66,7 @@ class GrnController extends Controller
 
     public function show($grn_id)
     {
-        $grn = Grn::with('purchaseOrder.vendor', 'location', 'defaultStatus', 'receivedBy', 'lines.item', 'lines.purchaseOrderLine', 'assets')
+        $grn = Grn::with('purchaseOrder.vendor', 'location', 'defaultStatus', 'receivedBy', 'lines.item', 'lines.purchaseOrderLine', 'assets.model.category', 'assets.assetstatus')
             ->findOrFail($grn_id);
 
         $this->authorize('view', $grn);

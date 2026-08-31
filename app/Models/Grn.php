@@ -130,6 +130,19 @@ class Grn extends SnipeModel
     }
 
     /**
+     * Builds the Asset Name for one unit created by postReceipt(), per the
+     * requested convention: PO#<PONO>-<MODEL>-<ASSET_TAG>[<SEQNO>].
+     * $seqNo is 1-based and counts units within this one GRN line only.
+     */
+    protected function generateAssetName(PurchaseOrder $po, Item $item, string $assetTag, int $seqNo): string
+    {
+        $poNumber = $po->custom_po_id ?: ('#'.$po->id);
+        $modelName = $item->assetModel?->name ?: $item->name;
+
+        return "PO#{$poNumber}-{$modelName}-{$assetTag}[{$seqNo}]";
+    }
+
+    /**
      * The status id newly created Assets should get. Uses whatever the
      * receiver picked (default_status_id); if they left it blank, falls
      * back to the first deployable status label on file. Returns null if
@@ -173,7 +186,7 @@ class Grn extends SnipeModel
         DB::transaction(function () use ($statusId) {
             $po = $this->purchaseOrder;
 
-            foreach ($this->lines()->with('item', 'purchaseOrderLine')->get() as $line) {
+            foreach ($this->lines()->with('item.assetModel', 'purchaseOrderLine')->get() as $line) {
                 $item = $line->item;
                 $poLine = $line->purchaseOrderLine;
                 $unitCost = $line->unit_cost ?? $poLine->unit_cost;
@@ -186,6 +199,11 @@ class Grn extends SnipeModel
                         $asset->model_id = $item->asset_model_id;
                         $asset->status_id = $statusId;
                         $asset->asset_tag = Asset::autoincrement_asset();
+                        // Requested naming convention: PO#<PONO>-<MODEL>-<ASSET_TAG>[<SEQNO>],
+                        // where SEQNO is this unit's 1-based position among the
+                        // units received on *this* GRN line (not a global
+                        // counter across the whole GRN or PO).
+                        $asset->name = $this->generateAssetName($po, $item, $asset->asset_tag, $i + 1);
                         $asset->serial = $serials[$i] ?? null;
                         $asset->purchase_cost = $unitCost;
                         // $this->received_date is cast to a Carbon instance

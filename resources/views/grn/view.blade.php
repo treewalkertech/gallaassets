@@ -149,28 +149,43 @@
           <div class="tab-pane" id="assets">
             <h2 class="box-title">{{ trans('admin/grn/table.assets_created') }}</h2>
 
-            <div class="table table-responsive">
-              <table
-                      data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
-                      data-cookie-id-table="grnAssetsTable"
-                      data-pagination="true"
-                      data-id-table="grnAssetsTable"
-                      data-search="true"
-                      data-side-pagination="server"
-                      data-show-columns="true"
-                      data-show-fullscreen="true"
-                      data-show-export="true"
-                      data-show-refresh="true"
-                      data-sort-order="asc"
-                      id="grnAssetsTable"
-                      class="table table-striped snipe-table"
-                      data-url="{{ route('api.assets.index', ['grn_id' => $grn->id]) }}"
-                      data-export-options='{
-                              "fileName": "export-grn-{{ $grn->grn_number ?: $grn->id }}-assets-{{ date('Y-m-d') }}",
-                              "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
-                              }'>
-              </table>
-            </div><!-- /.table-responsive -->
+            {{-- This tab used to embed the full Assets-index table
+                 (AssetPresenter::dataTableLayout(), ~20 columns: RFID,
+                 barcode, requestable, checked-out-to, etc.) via the
+                 general-purpose Assets API. Nearly all of that is either
+                 blank or irrelevant right after a receipt, and it forced
+                 a wide horizontally-scrolling table for what's usually a
+                 handful of rows. Swapped for a small, purpose-built table
+                 -- same plain <table> style as the Line Items tab above --
+                 showing only what's useful to confirm right after posting:
+                 the name, tag, model/category, serial, and status of each
+                 unit this GRN just created. --}}
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>{{ trans('admin/hardware/form.name') }}</th>
+                  <th>{{ trans('admin/hardware/table.asset_tag') }}</th>
+                  <th>{{ trans('admin/hardware/form.model') }}</th>
+                  <th>{{ trans('general.category') }}</th>
+                  <th>{{ trans('admin/hardware/form.serial') }}</th>
+                  <th>{{ trans('admin/hardware/table.status') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @forelse ($grn->assets as $asset)
+                  <tr>
+                    <td><a href="{{ route('hardware.show', ['hardware' => $asset->id]) }}">{{ $asset->name ?: $asset->asset_tag }}</a></td>
+                    <td>{{ $asset->asset_tag }}</td>
+                    <td>{{ $asset->model?->name ?: '—' }}</td>
+                    <td>{{ $asset->model?->category?->name ?: '—' }}</td>
+                    <td>{{ $asset->serial ?: '—' }}</td>
+                    <td>{{ $asset->assetstatus?->name ?: '—' }}</td>
+                  </tr>
+                @empty
+                  <tr><td colspan="6">{{ trans('admin/grn/table.no_line_items') }}</td></tr>
+                @endforelse
+              </tbody>
+            </table>
           </div><!-- /.tab-pane -->
           @endif
         </div>
