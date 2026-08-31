@@ -92,6 +92,31 @@ class PurchaseOrdersController extends Controller
     }
 
     /**
+     * Move a Draft PO to Pending Approval. This was previously only reachable
+     * by opening the Edit form and changing the Status dropdown (which still
+     * works) -- this is a one-click shortcut from the PO's own page, since
+     * "how do I get this to my approver" was reported as hard to find.
+     */
+    public function submit($id): RedirectResponse
+    {
+        $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('update', $po);
+
+        if ($po->status !== PurchaseOrder::STATUS_DRAFT && $po->status !== null) {
+            return back()->with('error', 'Only a Draft PO can be submitted for approval.');
+        }
+
+        if (!$po->lines()->exists()) {
+            return back()->with('error', 'Add at least one line item before submitting this PO for approval.');
+        }
+
+        $po->status = PurchaseOrder::STATUS_PENDING_APPROVAL;
+        $po->save();
+
+        return back()->with('success', 'Purchase Order submitted for approval.');
+    }
+
+    /**
      * Approve this PO. Only reachable while it's pending_approval, and only
      * by its designated approver (or an admin) -- see PurchaseOrderPolicy.
      */

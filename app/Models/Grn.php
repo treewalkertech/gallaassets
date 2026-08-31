@@ -192,6 +192,7 @@ class Grn extends SnipeModel
                         $asset->supplier_id = $po->supplier_id;
                         $asset->purchase_order_id = $po->id;
                         $asset->grn_id = $this->id;
+                        $asset->item_id = $item->id;
                         $asset->company_id = $po->company_id;
                         $asset->rtd_location_id = $this->location_id;
 

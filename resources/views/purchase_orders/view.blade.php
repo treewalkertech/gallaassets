@@ -8,6 +8,15 @@
 @stop
 
 @section('header_right')
+    @can('update', $po)
+        @if ($po->status === \App\Models\PurchaseOrder::STATUS_DRAFT || $po->status === null)
+            <form method="POST" action="{{ route('purchase-orders.submit', $po->id) }}" style="display:inline-block; margin-right: 10px;">
+                @csrf
+                <button type="submit" class="btn btn-success" onclick="return confirm('{{ trans('admin/purchase_orders/table.submit_confirm') }}')">{{ trans('admin/purchase_orders/table.submit_for_approval') }}</button>
+            </form>
+        @endif
+    @endcan
+
     @can('approve', $po)
         @if ($po->status === \App\Models\PurchaseOrder::STATUS_PENDING_APPROVAL)
             <form method="POST" action="{{ route('purchase-orders.approve', $po->id) }}" style="display:inline-block; margin-right: 10px;">
@@ -41,6 +50,12 @@
 
   <div class="row">
     <div class="col-md-9">
+
+      @if ($po->status === \App\Models\PurchaseOrder::STATUS_DRAFT || $po->status === null)
+        <p class="text-muted">{{ trans('admin/purchase_orders/table.draft_help') }}</p>
+      @elseif ($po->status === \App\Models\PurchaseOrder::STATUS_PENDING_APPROVAL)
+        <p class="text-muted">{{ trans('admin/purchase_orders/table.pending_approval_help', ['approver' => $po->approver?->present()->fullName ?: 'an approver']) }}</p>
+      @endif
 
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs hidden-print">
@@ -124,35 +139,37 @@
               @can('update', $po)
                 <hr>
                 <h4>{{ trans('admin/purchase_orders/table.add_line_item') }}</h4>
-                <form method="POST" action="{{ route('purchase-orders.lines.store', ['purchase_order_id' => $po->id]) }}" class="form-horizontal">
+                <form method="POST" action="{{ route('purchase-orders.lines.store', ['purchase_order_id' => $po->id]) }}" class="form-horizontal add-line-item-form">
                   @csrf
                   <div class="form-group">
                     <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.item') }}</label>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                       <select class="js-data-ajax" data-endpoint="items" data-placeholder="{{ trans('general.select') }}" name="item_id" style="width: 100%" required>
                         <option value="" role="option">{{ trans('general.select') }}</option>
                       </select>
                     </div>
-                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.qty_ordered') }}</label>
-                    <div class="col-md-1">
+                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.qty_ordered') }}</label>
+                    <div class="col-md-2">
                       <input type="number" name="qty_ordered" class="form-control" min="1" value="1" required>
                     </div>
-                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.unit_cost') }}</label>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.description') }}</label>
+                    <div class="col-md-6">
+                      <input type="text" name="description" class="form-control">
+                    </div>
+                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.unit_cost') }}</label>
                     <div class="col-md-2">
                       <input type="number" step="0.01" name="unit_cost" class="form-control" min="0" required>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-md-2 control-label">{{ trans('admin/purchase_orders/table.description') }}</label>
-                    <div class="col-md-4">
-                      <input type="text" name="description" class="form-control">
-                    </div>
-                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.discount_amount') }}</label>
-                    <div class="col-md-1">
+                    <div class="col-md-offset-2 col-md-2">
+                      <label class="control-label">{{ trans('admin/purchase_orders/table.discount_amount') }}</label>
                       <input type="number" step="0.01" name="discount_amount" class="form-control" min="0">
                     </div>
-                    <label class="col-md-1 control-label">{{ trans('admin/purchase_orders/table.tax_amount') }}</label>
                     <div class="col-md-2">
+                      <label class="control-label">{{ trans('admin/purchase_orders/table.tax_amount') }}</label>
                       <input type="number" step="0.01" name="tax_amount" class="form-control" min="0">
                     </div>
                   </div>
@@ -162,6 +179,21 @@
                     </div>
                   </div>
                 </form>
+
+                {{-- The narrow columns these number fields used to sit in (col-md-1)
+                     left barely enough room to see a typed value past the browser's
+                     native up/down spinner -- widened above, and this drops the
+                     spinner entirely so the full number is always visible. --}}
+                <style nonce="{{ csrf_token() }}">
+                    .add-line-item-form input[type="number"] {
+                        -moz-appearance: textfield;
+                    }
+                    .add-line-item-form input[type="number"]::-webkit-outer-spin-button,
+                    .add-line-item-form input[type="number"]::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                </style>
               @endcan
             @else
               <p class="text-muted">{{ trans('admin/purchase_orders/table.lines_locked_help') }}</p>

@@ -127,6 +127,7 @@ class Asset extends Depreciable
         'assigned_asset'    => ['nullable', 'exists:assets,id,deleted_at,NULL'],
         'purchase_order_id' => ['nullable', 'integer', 'exists:purchase_orders,id'],
         'grn_id'            => ['nullable', 'integer', 'exists:grn,id'],
+        'item_id'           => ['nullable', 'integer', 'exists:items,id'],
     ];
 
 
@@ -169,6 +170,7 @@ class Asset extends Depreciable
         'last_checkout',
         'rfid',
         'grn_id',
+        'item_id',
     ];
 
     use Searchable;
@@ -1973,6 +1975,19 @@ class Asset extends Depreciable
         return $this->belongsTo(
             \App\Models\Grn::class,
             'grn_id'
+        );
+    }
+
+    /**
+     * The Item Master catalog row this asset was received against, set by
+     * Grn::postReceipt() for every fixed_asset-type unit it creates. Not
+     * set for assets created any other way (manual create, SDP sync, etc).
+     */
+    public function item()
+    {
+        return $this->belongsTo(
+            \App\Models\Item::class,
+            'item_id'
         );
     }
 }

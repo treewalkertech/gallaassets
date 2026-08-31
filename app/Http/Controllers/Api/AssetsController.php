@@ -327,6 +327,10 @@ class AssetsController extends Controller
             $assets->where('assets.grn_id', '=', $request->input('grn_id'));
         }
 
+        if ($request->filled('item_id')) {
+            $assets->where('assets.item_id', '=', $request->input('item_id'));
+        }
+
         if ($request->filled('asset_eol_date')) {
             $assets->where('assets.asset_eol_date', '=', $request->input('asset_eol_date'));
         }

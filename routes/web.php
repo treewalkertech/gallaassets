@@ -135,6 +135,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('purchase-orders', PurchaseOrdersController::class, [
         'parameters' => ['purchase_order' => 'purchase_order_id'],
     ]);
+    Route::post('purchase-orders/{purchase_order_id}/submit', [PurchaseOrdersController::class, 'submit'])
+        ->name('purchase-orders.submit');
     Route::post('purchase-orders/{purchase_order_id}/approve', [PurchaseOrdersController::class, 'approve'])
         ->name('purchase-orders.approve');
     Route::post('purchase-orders/{purchase_order_id}/reject', [PurchaseOrdersController::class, 'reject'])

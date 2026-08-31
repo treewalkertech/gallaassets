@@ -81,4 +81,46 @@
     </div>
   </div>
 
+  @if ($item->item_type === \App\Models\Item::TYPE_FIXED_ASSET)
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box box-default">
+          <div class="box-body">
+            <h2 class="box-title">{{ trans('admin/items/table.assets') }}</h2>
+            <p class="text-muted">{{ trans('admin/items/table.assets_help') }}</p>
+
+            <div class="table table-responsive">
+              <table
+                      data-columns="{{ \App\Presenters\AssetPresenter::dataTableLayout() }}"
+                      data-cookie-id-table="itemAssetsTable"
+                      data-pagination="true"
+                      data-id-table="itemAssetsTable"
+                      data-search="true"
+                      data-side-pagination="server"
+                      data-show-columns="true"
+                      data-show-fullscreen="true"
+                      data-show-export="true"
+                      data-show-refresh="true"
+                      data-sort-order="asc"
+                      id="itemAssetsTable"
+                      class="table table-striped snipe-table"
+                      data-url="{{ route('api.assets.index', ['item_id' => $item->id]) }}"
+                      data-export-options='{
+                              "fileName": "export-item-{{ $item->item_code ?: $item->id }}-assets-{{ date('Y-m-d') }}",
+                              "ignoreColumn": ["actions","image","change","checkbox","checkincheckout","icon"]
+                              }'>
+              </table>
+            </div><!-- /.table-responsive -->
+          </div>
+        </div>
+      </div>
+    </div>
+  @endif
+
+@stop
+
+@section('moar_scripts')
+  @if ($item->item_type === \App\Models\Item::TYPE_FIXED_ASSET)
+    @include ('partials.bootstrap-table', ['search' => true])
+  @endif
 @stop

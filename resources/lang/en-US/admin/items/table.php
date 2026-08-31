@@ -22,4 +22,6 @@ return array(
     'reorder_level'     => 'Reorder Level',
     'is_active'         => 'Active',
     'notes'             => 'Notes',
+    'assets'            => 'Assets',
+    'assets_help'       => 'Individual Assets created against this Item -- one row per unit, from every GRN posted against a Purchase Order line for this Item.',
 );

@@ -33,6 +33,10 @@ class ItemsController extends Controller
         $item->fill($request->all());
         $item->created_by = auth()->id();
 
+        if (empty($item->item_code)) {
+            $item->item_code = Item::generateItemCode();
+        }
+
         if ($item->save()) {
             return redirect()->route('items.index')->with('success', 'Item created successfully.');
         }

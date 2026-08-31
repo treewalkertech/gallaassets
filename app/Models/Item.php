@@ -119,6 +119,16 @@ class Item extends SnipeModel
     }
 
     /**
+     * Individual Assets a GRN has created against this Item (fixed_asset
+     * items only -- see Grn::postReceipt(), which is the only place
+     * assets.item_id is ever set).
+     */
+    public function assets()
+    {
+        return $this->hasMany(Asset::class, 'item_id');
+    }
+
+    /**
      * The type-specific record this item fulfils into, whichever of
      * assetModel/consumable/license applies to its item_type.
      */
@@ -135,5 +145,27 @@ class Item extends SnipeModel
     public function typeLabel(): string
     {
         return self::ITEM_TYPES[$this->item_type] ?? $this->item_type;
+    }
+
+    /**
+     * A simple per-year sequential item code (ITM-2026-00001, ...), used
+     * when the create form's item_code field is left blank. Same
+     * non-concurrency-safe caveat as PurchaseOrder::generatePoNumber() /
+     * Grn::generateGrnNumber() -- fine for one-creator-at-a-time use.
+     */
+    public static function generateItemCode(): string
+    {
+        $prefix = 'ITM-'.now()->format('Y').'-';
+        $last = self::withTrashed()
+            ->where('item_code', 'LIKE', $prefix.'%')
+            ->orderByDesc('item_code')
+            ->value('item_code');
+
+        $next = 1;
+        if ($last) {
+            $next = ((int) substr($last, strlen($prefix))) + 1;
+        }
+
+        return $prefix.str_pad((string) $next, 5, '0', STR_PAD_LEFT);
     }
 }
