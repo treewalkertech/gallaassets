@@ -60,4 +60,11 @@
 
 @section('moar_scripts')
 @include ('partials.bootstrap-table', ['exportFile' => 'purchase-orders-export', 'search' => true])
+
+  {{-- See items/index.blade.php for why these are registered here rather
+       than in the shared partials.bootstrap-table 'formatters' list. --}}
+  <script nonce="{{ csrf_token() }}">
+      window.purchaseOrdersLinkFormatter = genericRowLinkFormatter('purchase-orders');
+      window.purchaseOrdersActionsFormatter = genericActionsFormatter('purchase-orders');
+  </script>
 @stop

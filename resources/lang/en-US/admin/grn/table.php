@@ -41,4 +41,6 @@ return array(
     'receive_goods'       => 'Receive Goods (GRN)',
     'goods_receipts'      => 'Goods Receipts',
     'no_grns_yet'         => 'No Goods Receipt Notes yet.',
+    'start_from_po'       => 'A GRN always belongs to a Purchase Order. To create one, open an approved Purchase Order and use its "Receive Goods (GRN)" button.',
+    'browse_pos'          => 'Browse Purchase Orders',
 );

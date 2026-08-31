@@ -44,8 +44,8 @@
             <th data-sortable="true" data-field="item_code" data-formatter="itemsLinkFormatter">{{ trans('admin/items/table.item_code') }}</th>
             <th data-sortable="true" data-searchable="true" data-field="name" data-formatter="itemsLinkFormatter">{{ trans('admin/items/table.name') }}</th>
             <th data-sortable="true" data-field="item_type_label">{{ trans('admin/items/table.item_type') }}</th>
-            <th data-sortable="true" data-searchable="true" data-field="category">{{ trans('admin/items/table.category') }}</th>
-            <th data-sortable="true" data-searchable="true" data-field="manufacturer">{{ trans('admin/items/table.manufacturer') }}</th>
+            <th data-sortable="true" data-searchable="true" data-field="category" data-formatter="categoriesLinkObjFormatter">{{ trans('admin/items/table.category') }}</th>
+            <th data-sortable="true" data-searchable="true" data-field="manufacturer" data-formatter="manufacturersLinkObjFormatter">{{ trans('admin/items/table.manufacturer') }}</th>
             <th data-sortable="true" data-field="default_unit_cost">{{ trans('admin/items/table.default_unit_cost') }}</th>
             <th data-sortable="true" data-field="is_active">{{ trans('admin/items/table.is_active') }}</th>
             <th data-switchable="false" data-formatter="itemsActionsFormatter" data-searchable="false" data-sortable="false" data-field="actions">{{ trans('table.actions') }}</th>
@@ -60,4 +60,15 @@
 
 @section('moar_scripts')
 @include ('partials.bootstrap-table', ['exportFile' => 'items-export', 'search' => true])
+
+  {{-- partials.bootstrap-table only auto-generates {module}LinkFormatter /
+       {module}ActionsFormatter globals for the modules listed in its own
+       'formatters' array. 'items' isn't in that shared list (it's a Snipe-IT
+       core file used by ~19 other modules), so we register the two
+       formatters this table's data-formatter attributes reference directly,
+       using the same factory functions the shared file itself uses. --}}
+  <script nonce="{{ csrf_token() }}">
+      window.itemsLinkFormatter = genericRowLinkFormatter('items');
+      window.itemsActionsFormatter = genericActionsFormatter('items');
+  </script>
 @stop

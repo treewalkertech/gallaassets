@@ -2,6 +2,7 @@
 namespace App\Http\Transformers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class PurchaseOrdersTransformer
 {
@@ -20,7 +21,7 @@ class PurchaseOrdersTransformer
 
     private function format($po): array
     {
-        return [
+        $array = [
             'id' => $po->id,
             'custom_po_id' => $po->custom_po_id,
             'po_name' => $po->po_name,
@@ -35,5 +36,12 @@ class PurchaseOrdersTransformer
             'created_date' => $po->created_date,
             'lines_count' => $po->relationLoaded('lines') ? $po->lines->count() : null,
         ];
+
+        $array['available_actions'] = [
+            'update' => Gate::allows('update', $po),
+            'delete' => Gate::allows('delete', $po),
+        ];
+
+        return $array;
     }
 }

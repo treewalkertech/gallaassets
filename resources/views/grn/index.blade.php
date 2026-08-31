@@ -6,11 +6,20 @@
 @parent
 @stop
 
+@section('header_right')
+  {{-- A GRN can't be created standalone -- it always belongs to a specific
+       Purchase Order (see the "Receive Goods (GRN)" button on a PO's own
+       page). This just gets people to that starting point instead of
+       leaving them on an index page with no way forward. --}}
+  <a href="{{ route('purchase-orders.index') }}" class="btn btn-primary pull-right">{{ trans('admin/grn/table.browse_pos') }}</a>
+@stop
+
 {{-- Page content --}}
 @section('content')
 
 <div class="row">
   <div class="col-md-12">
+    <p class="text-muted">{{ trans('admin/grn/table.start_from_po') }}</p>
     <div class="box box-default">
       <div class="box-body">
         <table
@@ -51,4 +60,10 @@
 
 @section('moar_scripts')
 @include ('partials.bootstrap-table', ['exportFile' => 'grn-export', 'search' => true])
+
+  {{-- See items/index.blade.php for why this is registered here rather
+       than in the shared partials.bootstrap-table 'formatters' list. --}}
+  <script nonce="{{ csrf_token() }}">
+      window.grnLinkFormatter = genericRowLinkFormatter('grn');
+  </script>
 @stop

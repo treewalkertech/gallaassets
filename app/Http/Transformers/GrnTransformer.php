@@ -2,6 +2,7 @@
 namespace App\Http\Transformers;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 
 class GrnTransformer
 {
@@ -20,7 +21,7 @@ class GrnTransformer
 
     private function format($grn): array
     {
-        return [
+        $array = [
             'id' => $grn->id,
             'grn_number' => $grn->grn_number,
             'status' => $grn->status,
@@ -36,5 +37,15 @@ class GrnTransformer
             'posted_at' => $grn->posted_at,
             'lines_count' => $grn->relationLoaded('lines') ? $grn->lines->count() : null,
         ];
+
+        // No actions column on the GRN index today (view.blade.php has its own
+        // Post/Cancel buttons), but this keeps the transformer consistent with
+        // Items/PurchaseOrders in case an actions column is added there later.
+        $array['available_actions'] = [
+            'update' => Gate::allows('update', $grn),
+            'delete' => Gate::allows('delete', $grn),
+        ];
+
+        return $array;
     }
 }

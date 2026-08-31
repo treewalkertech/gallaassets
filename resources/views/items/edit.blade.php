@@ -40,11 +40,11 @@
     </div>
 </div>
 
-{{-- Category is scoped to 'assets' categories by default. If you're cataloging a
+{{-- Category is scoped to 'asset' categories by default. If you're cataloging a
      consumable- or license-type item and don't see the right category, use the
      category type filter on the Categories screen, or pick the closest match --
      this will be made to switch automatically with item_type in a later pass. --}}
-@include ('partials.forms.edit.category-select', ['translated_name' => trans('admin/items/table.category'), 'fieldname' => 'category_id', 'category_type' => 'assets'])
+@include ('partials.forms.edit.category-select', ['translated_name' => trans('admin/items/table.category'), 'fieldname' => 'category_id', 'category_type' => 'asset'])
 
 @include ('partials.forms.edit.manufacturer-select', ['translated_name' => trans('admin/items/table.manufacturer'), 'fieldname' => 'manufacturer_id'])
 
