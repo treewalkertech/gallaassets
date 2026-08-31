@@ -810,6 +810,30 @@
                                 </a>
                                 </li>
                             @endcan
+                            @can('view', \App\Models\Item::class)
+                                <li{!! Request::is('items*') ? ' class="active"' : '' !!}>
+                                    <a href="{{ route('items.index') }}">
+                                        <x-icon type="items" class="fa-fw" />
+                                        <span>{{ trans('admin/items/table.items') }}</span>
+                                    </a>
+                                    </li>
+                                @endcan
+                            @can('view', \App\Models\PurchaseOrder::class)
+                                <li{!! Request::is('purchase-orders*') ? ' class="active"' : '' !!}>
+                                    <a href="{{ route('purchase-orders.index') }}">
+                                        <x-icon type="purchase-orders" class="fa-fw" />
+                                        <span>{{ trans('admin/purchase_orders/table.purchase_orders') }}</span>
+                                    </a>
+                                    </li>
+                                @endcan
+                            @can('view', \App\Models\Grn::class)
+                                <li{!! Request::is('grn*') ? ' class="active"' : '' !!}>
+                                    <a href="{{ route('grn.index') }}">
+                                        <x-icon type="grn" class="fa-fw" />
+                                        <span>{{ trans('admin/grn/table.grns') }}</span>
+                                    </a>
+                                    </li>
+                                @endcan
                             {{-- @can('view', \App\Models\PredefinedKit::class)
                             <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('kits.index') }}">

@@ -187,6 +187,14 @@ class IconHelper
             case 'note':
             case 'notes':
                 return 'fas fa-sticky-note';
+            case 'items':
+            case 'item':
+                return 'fas fa-boxes';
+            case 'purchase-orders':
+            case 'purchase-order':
+                return 'fas fa-file-invoice-dollar';
+            case 'grn':
+                return 'fas fa-dolly';
         }
     }
 }

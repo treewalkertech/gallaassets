@@ -188,7 +188,16 @@ class Grn extends SnipeModel
                         $asset->asset_tag = Asset::autoincrement_asset();
                         $asset->serial = $serials[$i] ?? null;
                         $asset->purchase_cost = $unitCost;
-                        $asset->purchase_date = $this->received_date;
+                        // $this->received_date is cast to a Carbon instance
+                        // (see $casts above), but Asset's own purchase_date
+                        // rule is date_format:Y-m-d, which Laravel's
+                        // validator only accepts as a string -- handed a
+                        // Carbon object it fails validation outright ("must
+                        // be a valid date in YYYY-MM-DD format") even though
+                        // the date itself is perfectly valid. Format it
+                        // explicitly rather than assigning the Carbon
+                        // instance straight through.
+                        $asset->purchase_date = $this->received_date?->format('Y-m-d');
                         $asset->supplier_id = $po->supplier_id;
                         $asset->purchase_order_id = $po->id;
                         $asset->grn_id = $this->id;

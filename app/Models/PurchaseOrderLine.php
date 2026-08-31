@@ -45,10 +45,24 @@ class PurchaseOrderLine extends SnipeModel
     protected static function booted()
     {
         static::saving(function (PurchaseOrderLine $line) {
+            // discount_amount/tax_amount are validated as nullable (an empty
+            // Add Line Item field is a legitimate "no discount/tax"), but the
+            // column itself is NOT NULL with a default of 0 -- that default
+            // only applies when a column is omitted from the INSERT
+            // entirely, not when it's explicitly bound as NULL. Laravel's
+            // ConvertEmptyStringsToNull middleware turns a blank form field
+            // into exactly that explicit null, which validation happily lets
+            // through (nullable) but the database then rejects with a raw
+            // "Column cannot be null" error instead of a friendly validation
+            // message. Coercing here, before either validation or the
+            // line_total math below, is what actually prevents that.
+            $line->discount_amount = (float) ($line->discount_amount ?? 0);
+            $line->tax_amount = (float) ($line->tax_amount ?? 0);
+
             $line->line_total = round(
                 ((float) $line->qty_ordered * (float) $line->unit_cost)
-                - (float) ($line->discount_amount ?? 0)
-                + (float) ($line->tax_amount ?? 0),
+                - $line->discount_amount
+                + $line->tax_amount,
                 2
             );
         });
