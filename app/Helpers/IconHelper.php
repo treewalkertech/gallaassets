@@ -54,7 +54,7 @@ class IconHelper
             case 'logout':
                 return 'fa fa-sign-out';
             case 'admin-settings':
-                return 'fas fa-cogs';
+                return 'fas fa-cog';
             case 'settings':
                 return 'fas fa-cog';
             case 'angle-left':
