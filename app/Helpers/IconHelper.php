@@ -195,6 +195,8 @@ class IconHelper
                 return 'fas fa-file-invoice-dollar';
             case 'grn':
                 return 'fas fa-dolly';
+            case 'inventory':
+                return 'fas fa-warehouse';
         }
     }
 }

@@ -99,6 +99,14 @@ class StatuslabelFactory extends Factory
             return [
                 'name'      => 'Broken - Not Fixable',
                 'default_label' => 0,
+                // Permanently removed from active inventory -- see the
+                // migration that fixes this same flag on already-seeded
+                // instances (2026_09_02_141300_fix_lost_broken_status_label_archived_flag.php)
+                // for why this matters (the Inventory report's "discarded/
+                // lost" count keys off this flag).
+                'deployable' => 0,
+                'pending'    => 0,
+                'archived'   => 1,
             ];
         });
     }
@@ -109,6 +117,9 @@ class StatuslabelFactory extends Factory
             return [
                 'name'      => 'Lost/Stolen',
                 'default_label' => 0,
+                'deployable' => 0,
+                'pending'    => 0,
+                'archived'   => 1,
             ];
         });
     }

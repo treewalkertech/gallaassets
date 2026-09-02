@@ -28,6 +28,7 @@ use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\PurchaseOrders\PurchaseOrdersController;
 use App\Http\Controllers\PurchaseOrders\PurchaseOrderLinesController;
 use App\Http\Controllers\Items\ItemsController;
+use App\Http\Controllers\Items\InventoryController;
 use App\Http\Controllers\Grn\GrnController;
 use App\Http\Controllers\Grn\GrnLinesController;
 use App\Http\Controllers\ViewAssetsController;
@@ -166,6 +167,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('grn/{grn_id}/cancel', [GrnController::class, 'cancel'])->name('grn.cancel');
     Route::post('grn/{grn_id}/lines', [GrnLinesController::class, 'store'])->name('grn.lines.store');
     Route::delete('grn/{grn_id}/lines/{line_id}', [GrnLinesController::class, 'destroy'])->name('grn.lines.destroy');
+
+    /*
+    * Inventory report -- read-only, so a single route rather than a
+    * Route::resource (nothing here is created/edited/deleted).
+    */
+    Route::get('inventory', [InventoryController::class, 'index'])->name('inventory.index');
 
     /*
     * Depreciations

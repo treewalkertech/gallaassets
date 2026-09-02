@@ -834,6 +834,14 @@
                                     </a>
                                     </li>
                                 @endcan
+                            @can('view', \App\Models\Item::class)
+                                <li{!! Request::is('inventory*') ? ' class="active"' : '' !!}>
+                                    <a href="{{ route('inventory.index') }}">
+                                        <x-icon type="inventory" class="fa-fw" />
+                                        <span>{{ trans('admin/inventory/table.inventory') }}</span>
+                                    </a>
+                                    </li>
+                                @endcan
                             {{-- @can('view', \App\Models\PredefinedKit::class)
                             <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('kits.index') }}">

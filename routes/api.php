@@ -845,6 +845,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], functi
     ); // end items API routes
 
     /**
+     * Inventory report API route -- a read-only view over Items + their
+     * Assets (see Api\InventoryController), not a CRUD resource, so a
+     * single GET is enough.
+     */
+    Route::get('inventory', [Api\InventoryController::class, 'index'])->name('api.inventory.index');
+
+    /**
      * GRN (Goods Receipt Note) API routes
      */
     Route::resource(
