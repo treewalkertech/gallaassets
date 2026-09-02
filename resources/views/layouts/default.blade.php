@@ -43,6 +43,7 @@
         <link rel="stylesheet"
             href="{{ url(mix('css/dist/skins/skin-' . ($snipeSettings->skin != '' ? $snipeSettings->skin : 'blue') . '.css')) }}">
     @endif
+    <link rel="stylesheet" href="{{ url(asset('css/galla-refresh.css')) }}">
     {{-- page level css --}}
     @stack('css')
 
