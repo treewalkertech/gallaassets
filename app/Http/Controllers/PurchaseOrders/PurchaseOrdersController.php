@@ -36,6 +36,9 @@ class PurchaseOrdersController extends Controller
         if (empty($po->status)) {
             $po->status = PurchaseOrder::STATUS_DRAFT;
         }
+        if ($po->total_price === null) {
+            $po->total_price = 0;
+        }
 
         if ($po->save()) {
             return redirect()
