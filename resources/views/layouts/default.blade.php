@@ -43,6 +43,7 @@
         <link rel="stylesheet"
             href="{{ url(mix('css/dist/skins/skin-' . ($snipeSettings->skin != '' ? $snipeSettings->skin : 'blue') . '.css')) }}">
     @endif
+    <link rel="stylesheet" href="{{ url(asset('css/galla-refresh.css')) }}">
     {{-- page level css --}}
     @stack('css')
 
@@ -237,7 +238,7 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    @can('index', \App\Models\Asset::class)
+                    {{-- @can('index', \App\Models\Asset::class)
                         <li aria-hidden="true"{!! Request::is('hardware*') ? ' class="active"' : '' !!}>
                             <a href="{{ url('hardware') }}"
                                 {{ $snipeSettings->shortcuts_enabled == 1 ? 'accesskey=1' : '' }} tabindex="-1"
@@ -289,7 +290,7 @@
                                 <span class="sr-only">{{ trans('general.components') }}</span>
                             </a>
                         </li>
-                    @endcan
+                    @endcan --}}
 
                     @can('index', \App\Models\Asset::class)
                         <li>
@@ -1240,6 +1241,15 @@
 
 <!-- v5-beta: This pGenerator call must remain here for v5 - until fixed - so that the JS password generator works for the user create modal. -->
 <script src="{{ url('js/pGenerator.jquery.js') }}"></script>
+
+<script nonce="{{ csrf_token() }}">
+    if (window.jQuery && $.fn.pushMenu) {
+        $('[data-toggle="push-menu"]').pushMenu({
+            expandOnHover: true,
+            expandTransitionDelay: 0
+        });
+    }
+</script>
 
 {{-- Page level javascript --}}
 @stack('js')

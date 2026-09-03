@@ -129,7 +129,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('suppliers', SuppliersController::class, [
         'parameters' => ['supplier' => 'supplier_id'],
     ]);
-
     /*
     * Purchase Orders
     */

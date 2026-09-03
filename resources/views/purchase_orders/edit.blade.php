@@ -57,15 +57,25 @@
 </div>
 @endif
 
-<!-- Total Price -->
-<div class="form-group {{ $errors->has('total_price') ? ' has-error' : '' }}">
-    {{ Form::label('total_price', trans('admin/purchase_orders/table.total_price'), array('class' => 'col-md-3 control-label')) }}
-    <div class="col-md-7">
-        {{ Form::text('total_price', old('total_price', $item->total_price), array('class' => 'form-control', 'readonly' => isset($item->id) && $item->lines()->exists())) }}
-        <p class="help-block">{{ trans('admin/purchase_orders/table.total_price_help') }}</p>
-        {!! $errors->first('total_price', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
+@if(isset($item->id))
+    <!-- Total Price - display only when editing existing PO -->
+    <div class="form-group">
+        {{ Form::label('total_price', trans('admin/purchase_orders/table.total_price'), ['class' => 'col-md-3 control-label']) }}
+
+        <div class="col-md-7">
+            <p class="form-control-static">
+                {{ number_format($item->total_price ?? 0, 2) }}
+            </p>
+
+            <p class="help-block">
+                Total price is calculated automatically from the purchase order items.
+            </p>
+        </div>
     </div>
-</div>
+@else
+    <!-- New PO starts with zero total -->
+    {{ Form::hidden('total_price', 0) }}
+@endif
 
 <!-- Currency Code -->
 <div class="form-group {{ $errors->has('currency_code') ? ' has-error' : '' }}">
