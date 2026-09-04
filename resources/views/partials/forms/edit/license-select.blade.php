@@ -15,6 +15,13 @@
             @endif
         </select>
     </div>
+    <div class="col-md-1 col-sm-1 text-left">
+        @can('create', \App\Models\License::class)
+            @if ((!isset($hide_new)) || ($hide_new!='true'))
+                <a href='{{ route('modal.show', 'license') }}' data-toggle="modal" data-target="#createModal" data-select='{{ (isset($select_id)) ? $select_id : 'assigned_license_select' }}' class="btn btn-sm btn-primary">{{ trans('button.new') }}</a>
+            @endif
+        @endcan
+    </div>
     {!! $errors->first($fieldname, '<div class="col-md-8 col-md-offset-3"><span class="alert-msg"><i class="fas fa-times"></i> :message</span></div>') !!}
 
 </div>
