@@ -11,6 +11,7 @@ use App\Models\Statuslabel;
 use App\Models\Setting;
 use App\View\Label;
 use Carbon\Carbon;
+use App\Services\MpdfLabelService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,7 @@ use App\Models\CustomField;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Response;
 
 class BulkAssetsController extends Controller
 {
@@ -40,7 +42,7 @@ class BulkAssetsController extends Controller
      * @internal param int $assetId
      * @since [v2.0]
      */
-    public function edit(Request $request) : View | RedirectResponse
+    public function edit(Request $request) : View | RedirectResponse|Response
     {
         $this->authorize('view', Asset::class);
 
@@ -101,6 +103,8 @@ class BulkAssetsController extends Controller
                 ->whereIn('assets.id', $asset_ids)
                 ->withTrashed();
 
+        
+
         $assets = $assets->get();
 
         if ($assets->isEmpty()) {
@@ -119,6 +123,35 @@ class BulkAssetsController extends Controller
 
             switch ($request->input('bulk_actions')) {
                 case 'labels':
+                    // $this->authorize('view', Asset::class);
+                    //         $mpdf = new \Mpdf\Mpdf([
+                    //             'mode' => 'utf-8',
+                    //             'format' => [60, 30],
+                    //             'margin_left' => 0,
+                    //             'margin_right' => 0,
+                    //             'margin_top' => 0,
+                    //             'margin_bottom' => 0,
+                    //         ]);
+
+                    //         // 🔥 REQUIRED FOR BARCODE TAGS
+                    //         $mpdf->use_kwt = true;
+                    //         $assets = Asset::whereIn('id', $asset_ids)->get();
+                    //         $settings = Setting::getSettings();
+                    //         $barcodeType = $settings->label2_1d_type ?? 'C128';
+                    //         $barcodeEnabled = $settings->alt_barcode_enabled == '1';
+                    //         $html = view(
+                    //             'hardware.labels-mpdf',
+                    //             compact('assets', 'settings', 'barcodeType', 'barcodeEnabled')
+                    //         )->render();
+
+                    //         $mpdf = (new MpdfLabelService())->make();
+                    //         $mpdf->WriteHTML($html);
+
+                    //         return response(
+                    //             $mpdf->Output('asset-labels.pdf', 'S'),
+                    //             200,
+                    //             ['Content-Type' => 'application/pdf']
+                    //         );
                     $this->authorize('view', Asset::class);
 
                     return (new Label)

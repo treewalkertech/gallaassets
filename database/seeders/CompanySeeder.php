@@ -9,39 +9,41 @@ use Illuminate\Support\Facades\Storage;
 
 class CompanySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         Log::debug('Seed companies');
-        Company::truncate();
-        Company::factory()->count(4)->create();
 
-        $src = public_path('/img/demo/companies/');
-        $dst = 'companies'.'/';
-        $del_files = Storage::files('companies/'.$dst);
+        // Company::truncate();
 
-        foreach ($del_files as $del_file) { // iterate files
-            $file_to_delete = str_replace($src, '', $del_file);
-            Log::debug('Deleting: '.$file_to_delete);
-            try {
-                Storage::disk('public')->delete($dst.$del_file);
-            } catch (\Exception $e) {
-                Log::debug($e);
-            }
+        // 1️⃣ Create company FIRST
+        $company = Company::factory()->create([
+            'name' => 'KWE',
+            'image' => 'favicon.png', // ✅ THIS WAS MISSING
+        ]);
+
+        // 2️⃣ Source & destination
+        $src = public_path('img/demo/companies');
+        $dst = 'companies/';
+
+        // 3️⃣ Delete old files
+        $files = Storage::disk('public')->files($dst);
+        foreach ($files as $file) {
+            Storage::disk('public')->delete($file);
         }
 
-        $add_files = glob($src.'/*.*');
+        // 4️⃣ Copy demo images
+        $add_files = glob($src . '/*.*');
         foreach ($add_files as $add_file) {
-            $file_to_copy = str_replace($src, '', $add_file);
-            Log::debug('Copying: '.$file_to_copy);
+
+            $filename = basename($add_file);
+
             try {
-                Storage::disk('public')->put($dst.$file_to_copy, file_get_contents($src.$file_to_copy));
+                Storage::disk('public')->put(
+                    $dst . $filename,
+                    file_get_contents($add_file)
+                );
             } catch (\Exception $e) {
-                Log::debug($e);
+                Log::error($e->getMessage());
             }
         }
     }

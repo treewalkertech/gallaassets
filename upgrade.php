@@ -10,7 +10,7 @@ function url_get_contents ($Url) {
     }
     print("file_get_contents() failed, trying curl instead.\n");
     if (!function_exists('curl_init')){
-        die("cURL is not installed!\nThis is required for Snipe-IT as well as the upgrade script, so you will need to fix this before continuing.\nAborting upgrade...\n");
+        die("cURL is not installed!\nThis is required for Treewalker as well as the upgrade script, so you will need to fix this before continuing.\nAborting upgrade...\n");
     }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $Url);
@@ -261,8 +261,8 @@ if(!$skip_php_checks){
 
     } else {
         echo "!!!!!!!!!!!!!!!!!!!!!!!!! PHP VERSION ERROR !!!!!!!!!!!!!!!!!!!!!!!!!\n";
-        echo "This version of PHP (".phpversion().") is NOT compatible with Snipe-IT.\n";
-        echo "Snipe-IT requires PHP versions between ".$php_min_works." and ".$php_max_wontwork.".\n";
+        echo "This version of PHP (".phpversion().") is NOT compatible with Treewalker.\n";
+        echo "Treewalker requires PHP versions between ".$php_min_works." and ".$php_max_wontwork.".\n";
         echo "Please install a compatible version of PHP and re-run this script again. \n";
         echo "!!!!!!!!!!!!!!!!!!!!!!!!! ABORTING THE UPGRADER !!!!!!!!!!!!!!!!!!!!!!\n";
         exit(1);
@@ -458,7 +458,7 @@ if ((strpos('git version', $git_version)) === false) {
 } else {
     echo "Git is NOT installed. You can still use this upgrade script to run common \n";
     echo "migration commands, but you will have to manually download the updated files. \n\n";
-    echo "Please note that this script will not download the latest Snipe-IT \n";
+    echo "Please note that this script will not download the latest Treewalker \n";
     echo "files for you unless you have git installed. \n";
     echo "It simply runs the standard composer, artisan, and migration \n";
     echo "commands needed to finalize the upgrade after. \n\n";
@@ -581,7 +581,7 @@ echo '-- '.$up."\n";
 
 echo "---------------------- FINISHED! -----------------------\n";
 echo "All done! Clear your browser cookies and re-login to use \n";
-echo "your upgraded Snipe-IT!\n";
+echo "your upgraded Treewalker!\n";
 echo "--------------------------------------------------------\n\n";
 
 

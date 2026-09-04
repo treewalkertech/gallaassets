@@ -5,6 +5,8 @@ namespace App\Observers;
 use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\Setting;
+use App\Helpers\BarcodeGenerator;
+
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -78,6 +80,25 @@ class AssetObserver
      */
     public function created(Asset $asset)
     {
+          /**
+         * ✅ 1. Generate barcode ONLY if empty
+         */
+        if (empty($asset->_snipeit_barcode_2)) {
+
+            $barcode = BarcodeGenerator::generate($asset);
+
+            if (!empty($barcode)) {
+                // save quietly → no observer loop
+                $asset->forceFill([
+                    '_snipeit_barcode_2' => $barcode
+                ])->saveQuietly();
+            }
+        }
+
+        /**
+         * ✅ 2. Existing auto-increment asset tag logic (UNCHANGED)
+         */
+
         if ($settings = Setting::getSettings()) {
             $tag = $asset->asset_tag;
             $prefix = (string)($settings->auto_increment_prefix ?? '');
@@ -182,6 +203,24 @@ class AssetObserver
        if ((!is_null($asset->asset_eol_date)) && (!is_null($asset->purchase_date)) && (is_null($asset->model->eol) || ($asset->model->eol == 0))) {
            $asset->eol_explicit = true;
        }
+
+        $barcodeRelatedFields = [
+            'company_id',
+            'rtd_location_id',
+            'department_id',
+            'purchase_order_id',
+            'order_number',
+            'external_asset_id',
+        ];
+
+        $shouldRegenerate =
+            empty($asset->_snipeit_barcode_2) ||
+            $asset->wasRecentlyCreated ||
+            $asset->isDirty($barcodeRelatedFields);
+
+        if ($shouldRegenerate) {
+            $asset->_snipeit_barcode_2 = BarcodeGenerator::generate($asset);
+        }
 
     }
 }

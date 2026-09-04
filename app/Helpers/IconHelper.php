@@ -54,7 +54,7 @@ class IconHelper
             case 'logout':
                 return 'fa fa-sign-out';
             case 'admin-settings':
-                return 'fas fa-cogs';
+                return 'fas fa-cog';
             case 'settings':
                 return 'fas fa-cog';
             case 'angle-left':
@@ -187,6 +187,16 @@ class IconHelper
             case 'note':
             case 'notes':
                 return 'fas fa-sticky-note';
+            case 'items':
+            case 'item':
+                return 'fas fa-boxes';
+            case 'purchase-orders':
+            case 'purchase-order':
+                return 'fas fa-file-invoice-dollar';
+            case 'grn':
+                return 'fas fa-dolly';
+            case 'inventory':
+                return 'fas fa-warehouse';
         }
     }
 }

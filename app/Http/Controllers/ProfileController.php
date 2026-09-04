@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Database\Eloquent\Builder;
 use \Illuminate\Contracts\View\View;
+use App\Models\AssetRFIDscanEvents;
+use App\Models\Location;
 /**
  * This controller handles all actions related to User Profiles for
  * the Snipe-IT Asset Management application.
@@ -32,6 +35,8 @@ class ProfileController extends Controller
         $user = auth()->user();
         return view('account/profile', compact('user'));
     }
+
+    
 
     /**
      * Validates and stores the user's update data.

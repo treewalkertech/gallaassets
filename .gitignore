@@ -1,0 +1,23 @@
+# Ignore environment files
+.env
+.env.*
+!.env.example
+
+# Ignore dependencies
+/vendor/
+/node_modules/
+
+# Laravel cache & logs
+/storage/logs/*
+/storage/framework/*
+/public/storage
+/public/hot
+
+# Laravel compiled / cache files
+/bootstrap/cache/*
+!.gitignore
+
+# IDE
+.idea
+.vscode
+.DS_Store

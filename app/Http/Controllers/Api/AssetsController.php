@@ -95,6 +95,8 @@ class AssetsController extends Controller
             'model_number',
             'last_checkout',
             'last_checkin',
+            'rfid',
+            'barcode',
             'notes',
             'expected_checkin',
             'order_number',
@@ -110,7 +112,6 @@ class AssetsController extends Controller
             'checkout_counter',
             'checkin_counter',
             'requests_counter',
-            'byod',
             'asset_eol_date',
             'requestable',
         ];
@@ -258,11 +259,11 @@ class AssetsController extends Controller
                 // more sad, horrible workarounds for laravel bugs when doing full text searches
                 $assets->whereNotNull('assets.assigned_to');
                 break;
-            case 'byod':
-                // This is kind of redundant, since we already check for byod=1 above, but this keeps the
-                // sidebar nav links a little less chaotic
-                $assets->where('assets.byod', '=', '1');
-                break;
+            // case 'byod':
+            //     // This is kind of redundant, since we already check for byod=1 above, but this keeps the
+            //     // sidebar nav links a little less chaotic
+            //     $assets->where('assets.byod', '=', '1');
+            //     break;
             default:
 
                 if ((! $request->filled('status_id')) && ($settings->show_archived_in_list != '1')) {
@@ -318,6 +319,18 @@ class AssetsController extends Controller
             $assets->where('assets.supplier_id', '=', $request->input('supplier_id'));
         }
 
+        if ($request->filled('purchase_order_id')) {
+            $assets->where('assets.purchase_order_id', '=', $request->input('purchase_order_id'));
+        }
+
+        if ($request->filled('grn_id')) {
+            $assets->where('assets.grn_id', '=', $request->input('grn_id'));
+        }
+
+        if ($request->filled('item_id')) {
+            $assets->where('assets.item_id', '=', $request->input('item_id'));
+        }
+
         if ($request->filled('asset_eol_date')) {
             $assets->where('assets.asset_eol_date', '=', $request->input('asset_eol_date'));
         }
@@ -339,9 +352,9 @@ class AssetsController extends Controller
             $assets->ByDepreciationId($request->input('depreciation_id'));
         }
 
-        if ($request->filled('byod')) {
-            $assets->where('assets.byod', '=', $request->input('byod'));
-        }
+        // if ($request->filled('byod')) {
+        //     $assets->where('assets.byod', '=', $request->input('byod'));
+        // }
 
         if ($request->filled('order_number')) {
             $assets->where('assets.order_number', '=', strval($request->get('order_number')));
@@ -354,9 +367,9 @@ class AssetsController extends Controller
 
         // This handles all of the pivot sorting (versus the assets.* fields
         // in the allowed_columns array)
-        $column_sort = in_array($sort_override, $allowed_columns) ? $sort_override : 'assets.created_at';
+        $column_sort = 'assets.id';
 
-        $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
+        $order = $request->input('order') === 'desc' ? 'desc' : 'asc';
 
         switch ($sort_override) {
             case 'model':

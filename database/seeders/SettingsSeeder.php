@@ -14,18 +14,18 @@ class SettingsSeeder extends Seeder
         Setting::truncate();
         $settings = new Setting;
         $settings->per_page = 20;
-        $settings->site_name = 'Snipe-IT Demo';
+        $settings->site_name = 'Galla Asset';
         $settings->auto_increment_assets = 1;
-        $settings->logo = 'snipe-logo.png';
-        $settings->alert_email = 'service@snipe-it.io';
-        $settings->header_color = null;
+        $settings->logo = 'galla.png';
+        $settings->alert_email = 'service@galla.io';
+        $settings->header_color = '#000000';
         $settings->label2_2d_type = 'QRCODE';
-        $settings->default_currency = 'USD';
+        $settings->default_currency = 'INR';
         $settings->brand = 3;
         $settings->ldap_enabled = 0;
         $settings->full_multiple_companies_support = 0;
         $settings->label2_1d_type = 'C128';
-        $settings->skin = '';
+        $settings->skin = 'contrast';
         $settings->email_domain = 'example.org';
         $settings->email_format = 'filastname';
         $settings->username_format = 'filastname';
@@ -36,6 +36,7 @@ class SettingsSeeder extends Seeder
         $settings->version_footer = 'on';
         $settings->support_footer = 'on';
         $settings->pwd_secure_min = '8';
+        $settings->favicon = 'galla_fav.png';
         $settings->default_avatar = 'default.png';
         $settings->save();
 
@@ -45,7 +46,7 @@ class SettingsSeeder extends Seeder
         }
 
         // Copy the logos from the img/demo directory
-        Storage::disk('local_public')->put('snipe-logo.png', file_get_contents(public_path('img/demo/snipe-logo.png')));
-        Storage::disk('local_public')->put('snipe-logo-lg.png', file_get_contents(public_path('img/demo/snipe-logo-lg.png')));
+        Storage::disk('local_public')->put('galla.png', file_get_contents(public_path('img/demo/logo.png')));
+        Storage::disk('local_public')->put('galla.png', file_get_contents(public_path('img/demo/logo.png')));
     }
 }

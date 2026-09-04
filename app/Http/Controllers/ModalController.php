@@ -22,10 +22,12 @@ class ModalController extends Controller
         // These values should correspond to a file in resources/views/modals/
         $allowed_types = [
             'category',
-            'kit-model', 
-            'kit-license', 
-            'kit-consumable', 
+            'consumable',
+            'kit-model',
+            'kit-license',
+            'kit-consumable',
             'kit-accessory',
+            'license',
             'location',
             'manufacturer',
             'model',

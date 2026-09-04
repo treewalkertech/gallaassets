@@ -1,4 +1,4 @@
-# Compose file to spin up a local Snipe-IT for development.
+# Compose file to spin up a local Treewalker for development.
 
 version: '3'
 

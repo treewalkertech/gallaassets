@@ -60,7 +60,12 @@
                                 <label class="control-label" for="modal-password">{{ trans('admin/users/table.password') }}:</label>
                             </div>
                             <div class="col-md-8 col-xs-12 " style="margin-bottom:5px;">
-                                <input type='password' name="password" id='modal-password' class="form-control" required>
+                                <div class="input-group">
+                                    <input type='password' name="password" id='modal-password' class="form-control" required>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default modal-toggle-password" data-target="modal-password" aria-label="Show password"><i class="fas fa-eye"></i></button>
+                                    </span>
+                                </div>
                                 <a href="#" class="left" id="modal-genPassword">Generate</a>
                                 <div id="modal-generated-password"></div>
                             </div>
@@ -73,8 +78,12 @@
                                 <label class="control-label" for="modal-password_confirmation">{{ trans('admin/users/table.password_confirm') }}:</label>
                             </div>
                             <div class="col-md-8 col-xs-12">
-                                <input class="form-control" type='password' name="password_confirmation" id='modal-password_confirmation' required>
-
+                                <div class="input-group">
+                                    <input class="form-control" type='password' name="password_confirmation" id='modal-password_confirmation' required>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default modal-toggle-password" data-target="modal-password_confirmation" aria-label="Show password"><i class="fas fa-eye"></i></button>
+                                    </span>
+                                </div>
                             </div>
                          </div>
                     </div>
@@ -101,5 +110,22 @@
 <script>
     $(document).ready(function(){
         $('#modal-first_name').focus();
+
+        // Show/hide toggle for the password fields (reported: no way to
+        // check what was typed before submitting).
+        $(document).on('click', '.modal-toggle-password', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var $input = $('#' + $btn.data('target'));
+            var $icon = $btn.find('i');
+
+            if ($input.attr('type') === 'password') {
+                $input.attr('type', 'text');
+                $icon.removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                $input.attr('type', 'password');
+                $icon.removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
     });
 </script>

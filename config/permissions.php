@@ -511,6 +511,99 @@ return [
         ],
     ],
 
+    'Items' => [
+        [
+            'permission' => 'items.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'items.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+    ],
+
+    'Purchase Orders' => [
+        [
+            'permission' => 'purchase-orders.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'purchase-orders.approve',
+            'label'      => 'Approve/Reject ',
+            'note'       => 'Allows a user to approve or reject Purchase Orders assigned to them as approver.',
+            'display'    => true,
+        ],
+    ],
+
+    'GRN' => [
+        [
+            'permission' => 'grn.view',
+            'label'      => 'View ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.create',
+            'label'      => 'Create ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.edit',
+            'label'      => 'Edit  ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.delete',
+            'label'      => 'Delete ',
+            'note'       => '',
+            'display'    => true,
+        ],
+        [
+            'permission' => 'grn.post',
+            'label'      => 'Post ',
+            'note'       => 'Allows a user to post a Goods Receipt Note, which creates the actual Assets/consumable quantity/license seats it covers. Separate from Edit since posting is irreversible.',
+            'display'    => true,
+        ],
+    ],
+
 
     'Manufacturers' => [
         [

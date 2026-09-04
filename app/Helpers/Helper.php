@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Route;
 class Helper
 {
 
@@ -486,6 +486,31 @@ class Helper
 
         return $colors;
     }
+    
+
+    // In app/Helpers/Helper.php
+
+        public static function safeRoute($name, $parameters = [], $fallback = null)
+        {
+            try {
+                if (Route::has($name)) {
+                    return route($name, $parameters);
+                }
+                
+                // Log warning for debugging
+                \Log::warning('Route not found: ' . $name);
+                
+                // Return fallback
+                if ($fallback === null) {
+                    return '#';
+                }
+                
+                return $fallback;
+            } catch (\Exception $e) {
+                \Log::error('Error generating route: ' . $e->getMessage());
+                return $fallback ?? '#';
+            }
+        }
 
 
     /**

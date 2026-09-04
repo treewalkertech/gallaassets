@@ -17,6 +17,8 @@ return [
     'id'      		=> 'ID',
     'last_checkin_date' => 'Last Checkin Date',
     'location' 		=> 'Location',
+    'rfid' 		    => 'Tag ID',
+    'barcode' 		=> 'Barcode',
     'purchase_cost'	=> 'Cost',
     'purchase_date'	=> 'Purchased',
     'serial'   		=> 'Serial',
