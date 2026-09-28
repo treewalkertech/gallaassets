@@ -42,8 +42,10 @@ class Item extends SnipeModel
         'category_id'     => 'nullable|integer|exists:categories,id',
         'manufacturer_id' => 'nullable|integer|exists:manufacturers,id',
         'asset_model_id'  => 'nullable|integer|required_if:item_type,fixed_asset|exists:models,id',
-        'consumable_id'   => 'nullable|integer|required_if:item_type,consumable|exists:consumables,id',
-        'license_id'      => 'nullable|integer|required_if:item_type,license|exists:licenses,id',
+        // 'consumable_id'   => 'nullable|integer',
+        'consumable_id'     => 'nullable|integer|exists:consumables,id',
+        // 'license_id'      => 'nullable|integer',
+        'license_id'        => 'nullable|integer|exists:licenses,id',
         'default_unit_cost' => 'nullable|numeric|min:0',
         'reorder_level'   => 'nullable|integer|min:0',
     ];
