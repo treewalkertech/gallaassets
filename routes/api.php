@@ -40,7 +40,10 @@ Route::withoutMiddleware(['auth:api'])->group(function () {
         '/assets/update-rfid',
         [AssetRfidController::class, 'update']
     );
-
+    Route::post(
+        '/assets/create-with-rfid',
+        [AssetRfidController::class, 'createWithRfid']
+    );
     Route::post(
         '/assets/update-rfid-bulk',
         [AssetRfidController::class, 'bulkUpdate']

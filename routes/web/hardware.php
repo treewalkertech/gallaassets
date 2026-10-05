@@ -245,3 +245,15 @@ Route::get(
     'asset-rfid-scan-events/status',
     [AssetRFIDscanEventsController::class, 'ajaxStatus']
 )->name('asset-rfid-scan-events.status');
+/*
+ * Add this route beside the existing asset-rfid-scan-events routes.
+ */
+Route::get(
+    'asset-rfid-scan-events/{scanEvent}/history',
+    [AssetRfidScanEventsController::class, 'history']
+)->name('asset-rfid-scan-events.history');
+
+Route::get(
+    'asset-rfid-scan-events/export',
+    [AssetRfidScanEventsController::class, 'exportCsv']
+)->name('asset-rfid-scan-events.export');

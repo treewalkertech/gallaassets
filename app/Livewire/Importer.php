@@ -64,7 +64,6 @@ class Importer extends Component
             $tmp = array_filter($tmp);
         }
         return json_encode($tmp);
-
     }
 
     private function getColumns($type)
@@ -235,6 +234,7 @@ class Importer extends Component
             'expected_checkin' => trans('admin/hardware/form.expected_checkin'),
             'last_audit_date' => trans('general.last_audit'),
             'next_audit_date' => trans('general.next_audit_date'),
+            'rfid' => 'RFID Code',
         ];
 
         $this->consumables_fields = [
@@ -359,175 +359,175 @@ class Importer extends Component
         // "real fieldnames" to a list of aliases for that field
         $this->aliases_fields = [
             'item_name' =>
-                [
-                    'item name',
-                    'asset name',
-                    'accessory name',
-                    'user name',
-                    'consumable name',
-                    'component name',
-                    'name',
-                ],
+            [
+                'item name',
+                'asset name',
+                'accessory name',
+                'user name',
+                'consumable name',
+                'component name',
+                'name',
+            ],
             'item_no' => [
                 'item number',
                 'item no.',
                 'item #',
             ],
             'asset_model' =>
-                [
-                    'model name',
-                    'model',
-                ],
+            [
+                'model name',
+                'model',
+            ],
             'eol_date' =>
-                [
-                    'eol',
-                    'eol date',
-                    'asset eol date',
-                ],
+            [
+                'eol',
+                'eol date',
+                'asset eol date',
+            ],
             'eol' =>
-                [
-                    'eol',
-                    'EOL',
-                    'eol months',
-                ],
+            [
+                'eol',
+                'EOL',
+                'eol months',
+            ],
             'depreciation' =>
-                [
-                    'Depreciation',
-                    'depreciation',
-                ],
+            [
+                'Depreciation',
+                'depreciation',
+            ],
             'requestable' =>
-                [
-                    'requestable',
-                    'Requestable',
-                ],
+            [
+                'requestable',
+                'Requestable',
+            ],
 
             'gravatar' =>
-                [
-                    'gravatar',
-                ],
+            [
+                'gravatar',
+            ],
             'currency' =>
-                [
-                    '$',
-                ],
+            [
+                '$',
+            ],
             'jobtitle' =>
-                [
-                    'job title for user',
-                    'job title',
-                ],
+            [
+                'job title for user',
+                'job title',
+            ],
             'full_name' =>
-                [
-                    'full name',
-                    'fullname',
-                    trans('general.importer.checked_out_to_fullname')
-                ],
+            [
+                'full name',
+                'fullname',
+                trans('general.importer.checked_out_to_fullname')
+            ],
             'username' =>
-                [
-                    'user name',
-                    'username',
-                    trans('general.importer.checked_out_to_username'),
-                ],
+            [
+                'user name',
+                'username',
+                trans('general.importer.checked_out_to_username'),
+            ],
             'first_name' =>
-                [
-                    'first name',
-                    trans('general.importer.checked_out_to_first_name'),
-                ],
+            [
+                'first name',
+                trans('general.importer.checked_out_to_first_name'),
+            ],
             'last_name' =>
-                [
-                    'last name',
-                    'lastname',
-                    trans('general.importer.checked_out_to_last_name'),
-                ],
+            [
+                'last name',
+                'lastname',
+                trans('general.importer.checked_out_to_last_name'),
+            ],
             'email' =>
-                [
-                    'email',
-                    'e-mail',
-                    trans('general.importer.checked_out_to_email'),
-                ],
+            [
+                'email',
+                'e-mail',
+                trans('general.importer.checked_out_to_email'),
+            ],
             'phone_number' =>
-                [
-                    'phone',
-                    'phone number',
-                    'phone num',
-                    'telephone number',
-                    'telephone',
-                    'tel.',
-                ],
+            [
+                'phone',
+                'phone number',
+                'phone num',
+                'telephone number',
+                'telephone',
+                'tel.',
+            ],
 
             'serial' =>
-                [
-                    'serial number',
-                    'serial no.',
-                    'serial no',
-                    'product key',
-                    'key',
-                ],
+            [
+                'serial number',
+                'serial no.',
+                'serial no',
+                'product key',
+                'key',
+            ],
             'model_number' =>
-                [
-                    'model',
-                    'model no',
-                    'model no.',
-                    'model number',
-                    'model num',
-                    'model num.'
-                ],
+            [
+                'model',
+                'model no',
+                'model no.',
+                'model number',
+                'model num',
+                'model num.'
+            ],
             'warranty_months' =>
-                [
-                    'Warranty',
-                    'Warranty Months'
-                ],
+            [
+                'Warranty',
+                'Warranty Months'
+            ],
             'qty' =>
-                [
-                    'QTY',
-                    'Quantity'
-                ],
+            [
+                'QTY',
+                'Quantity'
+            ],
             'zip' =>
-                [
-                    'Postal Code',
-                    'Post Code',
-                    'Zip Code'
-                ],
+            [
+                'Postal Code',
+                'Post Code',
+                'Zip Code'
+            ],
             'min_amt' =>
-                [
-                    'Min Amount',
-                    'Minimum Amount',
-                    'Min Quantity',
-                    'Minimum Quantity',
-                ],
+            [
+                'Min Amount',
+                'Minimum Amount',
+                'Min Quantity',
+                'Minimum Quantity',
+            ],
             'next_audit_date' =>
-                [
-                    'Next Audit',
-                ],
+            [
+                'Next Audit',
+            ],
             'last_checkout' =>
-                [
-                    'Last Checkout',
-                    'Last Checkout Date',
-                    'Checkout Date',
-                ],
+            [
+                'Last Checkout',
+                'Last Checkout Date',
+                'Checkout Date',
+            ],
             'address2' =>
-                [
-                    'Address 2',
-                    'Address2',
-                ],
+            [
+                'Address 2',
+                'Address2',
+            ],
             'ldap_ou' =>
-                [
-                    'LDAP OU',
-                    'OU',
-                ],
+            [
+                'LDAP OU',
+                'OU',
+            ],
             'parent_location' =>
-                [
-                    'Parent',
-                    'Parent Location',
-                ],
+            [
+                'Parent',
+                'Parent Location',
+            ],
             'manager' =>
-                [
-                    'Managed By',
-                    'Manager Name',
-                    'Manager Full Name',
-                ],
+            [
+                'Managed By',
+                'Manager Name',
+                'Manager Full Name',
+            ],
             'manager_username' =>
-                [
-                    'Manager Username',
-                ],
+            [
+                'Manager Username',
+            ],
         ];
 
         $this->columnOptions[''] = $this->getColumns(''); //blank mode? I don't know what this is supposed to mean
@@ -563,7 +563,6 @@ class Importer extends Component
         $this->file_id = $id;
         $this->import_errors = null;
         $this->statusText = null;
-
     }
 
     public function destroy($id)
